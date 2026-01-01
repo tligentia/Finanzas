@@ -296,7 +296,7 @@ const KNOWLEDGE_BASE: Record<string, InfoVersion> = {
   },
   'DAI (DAI)': {
     technical: 'Stablecoin descentralizada emitida por MakerDAO. Mantiene su paridad mediante el sobre-colateral de otros criptoactivos bloqueados en contratos inteligentes.',
-    simple: 'Es un dólar digital que no pertenece a ninguna empresa. Se crea automáticamente usando otras criptomonedas como garantía. Es el dólar de la libertad.',
+    simple: 'Es un dólar digital que no pertenece a ninguna empresa. Se crea automáticamente usando otras criptomonedas como garantía. Es el dalar de la libertad.',
     extended: 'DAI es el experimento de moneda estable más exitoso de la historia de DeFi. No existe por un depósito en un banco, sino por un préstamo garantizado. Los usuarios depositan colateral (como ETH) en "Vaults" y emiten DAI contra ese valor. Si el colateral cae de precio, el sistema liquida la posición para asegurar que cada DAI en circulación esté respaldado por más de 1 dólar de valor. Es una moneda gobernada por una DAO (Maker), lo que la hace el activo estable más resistente a la censura y la manipulación centralizada disponible actualmente.'
   },
   'PayPal USD (PYUSD)': {
@@ -405,7 +405,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
     return (
       <div className="bg-white border border-gray-100 p-4 rounded-2xl shadow-2xl backdrop-blur-md bg-white/95 animate-in fade-in zoom-in-95 duration-200 ring-1 ring-black/5">
-        <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2 border-b border-gray-50 pb-1">{label}</p>
+        <p className="text-[11px] font-black uppercase tracking-widest text-gray-400 mb-2 border-b border-gray-50 pb-1">{label}</p>
         <div className="space-y-1.5">
           {payload.map((entry: any, index: number) => (
             <div key={index} className="flex items-center justify-between gap-4">
@@ -413,7 +413,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
                 <div className="w-2 h-2 rounded-full" style={{ backgroundColor: entry.color || entry.fill }}></div>
                 <span className="text-[11px] font-bold text-gray-900 uppercase">{entry.name}:</span>
               </div>
-              <span className="text-[11px] font-black text-red-700 font-mono">
+              <span className="text-[12px] font-black text-red-700 font-mono">
                 {entry.value?.toLocaleString()}
               </span>
             </div>
@@ -429,25 +429,25 @@ const formatAiResponse = (text: string, isLightBg: boolean = false) => {
   if (!text) return null;
   const lines = text.split('\n').filter(l => l.trim() !== '');
   const textColorClass = isLightBg ? "text-gray-900" : "text-gray-200";
-  const headerColorClass = isLightBg ? "text-red-800" : "text-red-700";
+  const headerColorClass = isLightBg ? "text-red-800 font-black" : "text-red-700 font-black";
   
   return (
-    <div className={`space-y-3 font-sans antialiased text-[12px] leading-relaxed ${textColorClass}`}>
+    <div className={`space-y-3 font-sans antialiased text-[13px] leading-relaxed ${textColorClass}`}>
       {lines.map((line, idx) => {
         let content = line.trim();
         if (content.startsWith('###')) {
-          return <h5 key={idx} className={`text-[10px] font-black uppercase tracking-widest ${headerColorClass} mt-4 border-b border-black/5 pb-1`}>{content.replace(/###/g, '').trim()}</h5>;
+          return <h5 key={idx} className={`text-[11px] font-black uppercase tracking-widest ${headerColorClass} mt-4 border-b border-black/5 pb-1`}>{content.replace(/###/g, '').trim()}</h5>;
         }
         if (content.startsWith('*') || content.startsWith('-')) {
           return (
             <div key={idx} className="flex gap-2 pl-2">
-              <span className="text-red-700 font-black">›</span>
-              <span className="font-medium">{content.substring(1).trim().replace(/\*\*/g, '')}</span>
+              <span className="text-red-700 font-black text-sm">›</span>
+              <span className="font-semibold">{content.substring(1).trim().replace(/\*\*/g, '')}</span>
             </div>
           );
         }
         const cleanLine = content.replace(/\*\*(.*?)\*\*/g, '$1');
-        return <p key={idx} className="font-medium">{cleanLine}</p>;
+        return <p key={idx} className="font-semibold">{cleanLine}</p>;
       })}
     </div>
   );
@@ -497,27 +497,27 @@ const InfoPanel: React.FC<InfoPanelProps> = ({ sectionId }) => {
         }`}
       >
         <MessageSquare size={16} className={isOpen ? 'text-red-500' : 'group-hover:rotate-12 transition-transform'} />
-        <span className="text-[10px] font-black uppercase tracking-widest">Saber Más</span>
+        <span className="text-[11px] font-black uppercase tracking-widest">Saber Más</span>
         {isOpen ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-4 w-full md:w-[450px] bg-white border border-gray-100 rounded-[2.5rem] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.15)] z-40 overflow-hidden animate-in slide-in-from-top-4 duration-500 flex flex-col">
+        <div className="absolute right-0 mt-4 w-full md:w-[480px] bg-white border border-gray-100 rounded-[2.5rem] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.15)] z-40 overflow-hidden animate-in slide-in-from-top-4 duration-500 flex flex-col">
           <div className="p-6 bg-gray-50/50 border-b border-gray-100 flex items-center gap-3">
              <div className="p-2 bg-red-700 rounded-xl text-white shadow-lg shadow-red-700/20">
                <HelpCircle size={18} />
              </div>
              <div>
-               <h4 className="text-[11px] font-black uppercase tracking-tighter text-gray-900 leading-none">Consultoría Inteligente</h4>
-               <p className="text-[8px] font-black text-gray-400 uppercase tracking-widest mt-1">Soporte IA en Tiempo Real</p>
+               <h4 className="text-[12px] font-black uppercase tracking-tighter text-gray-900 leading-none">Consultoría Inteligente</h4>
+               <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mt-1">Soporte IA en Tiempo Real</p>
              </div>
           </div>
           <div className="p-6 space-y-6 max-h-[500px] overflow-y-auto custom-scrollbar">
             <div className="space-y-3">
-              <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest px-1">Preguntas Frecuentes</p>
+              <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Preguntas Frecuentes</p>
               <div className="flex flex-col gap-2">
                 {faqs.map((faq, i) => (
-                  <button key={i} onClick={() => { setQuery(faq); handleAsk(faq); }} className="text-left p-3 rounded-2xl bg-white border border-gray-100 text-[10px] font-bold text-gray-700 hover:border-red-700 hover:text-red-700 transition-all group">
+                  <button key={i} onClick={() => { setQuery(faq); handleAsk(faq); }} className="text-left p-3 rounded-2xl bg-white border border-gray-100 text-[11px] font-bold text-gray-700 hover:border-red-700 hover:text-red-700 transition-all group">
                     <div className="flex items-center justify-between">
                       <span className="max-w-[90%]">{faq}</span>
                       <ArrowRight size={10} className="opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0" />
@@ -527,9 +527,9 @@ const InfoPanel: React.FC<InfoPanelProps> = ({ sectionId }) => {
               </div>
             </div>
             <div className="space-y-3">
-              <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest px-1">Consulta Personalizada</p>
+              <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Consulta Personalizada</p>
               <div className="relative">
-                <textarea value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Escribe tu duda técnica..." className="w-full bg-gray-50 border border-gray-200 p-4 rounded-3xl text-[11px] font-medium min-h-[80px] outline-none focus:ring-2 focus:ring-gray-900 transition-all resize-none shadow-inner" />
+                <textarea value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Escribe tu duda técnica..." className="w-full bg-gray-50 border border-gray-200 p-4 rounded-3xl text-[12px] font-medium min-h-[80px] outline-none focus:ring-2 focus:ring-gray-900 transition-all resize-none shadow-inner" />
                 <button onClick={() => handleAsk()} disabled={isLoading || !query.trim()} className="absolute bottom-3 right-3 p-3 bg-gray-900 text-white rounded-2xl hover:bg-black shadow-lg disabled:opacity-20 active:scale-90 transition-all">
                   {isLoading ? <Loader2 size={16} className="animate-spin" /> : <Send size={16} />}
                 </button>
@@ -540,17 +540,17 @@ const InfoPanel: React.FC<InfoPanelProps> = ({ sectionId }) => {
                 <div className="absolute top-0 right-0 w-48 h-48 bg-red-700/5 blur-[80px] rounded-full"></div>
                 <div className="flex items-center justify-between mb-4 relative z-10 border-b border-white/5 pb-2">
                    <div className="flex items-center gap-2">
-                      <span className="text-[9px] font-black uppercase tracking-[0.3em] text-gray-400">Análisis del Motor</span>
+                      <span className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400">Análisis del Motor</span>
                    </div>
                    {!isLoading && answer && (
                      <button onClick={copyAnswer} className="p-1.5 hover:bg-white/10 rounded-lg text-gray-400 hover:text-white transition-all active:scale-90 flex items-center gap-1.5" title="Copiar respuesta">
                        {copied ? <Check size={12} className="text-green-500" /> : <Copy size={12} />}
-                       <span className="text-[8px] font-black uppercase tracking-widest">{copied ? 'Copiado' : 'Copiar'}</span>
+                       <span className="text-[10px] font-black uppercase tracking-widest">{copied ? 'Copiado' : 'Copiar'}</span>
                      </button>
                    )}
                 </div>
                 {isLoading ? (
-                  <div className="flex flex-col items-center justify-center py-6 gap-3 text-[11px] text-gray-500 uppercase font-black tracking-widest">
+                  <div className="flex flex-col items-center justify-center py-6 gap-3 text-[12px] text-gray-500 uppercase font-black tracking-widest">
                     <Loader2 size={24} className="animate-spin text-red-700" /> 
                     <span>Sincronizando Conocimiento...</span>
                   </div>
@@ -560,7 +560,7 @@ const InfoPanel: React.FC<InfoPanelProps> = ({ sectionId }) => {
               </div>
             )}
           </div>
-          <div className="p-4 bg-gray-50 border-t border-gray-100 flex justify-center"><p className="text-[8px] font-black text-gray-300 uppercase tracking-[0.3em]">IA Engine: Gemini v3 Flash</p></div>
+          <div className="p-4 bg-gray-50 border-t border-gray-100 flex justify-center"><p className="text-[10px] font-black text-gray-300 uppercase tracking-[0.3em]">IA Engine: Gemini v3 Flash</p></div>
         </div>
       )}
     </div>
@@ -577,7 +577,6 @@ export default function App() {
   const [selectedDetail, setSelectedDetail] = useState<string | null>(null);
   const [selectedEquivalence, setSelectedEquivalence] = useState<typeof EQUIVALENCES[0] | null>(null);
   
-  // Nueva gestión de modos de vista: 'technical' | 'simple' | 'extended' | 'ai'
   const [modalViewMode, setModalViewMode] = useState<'technical' | 'simple' | 'extended' | 'ai'>('technical');
   const [aiModalResponse, setAiModalResponse] = useState<string>('');
   const [isAiModalLoading, setIsAiModalLoading] = useState(false);
@@ -594,14 +593,14 @@ export default function App() {
     
     setIsAiModalLoading(true);
     if (query) {
-      setAiModalResponse(prev => prev + `\n\n### Pregunta Adicional: ${query}\n`);
+      setAiModalResponse(prev => prev + `\n\n### Profundización: ${query}\n`);
     } else {
       setAiModalResponse('');
     }
 
     try {
       const basePrompt = `Actúa como un profesor emérito de finanzas y criptoeconomía. Genera una Masterclass breve pero de altísimo nivel técnico sobre: "${topic}". Explica su relevancia en la transición del sistema Fiat hacia DeFi.`;
-      const prompt = query ? `Sobre el tema "${topic}", responde a la siguiente duda técnica de seguimiento: "${query}". Mantén el tono de Masterclass técnica.` : basePrompt;
+      const prompt = query ? `Sobre el tema "${topic}", responde a la siguiente duda técnica de seguimiento: "${query}". Mantén el tono de Masterclass técnica de alta fidelidad.` : basePrompt;
       const res = await askGemini(prompt);
       
       if (query) {
@@ -653,36 +652,36 @@ export default function App() {
               <div className="flex-1 text-center md:text-left">
                 <div className="inline-flex items-center gap-2 mb-3">
                   <span className="h-[2px] w-6 bg-red-700"></span>
-                  <span className="text-[9px] font-black uppercase tracking-[0.4em] text-gray-400">Master Thesis</span>
+                  <span className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-400">Master Thesis</span>
                 </div>
                 <h2 className="text-3xl md:text-5xl font-black uppercase italic tracking-tighter text-gray-900 leading-[0.85]">Economía <span className="text-red-700">Fiat ➜ DeFi</span></h2>
                 <div className="mt-4 flex justify-center md:justify-start gap-4">
-                  <div className="flex items-center gap-1.5 text-[8px] font-black uppercase text-gray-400"><span className="w-1 h-1 rounded-full bg-red-700 animate-pulse"></span> dinero cautivo en bancos</div>
-                  <div className="flex items-center gap-1.5 text-[8px] font-black uppercase text-gray-400"><span className="w-1 h-1 rounded-full bg-gray-900"></span> Protocolos On-Chain</div>
+                  <div className="flex items-center gap-1.5 text-[10px] font-black uppercase text-gray-400"><span className="w-1 h-1 rounded-full bg-red-700 animate-pulse"></span> dinero cautivo en bancos</div>
+                  <div className="flex items-center gap-1.5 text-[10px] font-black uppercase text-gray-400"><span className="w-1 h-1 rounded-full bg-gray-900"></span> Protocolos On-Chain</div>
                 </div>
               </div>
-              <div className="md:w-1/3 border-l-4 border-gray-900 pl-6 py-1"><p className="text-gray-500 text-[11px] md:text-xs uppercase tracking-tight font-bold leading-relaxed italic max-w-xs">Evolución de los sistemas de dinero cautivo en bancos hacia la infraestructura de protocolos descentralizados.</p></div>
+              <div className="md:w-1/3 border-l-4 border-gray-900 pl-6 py-1"><p className="text-gray-500 text-[12px] md:text-sm uppercase tracking-tight font-bold leading-relaxed italic max-w-xs">Evolución de los sistemas de dinero cautivo en bancos hacia la infraestructura de protocolos descentralizados.</p></div>
             </div>
-            <a href="https://notebooklm.google.com/notebook/45496add-d540-4b9d-8075-0becfdb16126" target="_blank" rel="noopener noreferrer" className="absolute bottom-4 right-8 text-[9px] font-black uppercase tracking-widest text-red-700 hover:text-gray-900 flex items-center gap-1.5 transition-all group/link bg-white/50 backdrop-blur-sm px-3 py-1.5 rounded-full border border-transparent hover:border-gray-200">Para saber más <ExternalLink size={10} className="group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 transition-transform" /></a>
+            <a href="https://notebooklm.google.com/notebook/45496add-d540-4b9d-8075-0becfdb16126" target="_blank" rel="noopener noreferrer" className="absolute bottom-4 right-8 text-[10px] font-black uppercase tracking-widest text-red-700 hover:text-gray-900 flex items-center gap-1.5 transition-all group/link bg-white/50 backdrop-blur-sm px-3 py-1.5 rounded-full border border-transparent hover:border-gray-200">Para saber más <ExternalLink size={10} className="group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 transition-transform" /></a>
           </section>
 
           {/* 01. FIAT */}
           <section id="sec-01" className="mb-40 space-y-12">
             <div className="border-b-4 border-gray-900 pb-4 flex flex-col md:flex-row md:items-end justify-between gap-4">
-              <div><h3 className="text-4xl font-black uppercase tracking-tighter flex items-center gap-4"><Landmark className="text-red-700" size={32} />01. El Ecosistema Fiat</h3><p className="text-gray-400 font-bold uppercase text-[10px] tracking-widest mt-2">Confianza Institucional y Expansión de Deuda</p></div>
+              <div><h3 className="text-4xl font-black uppercase tracking-tighter flex items-center gap-4"><Landmark className="text-red-700" size={32} />01. El Ecosistema Fiat</h3><p className="text-gray-400 font-bold uppercase text-[11px] tracking-widest mt-2">Confianza Institucional y Expansión de Deuda</p></div>
               <InfoPanel sectionId="sec-01" />
             </div>
             <div className="bg-gray-50/50 p-8 rounded-[2rem] border border-gray-100/50 relative overflow-hidden group"><div className="absolute top-0 right-0 w-32 h-32 bg-red-700/5 blur-3xl rounded-full"></div><p className="text-gray-700 text-base md:text-lg leading-relaxed relative z-10 max-w-5xl">El sistema Fiat se sustenta en el <span className="font-black text-gray-900">curso legal</span> y la confianza institucional. Bajo el modelo de <span className="text-red-700 font-black">dinero cautivo en bancos</span>, las entidades financieras crean moneda digital mediante el crédito, multiplicando la base monetaria real.</p></div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
-              <div className="bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-xl shadow-gray-100/50 flex flex-col"><h4 className="text-[10px] font-black uppercase tracking-widest mb-8 text-gray-400 border-l-2 border-red-700 pl-3">Multiplicador Monetario (M0-M3)</h4><div className="h-64 flex-1"><ResponsiveContainer width="100%" height="100%"><BarChart margin={{ top: 10, right: 10, left: -20, bottom: 0 }} data={multiplierData}><defs><linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#b91c1c" stopOpacity={1} /><stop offset="100%" stopColor="#7f1d1d" stopOpacity={1} /></linearGradient></defs><CartesianGrid strokeDasharray="4 4" vertical={false} stroke="#f3f4f6" /><XAxis dataKey="name" fontSize={9} axisLine={false} tickLine={false} tick={{ fill: '#9ca3af', fontWeight: 900 }} /><YAxis hide /><Tooltip content={<CustomTooltip />} cursor={{ fill: '#f9fafb', radius: 12 }} /><Bar dataKey="value" fill="url(#barGradient)" radius={[12, 12, 4, 4]} barSize={40} animationDuration={1500} /></BarChart></ResponsiveContainer></div></div>
-              <div className="bg-red-700 text-white p-12 rounded-[3.5rem] shadow-2xl shadow-red-700/30 relative overflow-hidden group flex flex-col justify-between"><div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent pointer-events-none"></div><div className="relative z-10"><div className="flex items-center gap-3 mb-4"><TrendingDown size={32} className="text-red-200 group-hover:scale-110 transition-transform" /><h4 className="text-3xl font-black uppercase italic tracking-tighter leading-none">El Impuesto Silencioso</h4></div><p className="text-red-100 text-[13px] font-bold uppercase tracking-tight leading-tight mb-6">La inflación disuelve el <span className="text-white font-black underline decoration-white/30 decoration-4">poder adquisitivo real</span> del ahorro nominal.</p></div><div className="h-48 bg-white/5 backdrop-blur-sm rounded-[2rem] p-6 relative z-10 border border-white/10 mt-auto"><ResponsiveContainer width="100%" height="100%"><AreaChart data={erosionData} margin={{ top: 5, right: 5, left: -20, bottom: 0 }}><defs><linearGradient id="erosionGradient" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stopColor="#fff" stopOpacity={0.4} /><stop offset="95%" stopColor="#fff" stopOpacity={0} /></linearGradient></defs><Tooltip content={<CustomTooltip />} /><Area type="monotone" dataKey="real" stroke="#fff" fill="url(#erosionGradient)" strokeWidth={4} animationDuration={2000} /><Line type="monotone" dataKey="nominal" stroke="rgba(255,255,255,0.2)" strokeDasharray="5 5" strokeWidth={2} /></AreaChart></ResponsiveContainer></div></div>
+              <div className="bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-xl shadow-gray-100/50 flex flex-col"><h4 className="text-[11px] font-black uppercase tracking-widest mb-8 text-gray-400 border-l-2 border-red-700 pl-3">Multiplicador Monetario (M0-M3)</h4><div className="h-64 flex-1"><ResponsiveContainer width="100%" height="100%"><BarChart margin={{ top: 10, right: 10, left: -20, bottom: 0 }} data={multiplierData}><defs><linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#b91c1c" stopOpacity={1} /><stop offset="100%" stopColor="#7f1d1d" stopOpacity={1} /></linearGradient></defs><CartesianGrid strokeDasharray="4 4" vertical={false} stroke="#f3f4f6" /><XAxis dataKey="name" fontSize={11} axisLine={false} tickLine={false} tick={{ fill: '#9ca3af', fontWeight: 900 }} /><YAxis hide /><Tooltip content={<CustomTooltip />} cursor={{ fill: '#f9fafb', radius: 12 }} /><Bar dataKey="value" fill="url(#barGradient)" radius={[12, 12, 4, 4]} barSize={40} animationDuration={1500} /></BarChart></ResponsiveContainer></div></div>
+              <div className="bg-red-700 text-white p-12 rounded-[3.5rem] shadow-2xl shadow-red-700/30 relative overflow-hidden group flex flex-col justify-between"><div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent pointer-events-none"></div><div className="relative z-10"><div className="flex items-center gap-3 mb-4"><TrendingDown size={32} className="text-red-200 group-hover:scale-110 transition-transform" /><h4 className="text-3xl font-black uppercase italic tracking-tighter leading-none">El Impuesto Silencioso</h4></div><p className="text-red-100 text-[14px] font-bold uppercase tracking-tight leading-tight mb-6">La inflación disuelve el <span className="text-white font-black underline decoration-white/30 decoration-4">poder adquisitivo real</span> del ahorro nominal.</p></div><div className="h-48 bg-white/5 backdrop-blur-sm rounded-[2rem] p-6 relative z-10 border border-white/10 mt-auto"><ResponsiveContainer width="100%" height="100%"><AreaChart data={erosionData} margin={{ top: 5, right: 5, left: -20, bottom: 0 }}><defs><linearGradient id="erosionGradient" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stopColor="#fff" stopOpacity={0.4} /><stop offset="95%" stopColor="#fff" stopOpacity={0} /></linearGradient></defs><Tooltip content={<CustomTooltip />} /><Area type="monotone" dataKey="real" stroke="#fff" fill="url(#erosionGradient)" strokeWidth={4} animationDuration={2000} /><Line type="monotone" dataKey="nominal" stroke="rgba(255,255,255,0.2)" strokeDasharray="5 5" strokeWidth={2} /></AreaChart></ResponsiveContainer></div></div>
             </div>
           </section>
 
           {/* 02. MERCADOS */}
           <section id="sec-02" className="mb-40 space-y-12">
             <div className="border-b-4 border-red-700 pb-4 flex flex-col md:flex-row md:items-end justify-between gap-4">
-              <div><h3 className="text-4xl font-black uppercase tracking-tighter flex items-center gap-4"><BarChart3 className="text-gray-900" size={32} />02. Mercados y Bolsa</h3><p className="text-gray-400 font-bold uppercase text-[10px] tracking-widest mt-2">Activos, Cotizaciones y Derivados</p></div>
+              <div><h3 className="text-4xl font-black uppercase tracking-tighter flex items-center gap-4"><BarChart3 className="text-gray-900" size={32} />02. Mercados y Bolsa</h3><p className="text-gray-400 font-bold uppercase text-[11px] tracking-widest mt-2">Activos, Cotizaciones y Derivados</p></div>
               <InfoPanel sectionId="sec-02" />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -699,22 +698,22 @@ export default function App() {
                 >
                    <div className="mb-4 transition-transform group-hover:scale-125 duration-300 text-red-700">{item.icon}</div>
                    <div className="flex items-center justify-between gap-2 mb-2">
-                     <h4 className="font-black text-lg uppercase italic tracking-tighter text-gray-900">{item.title}</h4>
+                     <h4 className="font-black text-xl uppercase italic tracking-tighter text-gray-900">{item.title}</h4>
                      <div className="p-2 rounded-full bg-gray-50 text-gray-400 group-hover:text-red-700 group-hover:bg-red-50 transition-all">
                        <Info size={16} />
                      </div>
                    </div>
-                   <p className="text-[11px] leading-relaxed font-bold uppercase opacity-70 text-gray-400">{item.desc}</p>
+                   <p className="text-[12px] leading-relaxed font-bold uppercase opacity-70 text-gray-400">{item.desc}</p>
                 </button>
               ))}
             </div>
             <div className="bg-white rounded-[3rem] p-12 border border-gray-100 shadow-xl shadow-gray-100/50">
-               <h4 className="text-center text-[10px] font-black uppercase tracking-[0.4em] mb-12 text-gray-400">Matriz Riesgo vs Beneficio</h4>
+               <h4 className="text-center text-[11px] font-black uppercase tracking-[0.4em] mb-12 text-gray-400">Matriz Riesgo vs Beneficio</h4>
                <div className="h-[400px] max-w-5xl mx-auto">
                  <ResponsiveContainer width="100%" height="100%">
                     <ComposedChart data={riskReturnData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
                       <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f3f4f6" />
-                      <XAxis dataKey="name" fontSize={10} axisLine={false} tickLine={false} tick={{ fill: '#111827', fontWeight: 900 }} />
+                      <XAxis dataKey="name" fontSize={11} axisLine={false} tickLine={false} tick={{ fill: '#111827', fontWeight: 900 }} />
                       <YAxis yAxisId="left" hide domain={[0, 30]} />
                       <YAxis yAxisId="right" orientation="right" hide domain={[0, 30]} />
                       <Tooltip content={<CustomTooltip />} cursor={{ fill: '#f9fafb' }} />
@@ -729,11 +728,11 @@ export default function App() {
                <div className="flex justify-center gap-12 mt-8">
                   <div className="flex items-center gap-2">
                     <span className="w-3 h-3 bg-gray-900 rounded-full"></span>
-                    <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">Beneficio</span>
+                    <span className="text-[11px] font-black uppercase tracking-widest text-gray-400">Beneficio</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="w-6 h-1 bg-red-700 rounded-full"></span>
-                    <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">Volatilidad / Riesgo</span>
+                    <span className="text-[11px] font-black uppercase tracking-widest text-gray-400">Volatilidad / Riesgo</span>
                   </div>
                </div>
             </div>
@@ -742,14 +741,14 @@ export default function App() {
           {/* 03. ARQUITECTURA DEFI */}
           <section id="sec-03" className="mb-40 space-y-12">
             <div className="border-b-4 border-gray-900 pb-4 flex flex-col md:flex-row md:items-end justify-between gap-4">
-              <div><h3 className="text-4xl font-black uppercase tracking-tighter flex items-center gap-4"><Cpu className="text-red-700" size={32} />03. Arquitectura DeFi</h3><p className="text-gray-400 font-bold uppercase text-[10px] tracking-widest mt-2">Soberanía Matemática y Código Inmutable</p></div>
+              <div><h3 className="text-4xl font-black uppercase tracking-tighter flex items-center gap-4"><Cpu className="text-red-700" size={32} />03. Arquitectura DeFi</h3><p className="text-gray-400 font-bold uppercase text-[11px] tracking-widest mt-2">Soberanía Matemática y Código Inmutable</p></div>
               <InfoPanel sectionId="sec-03" />
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
               <div className="space-y-4">
                 <div className="flex items-center gap-2 mb-6 pl-2 border-l-2 border-red-700">
-                   <h4 className="text-[10px] font-black uppercase tracking-widest text-red-700">Equivalencias de Sistema</h4>
-                   <span className="text-[8px] font-black uppercase bg-red-50 text-red-700 px-2 py-0.5 rounded">Detalle por elemento</span>
+                   <h4 className="text-[11px] font-black uppercase tracking-widest text-red-700">Equivalencias de Sistema</h4>
+                   <span className="text-[9px] font-black uppercase bg-red-50 text-red-700 px-2 py-0.5 rounded">Detalle por elemento</span>
                 </div>
                 
                 <div className="space-y-4">
@@ -759,7 +758,7 @@ export default function App() {
                         onClick={() => setSelectedEquivalence(item)}
                         className="flex-1 bg-white border border-gray-100 p-6 rounded-[1.5rem] flex justify-between items-center group hover:border-gray-400 transition-all shadow-sm hover:shadow-md duration-300 relative overflow-hidden"
                       >
-                        <span className="font-black text-[10px] uppercase text-gray-400 tracking-widest group-hover:text-gray-900 transition-colors">{item.trad}</span>
+                        <span className="font-black text-[11px] uppercase text-gray-400 tracking-widest group-hover:text-gray-900 transition-colors">{item.trad}</span>
                         <div className="p-1.5 bg-gray-50 rounded-lg opacity-40 group-hover:opacity-100 transition-opacity">
                            <Landmark size={12} className="text-gray-400 group-hover:text-gray-900" />
                         </div>
@@ -771,7 +770,7 @@ export default function App() {
                         onClick={() => setSelectedEquivalence(item)}
                         className="flex-1 bg-white border border-gray-100 p-6 rounded-[1.5rem] flex justify-between items-center group hover:border-red-500 transition-all shadow-sm hover:shadow-xl hover:-translate-y-0.5 duration-300 relative overflow-hidden"
                       >
-                        <span className="font-black text-[11px] uppercase text-gray-900 italic tracking-tight">{item.defi}</span>
+                        <span className="font-black text-[12px] uppercase text-gray-900 italic tracking-tight">{item.defi}</span>
                         <div className="p-1.5 bg-red-50 rounded-lg text-red-700">
                            <Cpu size={12} />
                         </div>
@@ -783,23 +782,23 @@ export default function App() {
               
               <div className="bg-white p-12 rounded-[3.5rem] flex flex-col items-center justify-center text-center space-y-8 shadow-xl shadow-gray-100/50 border border-gray-100 relative group overflow-hidden">
                 <div className="absolute top-0 right-0 w-64 h-64 bg-red-700/5 blur-[100px] pointer-events-none"></div>
-                <div className="absolute top-6 right-8 text-[10px] font-black text-gray-300 uppercase tracking-[0.5em] vertical-text">LIQUIDITY CERTAINTY</div>
+                <div className="absolute top-6 right-8 text-[11px] font-black text-gray-300 uppercase tracking-[0.5em] vertical-text">LIQUIDITY CERTAINTY</div>
                 
                 <div className="flex items-center gap-4 mb-2 relative z-10">
                    <Scale size={32} className="text-red-700 group-hover:rotate-12 transition-transform duration-500" />
                    <h4 className="text-2xl font-black uppercase tracking-tighter italic text-gray-900">Garantía Sistémica</h4>
                 </div>
-                <p className="text-gray-500 text-[11px] font-bold uppercase tracking-wider max-w-xs mx-auto mb-4 relative z-10">Diferencia entre la ilusión del crédito Fiat y el respaldo real DeFi.</p>
+                <p className="text-gray-500 text-[12px] font-bold uppercase tracking-wider max-w-xs mx-auto mb-4 relative z-10">Diferencia entre la ilusión del crédito Fiat y el respaldo real DeFi.</p>
                 
                 <div className="h-64 w-full relative z-10">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={collateralComparisonData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
                       <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f3f4f6" />
-                      <XAxis dataKey="name" fontSize={9} axisLine={false} tickLine={false} tick={{ fill: '#111827', fontWeight: 900 }} />
+                      <XAxis dataKey="name" fontSize={11} axisLine={false} tickLine={false} tick={{ fill: '#111827', fontWeight: 900 }} />
                       <YAxis hide domain={[0, 160]} />
                       <Tooltip content={<CustomTooltip />} cursor={{ fill: '#f9fafb' }} />
                       <Bar dataKey="principal" name="Respaldo Real" stackId="a" fill="#b91c1c" radius={[0, 0, 0, 0]}>
-                        <LabelList dataKey="desc" position="top" style={{ fill: '#111827', fontSize: '8px', fontWeight: 900, textTransform: 'uppercase' }} />
+                        <LabelList dataKey="desc" position="top" style={{ fill: '#111827', fontSize: '9px', fontWeight: 900, textTransform: 'uppercase' }} />
                       </Bar>
                       <Bar dataKey="leverage" name="Crédito (Fraccionario)" stackId="a" fill="#374151" radius={[15, 15, 0, 0]} />
                       <Bar dataKey="debt" name="Deuda Emitida" fill="#ffffff" stroke="#111827" strokeWidth={2} radius={[15, 15, 0, 0]} barSize={30} />
@@ -809,15 +808,15 @@ export default function App() {
                 
                 <div className="flex gap-6 mt-4 relative z-10">
                    <div className="flex items-center gap-2">
-                      <span className="w-2 h-2 bg-red-700 rounded-full"></span>
-                      <span className="text-[9px] font-black uppercase text-gray-400">Respaldo Real</span>
+                      <span className="w-2.5 h-2.5 bg-red-700 rounded-full"></span>
+                      <span className="text-[10px] font-black uppercase text-gray-400">Respaldo Real</span>
                    </div>
                    <div className="flex items-center gap-2">
-                      <span className="text-[9px] font-black uppercase text-gray-400">Crédito</span>
+                      <span className="text-[10px] font-black uppercase text-gray-400">Crédito</span>
                    </div>
                    <div className="flex items-center gap-2">
-                      <span className="w-2 h-2 bg-white border border-black rounded-full"></span>
-                      <span className="text-[9px] font-black uppercase text-gray-400">Préstamo</span>
+                      <span className="w-2.5 h-2.5 bg-white border border-black rounded-full"></span>
+                      <span className="text-[10px] font-black uppercase text-gray-400">Préstamo</span>
                    </div>
                 </div>
               </div>
@@ -827,7 +826,7 @@ export default function App() {
           {/* 04. INSTRUMENTOS DEFI */}
           <section id="sec-04" className="mb-40 space-y-12">
              <div className="border-b-4 border-red-700 pb-4 flex flex-col md:flex-row md:items-end justify-between gap-4">
-              <div><h3 className="text-4xl font-black uppercase tracking-tighter flex items-center gap-4"><Wallet className="text-gray-900" size={32} />04. Instrumentos DeFi</h3><p className="text-gray-400 font-bold uppercase text-[10px] tracking-widest mt-2">Infraestructura Programable</p></div>
+              <div><h3 className="text-4xl font-black uppercase tracking-tighter flex items-center gap-4"><Wallet className="text-gray-900" size={32} />04. Instrumentos DeFi</h3><p className="text-gray-400 font-bold uppercase text-[11px] tracking-widest mt-2">Infraestructura Programable</p></div>
               <InfoPanel sectionId="sec-04" />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -838,10 +837,10 @@ export default function App() {
                   className="text-left bg-gray-50 p-8 rounded-[2rem] border border-gray-200/50 hover:bg-white hover:shadow-2xl transition-all group active:scale-[0.98]"
                 >
                   <div className="flex justify-between items-center mb-4">
-                    <h4 className="font-black text-sm uppercase italic text-red-700 tracking-tighter group-hover:scale-105 transition-transform origin-left">{item.t}</h4>
-                    <span className="bg-red-700 text-white px-3 py-1 rounded-full text-[8px] font-black uppercase tracking-widest shadow-lg shadow-red-700/20">{item.tag}</span>
+                    <h4 className="font-black text-lg uppercase italic text-red-700 tracking-tighter group-hover:scale-105 transition-transform origin-left">{item.t}</h4>
+                    <span className="bg-red-700 text-white px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest shadow-lg shadow-red-700/20">{item.tag}</span>
                   </div>
-                  <p className="text-[10px] text-gray-500 leading-relaxed font-bold uppercase opacity-80">{item.d}</p>
+                  <p className="text-[12px] text-gray-500 leading-relaxed font-bold uppercase opacity-80">{item.d}</p>
                   <div className="mt-4 flex justify-end opacity-0 group-hover:opacity-100 transition-opacity">
                     <Info size={14} className="text-red-700" />
                   </div>
@@ -853,13 +852,13 @@ export default function App() {
           {/* 05. LÍDERES */}
           <section id="sec-05" className="mb-40 space-y-24">
             <div className="border-b-4 border-gray-900 pb-4 flex flex-col md:flex-row md:items-end justify-between gap-4">
-              <div><h3 className="text-4xl font-black uppercase tracking-tighter flex items-center gap-4"><Globe className="text-red-700" size={32} />05. Protocolos Líderes</h3><p className="text-gray-400 font-bold uppercase text-[10px] tracking-widest mt-2">Los pilares de la infraestructura digital</p></div>
+              <div><h3 className="text-4xl font-black uppercase tracking-tighter flex items-center gap-4"><Globe className="text-red-700" size={32} />05. Protocolos Líderes</h3><p className="text-gray-400 font-bold uppercase text-[11px] tracking-widest mt-2">Los pilares de la infraestructura digital</p></div>
               <InfoPanel sectionId="sec-05" />
             </div>
             
             {/* CRIPTOACTIVOS */}
             <div className="space-y-8">
-              <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-400 border-l-4 border-red-700 pl-4">Criptoactivos de Reserva</h4>
+              <h4 className="text-[11px] font-black uppercase tracking-[0.4em] text-gray-400 border-l-4 border-red-700 pl-4">Criptoactivos de Reserva</h4>
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
                 {CRYPTO_ASSETS.map((c) => (
                   <div key={c.name} className="flex items-center bg-white border border-gray-100 rounded-2xl p-1 shadow-sm hover:border-red-500 transition-all group overflow-hidden">
@@ -868,11 +867,11 @@ export default function App() {
                       className="p-3 bg-gray-900 text-white rounded-xl hover:bg-red-700 transition-colors flex-shrink-0 active:scale-90"
                       title={`Visitar web oficial de ${c.name}`}
                     >
-                      {React.cloneElement(c.icon as React.ReactElement<any>, { size: 14 })}
+                      {React.cloneElement(c.icon as React.ReactElement<any>, { size: 16 })}
                     </button>
                     <button 
                       onClick={() => setSelectedDetail(c.name)}
-                      className="flex-1 px-3 py-3 text-left font-black text-[10px] uppercase tracking-tighter italic text-gray-900 truncate hover:text-red-700 transition-colors"
+                      className="flex-1 px-3 py-3 text-left font-black text-[11px] uppercase tracking-tighter italic text-gray-900 truncate hover:text-red-700 transition-colors"
                     >
                       {c.name}
                     </button>
@@ -883,7 +882,7 @@ export default function App() {
 
             {/* STABLECOINS */}
             <div className="space-y-8">
-              <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-400 border-l-4 border-red-700 pl-4">Stablecoins Globales</h4>
+              <h4 className="text-[11px] font-black uppercase tracking-[0.4em] text-gray-400 border-l-4 border-gray-900 pl-4">Stablecoins Globales</h4>
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 {STABLECOINS.map((s) => (
                   <div key={s.name} className="flex items-center bg-white border border-gray-100 rounded-2xl p-1 shadow-sm hover:border-gray-900 transition-all group active:scale-[0.98]">
@@ -891,11 +890,11 @@ export default function App() {
                       onClick={() => window.open(s.url, '_blank')}
                       className="p-3 bg-red-700 text-white rounded-xl hover:bg-gray-900 transition-colors flex-shrink-0"
                     >
-                      {React.cloneElement(s.icon as React.ReactElement<any>, { size: 14 })}
+                      {React.cloneElement(s.icon as React.ReactElement<any>, { size: 16 })}
                     </button>
                     <button 
                       onClick={() => setSelectedDetail(s.name)}
-                      className="flex-1 px-3 py-3 text-left font-black text-[10px] uppercase tracking-tighter italic text-gray-900 truncate"
+                      className="flex-1 px-3 py-3 text-left font-black text-[11px] uppercase tracking-tighter italic text-gray-900 truncate"
                     >
                       {s.name}
                     </button>
@@ -906,19 +905,19 @@ export default function App() {
 
             {/* WALLETS */}
             <div className="space-y-8">
-              <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-400 border-l-4 border-red-700 pl-4">Infraestructura de Custodia (Wallets)</h4>
+              <h4 className="text-[11px] font-black uppercase tracking-[0.4em] text-gray-400 border-l-4 border-red-700 pl-4">Infraestructura de Custodia (Wallets)</h4>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
                 <div className="space-y-4">
-                  <span className="flex items-center gap-2 text-[10px] font-black uppercase text-red-700 tracking-widest px-2">
-                    <Smartphone size={14} /> Hot Wallets (Uso Diario)
+                  <span className="flex items-center gap-2 text-[11px] font-black uppercase text-red-700 tracking-widest px-2">
+                    <Smartphone size={16} /> Hot Wallets (Uso Diario)
                   </span>
                   <div className="grid grid-cols-1 gap-3">
                     {HOT_WALLETS.map((w) => (
                       <div key={w.name} className="flex items-center bg-white border border-gray-100 rounded-2xl p-1 shadow-sm hover:border-red-700 transition-all group">
                         <button onClick={() => window.open(w.url, '_blank')} className="p-3 bg-gray-900 text-white rounded-xl hover:bg-red-700 transition-colors flex-shrink-0">
-                          {React.cloneElement(w.icon as React.ReactElement<any>, { size: 14 })}
+                          {React.cloneElement(w.icon as React.ReactElement<any>, { size: 16 })}
                         </button>
-                        <button onClick={() => setSelectedDetail(w.name)} className="flex-1 px-3 py-3 text-left font-black text-[10px] uppercase tracking-tighter italic text-gray-900">
+                        <button onClick={() => setSelectedDetail(w.name)} className="flex-1 px-3 py-3 text-left font-black text-[11px] uppercase tracking-tighter italic text-gray-900">
                           {w.name}
                         </button>
                       </div>
@@ -926,16 +925,16 @@ export default function App() {
                   </div>
                 </div>
                 <div className="space-y-4">
-                  <span className="flex items-center gap-2 text-[10px] font-black uppercase text-gray-400 tracking-widest px-2">
-                    <HardDrive size={14} /> Cold Wallets (Seguridad Máxima)
+                  <span className="flex items-center gap-2 text-[11px] font-black uppercase text-gray-400 tracking-widest px-2">
+                    <HardDrive size={16} /> Cold Wallets (Seguridad Máxima)
                   </span>
                   <div className="grid grid-cols-1 gap-3">
                     {COLD_WALLETS.map((w) => (
                       <div key={w.name} className="flex items-center bg-white border border-gray-100 rounded-2xl p-1 shadow-sm hover:border-gray-900 transition-all group">
                         <button onClick={() => window.open(w.url, '_blank')} className="p-3 bg-red-700 text-white rounded-xl hover:bg-gray-900 transition-colors flex-shrink-0">
-                          {React.cloneElement(w.icon as React.ReactElement<any>, { size: 14 })}
+                          {React.cloneElement(w.icon as React.ReactElement<any>, { size: 16 })}
                         </button>
-                        <button onClick={() => setSelectedDetail(w.name)} className="flex-1 px-3 py-3 text-left font-black text-[10px] uppercase tracking-tighter italic text-gray-900">
+                        <button onClick={() => setSelectedDetail(w.name)} className="flex-1 px-3 py-3 text-left font-black text-[11px] uppercase tracking-tighter italic text-gray-900">
                           {w.name}
                         </button>
                       </div>
@@ -947,7 +946,7 @@ export default function App() {
 
             {/* DEFI PLATFORMS */}
             <div className="space-y-8">
-              <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-400 border-l-4 border-red-700 pl-4">Infraestructura DeFi Top</h4>
+              <h4 className="text-[11px] font-black uppercase tracking-[0.4em] text-gray-400 border-l-4 border-red-700 pl-4">Infraestructura DeFi Top</h4>
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 {DEFI_PLATFORMS.map((p) => (
                   <div key={p.name} className="flex items-center bg-white border border-gray-100 rounded-2xl p-1 shadow-sm hover:border-red-700 transition-all group">
@@ -955,11 +954,11 @@ export default function App() {
                       onClick={() => window.open(p.url, '_blank')}
                       className="p-3 bg-gray-900 text-white rounded-xl hover:bg-red-700 transition-colors flex-shrink-0"
                     >
-                      {React.cloneElement(p.icon as React.ReactElement<any>, { size: 14 })}
+                      {React.cloneElement(p.icon as React.ReactElement<any>, { size: 16 })}
                     </button>
                     <button 
                       onClick={() => setSelectedDetail(p.name)}
-                      className="flex-1 px-3 py-3 text-left font-black text-[10px] uppercase tracking-tighter italic text-gray-900 truncate"
+                      className="flex-1 px-3 py-3 text-left font-black text-[11px] uppercase tracking-tighter italic text-gray-900 truncate"
                     >
                       {p.name}
                     </button>
@@ -972,23 +971,23 @@ export default function App() {
           {/* 06. COMPARATIVA */}
           <section id="sec-06" className="mb-40 space-y-12">
             <div className="border-b-4 border-red-700 pb-4 flex flex-col md:flex-row md:items-end justify-between gap-4">
-              <div><h3 className="text-4xl font-black uppercase tracking-tighter flex items-center gap-4"><BarChart3 size={32} className="text-gray-900" />06. Comparativa Sistémica</h3><p className="text-gray-400 font-bold uppercase text-[10px] tracking-widest mt-2">Vector de Atributos y Eficiencia de Respuesta</p></div>
+              <div><h3 className="text-4xl font-black uppercase tracking-tighter flex items-center gap-4"><BarChart3 size={32} className="text-gray-900" />06. Comparativa Sistémica</h3><p className="text-gray-400 font-bold uppercase text-[11px] tracking-widest mt-2">Vector de Atributos y Eficiencia de Respuesta</p></div>
               <InfoPanel sectionId="sec-06" />
             </div>
             
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
                <div className="bg-white p-12 rounded-[3.5rem] shadow-xl border border-gray-100 relative overflow-hidden group">
                  <div className="absolute top-0 right-0 w-64 h-64 bg-red-700/5 blur-[100px] pointer-events-none"></div>
-                 <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-red-700 mb-10 text-center relative z-10">Radar de Atributos Sistémicos</h4>
+                 <h4 className="text-[11px] font-black uppercase tracking-[0.4em] text-red-700 mb-10 text-center relative z-10">Radar de Atributos Sistémicos</h4>
                  <div className="h-96 relative z-10">
                    <ResponsiveContainer width="100%" height="100%">
                      <RadarChart cx="50%" cy="50%" outerRadius="75%" data={radarData}>
                        <PolarGrid stroke="#f3f4f6" strokeDasharray="3 3" />
-                       <PolarAngleAxis dataKey="subject" tick={{ fill: '#9ca3af', fontSize: 10, fontWeight: 900 }} />
+                       <PolarAngleAxis dataKey="subject" tick={{ fill: '#9ca3af', fontSize: 11, fontWeight: 900 }} />
                        <Radar name="SISTEMA FIAT" dataKey="FIAT" stroke="#9ca3af" fill="#9ca3af" fillOpacity={0.1} strokeWidth={3} />
                        <Radar name="SISTEMA DEFI" dataKey="DEFI" stroke="#b91c1c" fill="#b91c1c" fillOpacity={0.2} strokeWidth={3} />
                        <Tooltip content={<CustomTooltip />} />
-                       <Legend wrapperStyle={{ paddingTop: '30px', fontSize: '9px', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.1em' }} />
+                       <Legend wrapperStyle={{ paddingTop: '30px', fontSize: '10px', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.1em' }} />
                      </RadarChart>
                    </ResponsiveContainer>
                  </div>
@@ -997,36 +996,36 @@ export default function App() {
                <div className="space-y-12">
                  <div className="bg-white p-10 rounded-[3rem] border border-gray-100 shadow-xl shadow-gray-100/50 relative overflow-hidden group">
                    <div className="flex items-center justify-between mb-8 pb-4 border-b border-gray-50">
-                      <h4 className="text-[10px] font-black uppercase tracking-widest text-gray-400">Tiempo de Respuesta (Finalidad)</h4>
-                      <Clock size={16} className="text-red-700 animate-pulse" />
+                      <h4 className="text-[11px] font-black uppercase tracking-widest text-gray-400">Tiempo de Respuesta (Finalidad)</h4>
+                      <Clock size={18} className="text-red-700 animate-pulse" />
                    </div>
                    <div className="h-64">
                      <ResponsiveContainer width="100%" height="100%">
                        <BarChart layout="vertical" data={responseTimeData} margin={{ left: 20, right: 60 }}>
                          <XAxis type="number" hide scale="log" domain={[0.1, 10000]} />
-                         <YAxis dataKey="name" type="category" width={140} fontSize={9} axisLine={false} tickLine={false} tick={{ fill: '#111827', fontWeight: 900 }} />
+                         <YAxis dataKey="name" type="category" width={140} fontSize={10} axisLine={false} tickLine={false} tick={{ fill: '#111827', fontWeight: 900 }} />
                          <Tooltip content={<CustomTooltip />} cursor={{ fill: '#f9fafb' }} />
                          <Bar dataKey="min" fill="#b91c1c" radius={[0, 10, 10, 0]} barSize={28}>
-                            <LabelList dataKey="label" position="right" style={{ fill: '#111827', fontSize: '9px', fontWeight: 900, textTransform: 'uppercase' }} offset={10} />
+                            <LabelList dataKey="label" position="right" style={{ fill: '#111827', fontSize: '10px', fontWeight: 900, textTransform: 'uppercase' }} offset={10} />
                          </Bar>
                        </BarChart>
                      </ResponsiveContainer>
                    </div>
-                   <p className="text-[9px] text-gray-400 font-bold uppercase italic text-center mt-6 tracking-widest">Escala logarítmica de latencia transaccional</p>
+                   <p className="text-[10px] text-gray-400 font-bold uppercase italic text-center mt-6 tracking-widest">Escala logarítmica de latencia transaccional</p>
                  </div>
 
-                 <div className="space-y-4">
-                   <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-red-700 px-4">Atributos de Disponibilidad y Certeza</h4>
+                 <div className="space-y-6">
+                   <h4 className="text-[12px] font-black uppercase tracking-[0.4em] text-red-700 px-6 border-l-4 border-red-700">Atributos de Disponibilidad y Certeza</h4>
                    <div className="grid grid-cols-2 gap-6">
                      <div className="text-center p-8 border-2 border-gray-100 rounded-[2.5rem] bg-white shadow-sm hover:shadow-xl transition-all group duration-500">
-                       <div className="mb-2 flex justify-center"><Smartphone size={24} className="text-gray-900 group-hover:scale-110 transition-transform" /></div>
+                       <div className="mb-2 flex justify-center"><Smartphone size={28} className="text-gray-900 group-hover:scale-110 transition-transform" /></div>
                        <span className="block text-4xl font-black text-gray-900 mb-1 italic tracking-tighter">24/7</span>
-                       <span className="text-[9px] font-black uppercase text-gray-400 tracking-[0.2em]">Mercado sin Cierre</span>
+                       <span className="text-[10px] font-black uppercase text-gray-400 tracking-[0.2em]">Mercado sin Cierre</span>
                      </div>
                      <div className="text-center p-8 border-2 border-red-700 bg-red-50/30 rounded-[2.5rem] shadow-xl shadow-red-700/5 hover:-translate-y-1 transition-all group duration-500">
-                       <div className="mb-2 flex justify-center"><Shield size={24} className="text-red-700 group-hover:scale-110 transition-transform" /></div>
+                       <div className="mb-2 flex justify-center"><Shield size={28} className="text-red-700 group-hover:scale-110 transition-transform" /></div>
                        <span className="block text-4xl font-black text-red-700 mb-1 italic tracking-tighter">100%</span>
-                       <span className="text-[9px] font-black uppercase text-red-700 tracking-[0.2em]">Certeza Algorítmica</span>
+                       <span className="text-[10px] font-black uppercase text-red-700 tracking-[0.2em]">Certeza Algorítmica</span>
                      </div>
                    </div>
                  </div>
@@ -1040,12 +1039,12 @@ export default function App() {
               <div className="space-y-4">
                 <div className="flex items-center gap-3 text-red-700">
                   <div className="p-2 bg-red-50 rounded-xl"><BookOpen size={24} /></div>
-                  <span className="text-[10px] font-black uppercase tracking-[0.4em]">Master Knowledge</span>
+                  <span className="text-[11px] font-black uppercase tracking-[0.4em]">Master Knowledge</span>
                 </div>
                 <h3 className="text-4xl font-black uppercase italic tracking-tighter text-gray-900 leading-none">Glosario<br/><span className="text-red-700">Estructural</span></h3>
               </div>
               <div className="max-w-md">
-                <p className="text-gray-400 text-xs font-bold uppercase leading-relaxed text-right border-r-4 border-red-700 pr-6 italic">Conceptos fundamentales para comprender la infraestructura de las finanzas programables y la criptoeconomía moderna.</p>
+                <p className="text-gray-400 text-sm font-bold uppercase leading-relaxed text-right border-r-4 border-red-700 pr-6 italic">Conceptos fundamentales para comprender la infraestructura de las finanzas programables y la criptoeconomía moderna.</p>
               </div>
             </div>
 
@@ -1057,10 +1056,10 @@ export default function App() {
                   className="text-left bg-white p-6 rounded-[1.5rem] border border-gray-100 hover:border-red-700 shadow-sm hover:shadow-xl transition-all group relative active:scale-[0.98]"
                 >
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-red-700 font-black text-[11px] uppercase tracking-widest group-hover:italic transition-all">{item.t}</span>
-                    <Plus size={12} className="text-gray-300 group-hover:text-red-700 group-hover:rotate-90 transition-all" />
+                    <span className="text-red-700 font-black text-[12px] uppercase tracking-widest group-hover:italic transition-all">{item.t}</span>
+                    <Plus size={14} className="text-gray-300 group-hover:text-red-700 group-hover:rotate-90 transition-all" />
                   </div>
-                  <p className="text-[10px] text-gray-400 italic font-medium leading-snug group-hover:text-gray-600 transition-colors">{item.d}</p>
+                  <p className="text-[11px] text-gray-400 italic font-medium leading-snug group-hover:text-gray-600 transition-colors">{item.d}</p>
                   <div className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
                     <Terminal size={10} className="text-gray-200" />
                   </div>
@@ -1072,18 +1071,18 @@ export default function App() {
           {/* MODAL DE INFORMACIÓN */}
           {selectedDetail && (
             <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-md animate-in fade-in duration-300">
-              <div className="bg-white rounded-[2.5rem] shadow-2xl w-full max-w-lg overflow-hidden border border-gray-100 animate-in zoom-in-95 relative">
+              <div className="bg-white rounded-[2.5rem] shadow-2xl w-full max-w-3xl overflow-hidden border border-gray-100 animate-in zoom-in-95 relative">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-red-700/5 blur-3xl rounded-full"></div>
                 
                 {/* Cabecera del Modal */}
                 <div className="p-8 pb-4 flex items-center justify-between relative z-10 border-b border-gray-50">
                   <div className="flex items-center gap-4">
                     <div className="p-2.5 bg-red-700 rounded-xl text-white shadow-lg shadow-red-700/20">
-                      <Info size={24} />
+                      <Info size={28} />
                     </div>
                     <div>
-                      <h3 className="text-xl font-black text-gray-900 uppercase tracking-tighter italic leading-none">{selectedDetail}</h3>
-                      <p className="text-[9px] text-gray-400 font-bold uppercase tracking-widest mt-1">
+                      <h3 className="text-2xl font-black text-gray-900 uppercase tracking-tighter italic leading-none">{selectedDetail}</h3>
+                      <p className="text-[11px] text-gray-400 font-bold uppercase tracking-widest mt-1">
                         {modalViewMode === 'simple' ? "Lenguaje Sencillo" : modalViewMode === 'extended' ? "Investigación Profunda" : modalViewMode === 'ai' ? "Respuesta IA Gemini" : "Análisis Técnico"}
                       </p>
                     </div>
@@ -1091,79 +1090,79 @@ export default function App() {
                   <div className="flex items-center gap-2">
                     <button 
                       onClick={() => setModalViewMode('technical')}
-                      className={`p-2.5 rounded-xl transition-all active:scale-90 ${modalViewMode === 'technical' ? 'bg-gray-900 text-white shadow-lg' : 'bg-gray-100 text-gray-400 hover:text-gray-900'}`}
+                      className={`p-3 rounded-xl transition-all active:scale-90 ${modalViewMode === 'technical' ? 'bg-gray-900 text-white shadow-lg' : 'bg-gray-100 text-gray-400 hover:text-gray-900'}`}
                       title="Versión Técnica"
                     >
-                      <Code size={20} />
+                      <Code size={24} />
                     </button>
                     <button 
                       onClick={() => setModalViewMode('extended')}
-                      className={`p-2.5 rounded-xl transition-all active:scale-90 ${modalViewMode === 'extended' ? 'bg-red-700 text-white shadow-lg shadow-red-700/20' : 'bg-gray-100 text-gray-400 hover:text-red-700'}`}
+                      className={`p-3 rounded-xl transition-all active:scale-90 ${modalViewMode === 'extended' ? 'bg-red-700 text-white shadow-lg shadow-red-700/20' : 'bg-gray-100 text-gray-400 hover:text-red-700'}`}
                       title="Análisis Detallado"
                     >
-                      <BookOpen size={20} />
+                      <BookOpen size={24} />
                     </button>
                     <button 
                       onClick={() => setModalViewMode('simple')}
-                      className={`p-2.5 rounded-xl transition-all active:scale-90 ${modalViewMode === 'simple' ? 'bg-red-700 text-white shadow-lg shadow-red-700/20' : 'bg-gray-100 text-gray-400 hover:text-red-700'}`}
+                      className={`p-3 rounded-xl transition-all active:scale-90 ${modalViewMode === 'simple' ? 'bg-red-700 text-white shadow-lg shadow-red-700/20' : 'bg-gray-100 text-gray-400 hover:text-red-700'}`}
                       title="Versión Neófito"
                     >
-                      <Sparkles size={20} />
+                      <Sparkles size={24} />
                     </button>
                     <button 
                       onClick={() => handleAiModalAsk(selectedDetail)}
                       disabled={isAiModalLoading}
-                      className={`p-2.5 rounded-xl transition-all active:scale-90 ${modalViewMode === 'ai' ? 'bg-red-700 text-white shadow-lg shadow-red-700/20' : 'bg-gray-100 text-gray-400 hover:text-red-700'}`}
+                      className={`p-3 rounded-xl transition-all active:scale-90 ${modalViewMode === 'ai' ? 'bg-red-700 text-white shadow-lg shadow-red-700/20' : 'bg-gray-100 text-gray-400 hover:text-red-700'}`}
                       title="Consultar a la IA"
                     >
-                      {isAiModalLoading ? <Loader2 size={20} className="animate-spin" /> : <Bot size={20} />}
+                      {isAiModalLoading ? <Loader2 size={24} className="animate-spin" /> : <Bot size={24} />}
                     </button>
-                    <div className="w-[1px] h-8 bg-gray-100 mx-1"></div>
-                    <button onClick={() => setSelectedDetail(null)} className="p-2.5 hover:bg-gray-100 rounded-xl text-gray-400 hover:text-red-700 transition-all active:scale-90">
-                      <X size={20} />
+                    <div className="w-[1px] h-10 bg-gray-100 mx-2"></div>
+                    <button onClick={() => setSelectedDetail(null)} className="p-3 hover:bg-gray-100 rounded-xl text-gray-400 hover:text-red-700 transition-all active:scale-90">
+                      <X size={28} />
                     </button>
                   </div>
                 </div>
 
                 {/* Contenido del Modal */}
-                <div className="p-8 pt-6 relative z-10">
+                <div className="p-8 pt-6 relative z-10 overflow-y-auto max-h-[70vh] custom-scrollbar">
                   <div className="min-h-[120px]">
                     {modalViewMode === 'simple' ? (
-                      <div className="bg-red-50/30 p-6 rounded-3xl border border-red-100 animate-in fade-in slide-in-from-bottom-2">
-                        <p className="text-sm text-gray-900 leading-relaxed font-bold italic">
+                      <div className="bg-red-50/30 p-8 rounded-3xl border border-red-100 animate-in fade-in slide-in-from-bottom-2">
+                        <p className="text-base text-gray-900 leading-relaxed font-bold italic">
                           {KNOWLEDGE_BASE[selectedDetail]?.simple || "Traducción a lenguaje sencillo próximamente disponible."}
                         </p>
                       </div>
                     ) : modalViewMode === 'extended' ? (
-                      <div className="bg-white p-6 rounded-3xl border border-red-100 shadow-sm animate-in fade-in slide-in-from-bottom-2 relative overflow-hidden">
+                      <div className="bg-white p-8 rounded-3xl border border-red-100 shadow-sm animate-in fade-in slide-in-from-bottom-2 relative overflow-hidden">
                          <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
-                           <FileText size={40} className="text-red-700" />
+                           <FileText size={60} className="text-red-700" />
                          </div>
-                         <div className="flex items-center gap-2 mb-3 relative z-10">
-                           <FileText size={14} className="text-red-700" />
-                           <span className="text-[9px] font-black uppercase tracking-widest text-red-700">Tesis de Investigación</span>
+                         <div className="flex items-center gap-2 mb-4 relative z-10">
+                           <FileText size={18} className="text-red-700" />
+                           <span className="text-[11px] font-black uppercase tracking-widest text-red-700">Tesis de Investigación</span>
                          </div>
-                         <p className="text-[13px] text-gray-900 leading-relaxed font-medium relative z-10">
+                         <p className="text-[15px] text-gray-900 leading-relaxed font-semibold relative z-10">
                            {KNOWLEDGE_BASE[selectedDetail]?.extended || "El análisis detallado para este término está siendo verificado por el equipo de investigación."}
                          </p>
                       </div>
                     ) : modalViewMode === 'ai' ? (
-                      <div className="bg-gray-50 p-6 rounded-3xl border border-gray-200 animate-in fade-in slide-in-from-bottom-2 flex flex-col">
+                      <div className="bg-gray-50 p-8 rounded-3xl border border-gray-200 animate-in fade-in slide-in-from-bottom-2 flex flex-col">
                         {isAiModalLoading && !aiModalResponse ? (
-                          <div className="flex flex-col items-center justify-center py-6 gap-3">
-                             <Loader2 size={24} className="animate-spin text-red-700" />
-                             <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">Procesando Consulta IA...</span>
+                          <div className="flex flex-col items-center justify-center py-10 gap-3">
+                             <Loader2 size={32} className="animate-spin text-red-700" />
+                             <span className="text-[11px] font-black uppercase tracking-widest text-gray-400">Procesando Consulta IA...</span>
                           </div>
                         ) : (
                           <>
-                            <div className="prose-sm max-h-[250px] overflow-y-auto custom-scrollbar pr-2 mb-6">
+                            <div className="prose-sm overflow-y-auto custom-scrollbar pr-2 mb-8">
                                {formatAiResponse(aiModalResponse, true)}
                             </div>
                             
-                            <div className="border-t border-gray-200 pt-6 space-y-3">
+                            <div className="border-t border-gray-200 pt-8 space-y-4">
                                <div className="flex items-center gap-2 mb-1">
-                                  <MessageSquare size={14} className="text-red-700" />
-                                  <span className="text-[10px] font-black uppercase tracking-widest text-gray-900">¿Más preguntas?</span>
+                                  <MessageSquare size={16} className="text-red-700" />
+                                  <span className="text-[12px] font-black uppercase tracking-widest text-gray-900">¿Más preguntas?</span>
                                </div>
                                <div className="relative group">
                                   <input 
@@ -1171,15 +1170,15 @@ export default function App() {
                                     value={aiFollowUp}
                                     onChange={(e) => setAiFollowUp(e.target.value)}
                                     onKeyDown={(e) => e.key === 'Enter' && aiFollowUp.trim() && handleAiModalAsk(selectedDetail, aiFollowUp)}
-                                    placeholder="Profundiza sobre este concepto..."
-                                    className="w-full bg-white border border-gray-200 p-3 rounded-xl text-[11px] font-medium pr-10 outline-none focus:ring-2 focus:ring-red-700/10 transition-all shadow-inner"
+                                    placeholder="Profundiza sobre este concepto con nuestra IA..."
+                                    className="w-full bg-white border border-gray-200 p-4 rounded-2xl text-[13px] font-semibold pr-12 outline-none focus:ring-2 focus:ring-red-700/10 transition-all shadow-inner"
                                   />
                                   <button 
                                     onClick={() => aiFollowUp.trim() && handleAiModalAsk(selectedDetail, aiFollowUp)}
                                     disabled={isAiModalLoading || !aiFollowUp.trim()}
-                                    className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 bg-gray-900 text-white rounded-lg hover:bg-black disabled:opacity-20 transition-all"
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 p-2 bg-gray-900 text-white rounded-xl hover:bg-black disabled:opacity-20 transition-all"
                                   >
-                                    {isAiModalLoading ? <Loader2 size={12} className="animate-spin" /> : <Send size={12} />}
+                                    {isAiModalLoading ? <Loader2 size={16} className="animate-spin" /> : <Send size={16} />}
                                   </button>
                                </div>
                             </div>
@@ -1187,8 +1186,8 @@ export default function App() {
                         )}
                       </div>
                     ) : (
-                      <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm animate-in fade-in slide-in-from-bottom-2">
-                        <p className="text-sm text-gray-900 leading-relaxed font-medium">
+                      <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm animate-in fade-in slide-in-from-bottom-2">
+                        <p className="text-base text-gray-900 leading-relaxed font-semibold">
                           {KNOWLEDGE_BASE[selectedDetail]?.technical || "Información técnica detallada en proceso de sincronización."}
                         </p>
                       </div>
@@ -1202,18 +1201,18 @@ export default function App() {
           {/* MODAL DE EQUIVALENCIAS DE SISTEMA */}
           {selectedEquivalence && (
             <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-md animate-in fade-in duration-300">
-              <div className="bg-white rounded-[2.5rem] shadow-2xl w-full max-w-lg overflow-hidden border border-gray-100 animate-in zoom-in-95 relative">
+              <div className="bg-white rounded-[2.5rem] shadow-2xl w-full max-w-3xl overflow-hidden border border-gray-100 animate-in zoom-in-95 relative">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-red-700/5 blur-3xl rounded-full"></div>
                 
                 {/* Cabecera con Selector */}
                 <div className="p-8 pb-4 flex items-center justify-between relative z-10 border-b border-gray-50">
                   <div className="flex items-center gap-4">
                     <div className="p-2.5 bg-gray-900 rounded-xl text-white shadow-lg">
-                      <Cpu size={24} />
+                      <Cpu size={28} />
                     </div>
                     <div>
-                      <h3 className="text-xl font-black text-gray-900 uppercase tracking-tighter italic leading-none">{selectedEquivalence.defi}</h3>
-                      <p className="text-[9px] text-gray-400 font-bold uppercase tracking-widest mt-1">
+                      <h3 className="text-2xl font-black text-gray-900 uppercase tracking-tighter italic leading-none">{selectedEquivalence.defi}</h3>
+                      <p className="text-[11px] text-gray-400 font-bold uppercase tracking-widest mt-1">
                          Transición desde {selectedEquivalence.trad}
                       </p>
                     </div>
@@ -1221,79 +1220,79 @@ export default function App() {
                   <div className="flex items-center gap-2">
                     <button 
                       onClick={() => setModalViewMode('technical')}
-                      className={`p-2.5 rounded-xl transition-all active:scale-90 ${modalViewMode === 'technical' ? 'bg-gray-900 text-white shadow-lg' : 'bg-gray-100 text-gray-400 hover:text-gray-900'}`}
+                      className={`p-3 rounded-xl transition-all active:scale-90 ${modalViewMode === 'technical' ? 'bg-gray-900 text-white shadow-lg' : 'bg-gray-100 text-gray-400 hover:text-gray-900'}`}
                       title="Análisis Técnico"
                     >
-                      <Terminal size={20} />
+                      <Terminal size={24} />
                     </button>
                     <button 
                       onClick={() => setModalViewMode('extended')}
-                      className={`p-2.5 rounded-xl transition-all active:scale-90 ${modalViewMode === 'extended' ? 'bg-red-700 text-white shadow-lg shadow-red-700/20' : 'bg-gray-100 text-gray-400 hover:text-red-700'}`}
+                      className={`p-3 rounded-xl transition-all active:scale-90 ${modalViewMode === 'extended' ? 'bg-red-700 text-white shadow-lg shadow-red-700/20' : 'bg-gray-100 text-gray-400 hover:text-red-700'}`}
                       title="Profundización"
                     >
-                      <BookOpen size={20} />
+                      <BookOpen size={24} />
                     </button>
                     <button 
                       onClick={() => setModalViewMode('simple')}
-                      className={`p-2.5 rounded-xl transition-all active:scale-90 ${modalViewMode === 'simple' ? 'bg-red-700 text-white shadow-lg shadow-red-700/20' : 'bg-gray-100 text-gray-400 hover:text-red-700'}`}
+                      className={`p-3 rounded-xl transition-all active:scale-90 ${modalViewMode === 'simple' ? 'bg-red-700 text-white shadow-lg shadow-red-700/20' : 'bg-gray-100 text-gray-400 hover:text-red-700'}`}
                       title="Análisis Neófito"
                     >
-                      <User size={20} />
+                      <User size={24} />
                     </button>
                     <button 
                       onClick={() => handleAiModalAsk(`${selectedEquivalence.trad} vs ${selectedEquivalence.defi}`)}
                       disabled={isAiModalLoading}
-                      className={`p-2.5 rounded-xl transition-all active:scale-90 ${modalViewMode === 'ai' ? 'bg-red-700 text-white shadow-lg shadow-red-700/20' : 'bg-gray-100 text-gray-400 hover:text-red-700'}`}
+                      className={`p-3 rounded-xl transition-all active:scale-90 ${modalViewMode === 'ai' ? 'bg-red-700 text-white shadow-lg shadow-red-700/20' : 'bg-gray-100 text-gray-400 hover:text-red-700'}`}
                       title="Análisis por IA"
                     >
-                      {isAiModalLoading ? <Loader2 size={20} className="animate-spin" /> : <Bot size={20} />}
+                      {isAiModalLoading ? <Loader2 size={24} className="animate-spin" /> : <Bot size={24} />}
                     </button>
-                    <div className="w-[1px] h-8 bg-gray-100 mx-1"></div>
-                    <button onClick={() => setSelectedEquivalence(null)} className="p-2.5 hover:bg-gray-100 rounded-xl text-gray-400 hover:text-red-700 transition-all active:scale-90">
-                      <X size={20} />
+                    <div className="w-[1px] h-10 bg-gray-100 mx-2"></div>
+                    <button onClick={() => setSelectedEquivalence(null)} className="p-3 hover:bg-gray-100 rounded-xl text-gray-400 hover:text-red-700 transition-all active:scale-90">
+                      <X size={28} />
                     </button>
                   </div>
                 </div>
 
                 {/* Contenido */}
-                <div className="p-8 pt-6 relative z-10">
+                <div className="p-8 pt-6 relative z-10 overflow-y-auto max-h-[70vh] custom-scrollbar">
                   <div className="min-h-[120px]">
                     {modalViewMode === 'simple' ? (
-                      <div className="bg-red-50/30 p-6 rounded-3xl border border-red-100 animate-in fade-in slide-in-from-bottom-2">
-                        <p className="text-sm text-gray-900 leading-relaxed italic font-bold">
+                      <div className="bg-red-50/30 p-8 rounded-3xl border border-red-100 animate-in fade-in slide-in-from-bottom-2">
+                        <p className="text-base text-gray-900 leading-relaxed italic font-bold">
                           {selectedEquivalence.simple}
                         </p>
                       </div>
                     ) : modalViewMode === 'extended' ? (
-                      <div className="bg-white p-6 rounded-3xl border border-red-100 shadow-sm animate-in fade-in slide-in-from-bottom-2 relative overflow-hidden">
+                      <div className="bg-white p-8 rounded-3xl border border-red-100 shadow-sm animate-in fade-in slide-in-from-bottom-2 relative overflow-hidden">
                          <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
-                           <FileText size={40} className="text-red-700" />
+                           <FileText size={60} className="text-red-700" />
                          </div>
-                         <div className="flex items-center gap-2 mb-3 relative z-10">
-                           <FileText size={14} className="text-red-700" />
-                           <span className="text-[9px] font-black uppercase tracking-widest text-red-700">Análisis Estructural</span>
+                         <div className="flex items-center gap-2 mb-4 relative z-10">
+                           <FileText size={18} className="text-red-700" />
+                           <span className="text-[11px] font-black uppercase tracking-widest text-red-700">Análisis Estructural</span>
                          </div>
-                         <p className="text-[13px] text-gray-900 leading-relaxed font-medium relative z-10 italic">
+                         <p className="text-[15px] text-gray-900 leading-relaxed font-semibold relative z-10 italic">
                            {selectedEquivalence.extended}
                          </p>
                       </div>
                     ) : modalViewMode === 'ai' ? (
-                      <div className="bg-gray-50 p-6 rounded-3xl border border-gray-200 animate-in fade-in slide-in-from-bottom-2 flex flex-col">
+                      <div className="bg-gray-50 p-8 rounded-3xl border border-gray-200 animate-in fade-in slide-in-from-bottom-2 flex flex-col">
                         {isAiModalLoading && !aiModalResponse ? (
-                          <div className="flex flex-col items-center justify-center py-6 gap-3">
-                             <Loader2 size={24} className="animate-spin text-red-700" />
-                             <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">Generando Análisis...</span>
+                          <div className="flex flex-col items-center justify-center py-10 gap-3">
+                             <Loader2 size={32} className="animate-spin text-red-700" />
+                             <span className="text-[11px] font-black uppercase tracking-widest text-gray-400">Generando Análisis...</span>
                           </div>
                         ) : (
                           <>
-                            <div className="prose-sm max-h-[200px] overflow-y-auto custom-scrollbar pr-2 mb-6">
+                            <div className="prose-sm overflow-y-auto custom-scrollbar pr-2 mb-8">
                                {formatAiResponse(aiModalResponse, true)}
                             </div>
                             
-                            <div className="border-t border-gray-200 pt-6 space-y-3">
+                            <div className="border-t border-gray-200 pt-8 space-y-4">
                                <div className="flex items-center gap-2 mb-1">
-                                  <MessageSquare size={14} className="text-red-700" />
-                                  <span className="text-[10px] font-black uppercase tracking-widest text-gray-900">¿Más preguntas?</span>
+                                  <MessageSquare size={16} className="text-red-700" />
+                                  <span className="text-[12px] font-black uppercase tracking-widest text-gray-900">¿Más preguntas?</span>
                                </div>
                                <div className="relative group">
                                   <input 
@@ -1301,15 +1300,15 @@ export default function App() {
                                     value={aiFollowUp}
                                     onChange={(e) => setAiFollowUp(e.target.value)}
                                     onKeyDown={(e) => e.key === 'Enter' && aiFollowUp.trim() && handleAiModalAsk(`${selectedEquivalence.trad} vs ${selectedEquivalence.defi}`, aiFollowUp)}
-                                    placeholder="Consulta más detalles técnicos..."
-                                    className="w-full bg-white border border-gray-200 p-3 rounded-xl text-[11px] font-medium pr-10 outline-none focus:ring-2 focus:ring-red-700/10 transition-all shadow-inner"
+                                    placeholder="Consulta más detalles técnicos sobre esta transición..."
+                                    className="w-full bg-white border border-gray-200 p-4 rounded-2xl text-[13px] font-semibold pr-12 outline-none focus:ring-2 focus:ring-red-700/10 transition-all shadow-inner"
                                   />
                                   <button 
                                     onClick={() => aiFollowUp.trim() && handleAiModalAsk(`${selectedEquivalence.trad} vs ${selectedEquivalence.defi}`, aiFollowUp)}
                                     disabled={isAiModalLoading || !aiFollowUp.trim()}
-                                    className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 bg-gray-900 text-white rounded-lg hover:bg-black disabled:opacity-20 transition-all"
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 p-2 bg-gray-900 text-white rounded-xl hover:bg-black disabled:opacity-20 transition-all"
                                   >
-                                    {isAiModalLoading ? <Loader2 size={12} className="animate-spin" /> : <Send size={12} />}
+                                    {isAiModalLoading ? <Loader2 size={16} className="animate-spin" /> : <Send size={16} />}
                                   </button>
                                </div>
                             </div>
@@ -1317,22 +1316,22 @@ export default function App() {
                         )}
                       </div>
                     ) : (
-                      <div className="bg-gray-50 p-6 rounded-3xl border border-gray-100 animate-in fade-in slide-in-from-bottom-2">
-                        <p className="text-sm text-gray-700 leading-relaxed font-medium italic">
+                      <div className="bg-gray-50 p-8 rounded-3xl border border-gray-100 animate-in fade-in slide-in-from-bottom-2">
+                        <p className="text-base text-gray-700 leading-relaxed font-semibold italic">
                           {selectedEquivalence.desc}
                         </p>
                       </div>
                     )}
                   </div>
 
-                  <div className="mt-8 flex gap-3 relative z-10">
-                    <div className="flex-1 p-4 bg-gray-100 rounded-2xl text-center">
-                      <span className="block text-[8px] font-black uppercase text-gray-400 mb-1">Pasado Fiat</span>
-                      <span className="text-[10px] font-black uppercase text-gray-600">{selectedEquivalence.trad}</span>
+                  <div className="mt-8 flex gap-4 relative z-10">
+                    <div className="flex-1 p-5 bg-gray-100 rounded-2xl text-center">
+                      <span className="block text-[10px] font-black uppercase text-gray-400 mb-1">Pasado Fiat</span>
+                      <span className="text-[12px] font-black uppercase text-gray-600">{selectedEquivalence.trad}</span>
                     </div>
-                    <div className="flex-1 p-4 bg-red-50 rounded-2xl text-center border border-red-100">
-                      <span className="block text-[8px] font-black uppercase text-red-400 mb-1">Futuro DeFi</span>
-                      <span className="text-[10px] font-black uppercase text-red-700">{selectedEquivalence.defi}</span>
+                    <div className="flex-1 p-5 bg-red-50 rounded-2xl text-center border border-red-100">
+                      <span className="block text-[10px] font-black uppercase text-red-400 mb-1">Futuro DeFi</span>
+                      <span className="text-[12px] font-black uppercase text-red-700">{selectedEquivalence.defi}</span>
                     </div>
                   </div>
                 </div>
@@ -1345,7 +1344,7 @@ export default function App() {
             .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
             section { scroll-margin-top: 100px; }
             .vertical-text { writing-mode: vertical-rl; text-orientation: mixed; }
-            .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+            .custom-scrollbar::-webkit-scrollbar { width: 6px; }
             .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
             .custom-scrollbar::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 10px; }
             .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #d1d5db; }
