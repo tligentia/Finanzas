@@ -1,18 +1,20 @@
-
 import React, { useState, useEffect } from 'react';
 import { X, Key, ShieldCheck, RefreshCcw, Eye, EyeOff, ExternalLink, Lock, Database, Loader2, CheckCircle2, XCircle, Sparkles, Send, Table, Cpu, ChevronDown, Globe, Plus, Zap } from 'lucide-react';
-import { getShortcutKey, crypto, validateKey, listAvailableModels, askGemini } from './Parameters';
+import { getShortcutKey, crypto, validateKey, listAvailableModels, askGemini, AUTHORIZED_DOMAIN } from './Parameters';
 import { Obfuscator } from './Obfuscator';
 
 interface AjustesProps {
   isOpen: boolean;
   onClose: () => void;
+  apiKey: string;
+  onApiKeySave: (key: string) => void;
   userIp: string | null;
 }
 
 const SHEET_ID = '1wJkM8rmiXCrnB0K4h9jtme0m7f5I3y1j1PX5nmEaTII';
 
-export const Ajustes: React.FC<AjustesProps> = ({ isOpen, onClose, userIp }) => {
+export const Ajustes: React.FC<AjustesProps> = ({ isOpen, onClose, apiKey, onApiKeySave, userIp }) => {
+  const [showKey, setShowKey] = useState(false);
   const [showObfuscator, setShowObfuscator] = useState(false);
   const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [isValidating, setIsValidating] = useState(false);
@@ -35,8 +37,8 @@ export const Ajustes: React.FC<AjustesProps> = ({ isOpen, onClose, userIp }) => 
   });
 
   const hostname = typeof window !== 'undefined' ? window.location.hostname : '';
-  const isAuthorized = !hostname || hostname === 'localhost' || hostname === 'hello.tligent.com';
-  const isCurrentIpMemorized = userIp ? memorizedIps.includes(crypto.obfuscate(userIp)) : false;
+  const isAuthorized = !hostname || hostname === 'localhost' || hostname === AUTHORIZED_DOMAIN;
+  const isCurrentIpMemorized = userIp ? memorizedIps.includes(crypto.obfuscate(userIp, "tligent")) : false;
 
   const loadModels = async () => {
     setIsLoadingModels(true);
@@ -44,7 +46,6 @@ export const Ajustes: React.FC<AjustesProps> = ({ isOpen, onClose, userIp }) => 
       const models = await listAvailableModels();
       setAvailableModels(models);
       
-      // Lógica de pre-selección optimizada: Multimodal + Flash + Reciente
       if (!selectedModel || !models.includes(selectedModel)) {
         const optimal = models.find(m => m === 'gemini-3-flash-preview') || 
                         models.find(m => m.includes('flash-preview')) || 
@@ -63,19 +64,37 @@ export const Ajustes: React.FC<AjustesProps> = ({ isOpen, onClose, userIp }) => 
     }
   };
 
-  const handleConfigCheck = async () => {
+  const handleConfigCheck = async (keyToValidate: string) => {
     setIsValidating(true);
-    const ok = await validateKey();
+    const ok = await validateKey(keyToValidate);
     setStatus(ok ? 'success' : 'error');
-    if (ok) await loadModels();
+    if (ok) {
+      await loadModels();
+    } else {
+      // Intentar cargar modelos de todos modos para que el selector no esté vacío si la key falla por un ping lento
+      const models = await listAvailableModels();
+      setAvailableModels(models);
+    }
     setIsValidating(false);
   };
 
   useEffect(() => {
     if (isOpen) {
-      handleConfigCheck();
+      handleConfigCheck(apiKey);
     }
-  }, [isOpen]);
+  }, [isOpen, apiKey]);
+
+  const handleKeyChange = (val: string) => {
+    const shortcut = getShortcutKey(val);
+    if (shortcut) {
+      onApiKeySave(shortcut);
+      handleConfigCheck(shortcut);
+    } else {
+      onApiKeySave(val);
+      // No validamos en cada pulsación para evitar saturación de API, el usuario puede pulsar refresh
+    }
+    setStatus('idle');
+  };
 
   const handleModelChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const val = e.target.value;
@@ -85,7 +104,7 @@ export const Ajustes: React.FC<AjustesProps> = ({ isOpen, onClose, userIp }) => 
 
   const handleMemorizeIp = () => {
     if (!userIp) return;
-    const obfuscated = crypto.obfuscate(userIp);
+    const obfuscated = crypto.obfuscate(userIp, "tligent");
     if (!memorizedIps.includes(obfuscated)) {
       const newList = [...memorizedIps, obfuscated];
       setMemorizedIps(newList);
@@ -97,7 +116,7 @@ export const Ajustes: React.FC<AjustesProps> = ({ isOpen, onClose, userIp }) => 
     if (!aiQuestion.trim() || isAsking) return;
     setIsAsking(true);
     try {
-      const res = await askGemini(aiQuestion, selectedModel);
+      const res = await askGemini(aiQuestion, selectedModel, apiKey);
       setAiAnswer(res);
     } catch (e: any) {
       setAiAnswer(`System Error: ${e.message}`);
@@ -128,8 +147,31 @@ export const Ajustes: React.FC<AjustesProps> = ({ isOpen, onClose, userIp }) => 
 
         <div className="p-6 overflow-y-auto space-y-6 custom-scrollbar">
           
-          {/* SECCIÓN 1: MOTOR DE IA DINÁMICO */}
+          {/* SECCIÓN 1: IDENTIDAD Y LLAVES */}
           <div className="space-y-4 bg-gray-50/30 p-4 rounded-3xl border border-gray-100">
+            <div className="space-y-2">
+              <label className="text-[10px] font-black uppercase tracking-widest text-gray-900 flex items-center gap-2 px-1">
+                <Key size={14} className="text-red-700" /> Gemini API Key
+              </label>
+              <div className="relative">
+                <input 
+                  type={showKey ? "text" : "password"}
+                  value={apiKey}
+                  onChange={(e) => handleKeyChange(e.target.value)}
+                  placeholder="AIzaSy..."
+                  className="w-full bg-white border border-gray-200 p-3 rounded-2xl text-xs font-mono outline-none focus:ring-2 focus:ring-gray-900 transition-all shadow-sm"
+                />
+                <button 
+                  type="button" 
+                  onClick={() => setShowKey(!showKey)} 
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-300 hover:text-red-700"
+                >
+                  {showKey ? <EyeOff size={16} /> : <Eye size={16} />}
+                </button>
+              </div>
+            </div>
+
+            {/* MOTOR DE IA DINÁMICO */}
             <div className="space-y-2">
               <label className="text-[10px] font-black uppercase tracking-widest text-gray-900 flex items-center gap-2 px-1">
                 <Cpu size={14} className="text-red-700" /> Inteligencia del Sistema
@@ -155,11 +197,6 @@ export const Ajustes: React.FC<AjustesProps> = ({ isOpen, onClose, userIp }) => 
                   <ChevronDown size={16} />
                 </div>
               </div>
-              {selectedModel.includes('flash') && (
-                <p className={`text-[8px] font-black uppercase tracking-widest ml-1 animate-pulse transition-colors duration-300 ${status === 'success' ? 'text-green-800' : 'text-red-700'}`}>
-                  MOTOR FLASH ACTIVO: MULTIMODAL & LOW LATENCY
-                </p>
-              )}
             </div>
           </div>
 
@@ -169,10 +206,10 @@ export const Ajustes: React.FC<AjustesProps> = ({ isOpen, onClose, userIp }) => 
                <div className="flex items-center gap-3">
                  <div className={`w-2.5 h-2.5 rounded-full ${status === 'success' ? 'bg-green-500 animate-pulse' : status === 'error' ? 'bg-red-500' : 'bg-gray-200'}`}></div>
                  <span className="text-[9px] font-black text-gray-900 uppercase tracking-widest">
-                   {status === 'success' ? 'SYNC OK' : status === 'error' ? 'KEY ERROR' : 'IDLE'}
+                   {status === 'success' ? 'AI ONLINE' : status === 'error' ? 'KEY ERROR' : 'IDLE'}
                  </span>
                </div>
-               <button onClick={handleConfigCheck} disabled={isValidating} className="text-gray-400 hover:text-red-700 transition-all active:rotate-180">
+               <button onClick={() => handleConfigCheck(apiKey)} disabled={isValidating} className="text-gray-400 hover:text-red-700 transition-all active:rotate-180">
                  {isValidating ? <Loader2 size={14} className="animate-spin" /> : <RefreshCcw size={14} />}
                </button>
              </div>
@@ -185,7 +222,7 @@ export const Ajustes: React.FC<AjustesProps> = ({ isOpen, onClose, userIp }) => 
              )}
           </div>
 
-          {/* MEMORIZAR IP (REDUCIDO) */}
+          {/* MEMORIZAR IP */}
           <section className="bg-gray-50/50 border border-gray-100 p-4 rounded-3xl space-y-3">
              <div className="flex items-center justify-between px-1">
                 <label className="text-[9px] font-black uppercase tracking-widest text-gray-900 flex items-center gap-2">
@@ -246,10 +283,10 @@ export const Ajustes: React.FC<AjustesProps> = ({ isOpen, onClose, userIp }) => 
              onClick={() => { if(confirm("¿Eliminar todos los datos de sesión?")) { localStorage.clear(); window.location.reload(); }}} 
              className="flex-1 border border-red-100 bg-white text-red-700 py-3 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-red-50 transition-all"
            >
-             RESET MEMORY
+             Reset Memory
            </button>
            <button onClick={onClose} className="flex-1 bg-gray-900 hover:bg-black text-white py-3 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all shadow-lg active:scale-95">
-             CERRAR PANEL
+             Cerrar Panel
            </button>
         </div>
       </div>

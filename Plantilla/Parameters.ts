@@ -13,6 +13,11 @@ const getSystemSLD = (): string => {
 const MASTER_KEY = getSystemSLD();
 
 /**
+ * Dominio autorizado para funciones extendidas
+ */
+export const AUTHORIZED_DOMAIN = 'hello.tligent.com';
+
+/**
  * UI Theme configuration
  * Following requirements: Fondo blanco, contenidos en Negro, rojo y gris
  */
@@ -46,12 +51,18 @@ export const crypto = {
   }
 };
 
+// --- API KEY RESOLVER ---
+const getActiveApiKey = (): string | undefined => {
+  return localStorage.getItem('app_apikey') || process.env.API_KEY;
+};
+
 // --- API & MODELS ---
 
 export const listAvailableModels = async (): Promise<string[]> => {
-  if (!process.env.API_KEY) return ['gemini-3-flash-preview', 'gemini-3-pro-preview'];
+  const apiKey = getActiveApiKey();
+  if (!apiKey) return ['gemini-3-flash-preview', 'gemini-3-pro-preview'];
   try {
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+    const ai = new GoogleGenAI({ apiKey });
     const result = await ai.models.list();
     const models: string[] = [];
     for await (const m of result) {
@@ -74,12 +85,12 @@ export const listAvailableModels = async (): Promise<string[]> => {
 
 /**
  * [PROCESO DE INICIALIZACIÓN 3]: Verificación de Salud del Motor
- * Esta función es la que determina el estado AI ONLINE / OFFLINE.
  */
-export const validateKey = async (): Promise<boolean> => {
-  if (!process.env.API_KEY) return false;
+export const validateKey = async (keyOverride?: string): Promise<boolean> => {
+  const apiKey = keyOverride || getActiveApiKey();
+  if (!apiKey) return false;
   try {
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+    const ai = new GoogleGenAI({ apiKey });
     await ai.models.generateContent({ model: 'gemini-3-flash-preview', contents: 'ping' });
     return true;
   } catch {
@@ -87,9 +98,10 @@ export const validateKey = async (): Promise<boolean> => {
   }
 };
 
-export const askGemini = async (prompt: string, modelOverride?: string): Promise<string> => {
-  if (!process.env.API_KEY) throw new Error("API_KEY_REQUIRED");
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+export const askGemini = async (prompt: string, modelOverride?: string, keyOverride?: string): Promise<string> => {
+  const apiKey = keyOverride || getActiveApiKey();
+  if (!apiKey) throw new Error("API_KEY_REQUIRED");
+  const ai = new GoogleGenAI({ apiKey });
   const model = modelOverride || localStorage.getItem('app_selected_model') || 'gemini-3-flash-preview';
   
   const isTTS = model.includes('tts');

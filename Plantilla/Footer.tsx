@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { AlertTriangle, Settings, Globe } from 'lucide-react';
 import { APP_VERSION } from './Version';
@@ -16,7 +17,7 @@ export const Footer: React.FC<FooterProps> = ({ onShowCookies, onShowAjustes }) 
   const displayHostname = isLocalMode ? 'Desarrollo' : rawHostname;
 
   return (
-    <footer className="mt-12 border-t border-gray-200 pt-8 pb-4">
+    <footer className="mt-0 border-t border-gray-200 pt-6 pb-4">
       <div className="bg-gray-50 border border-gray-200 p-4 rounded-xl text-center mb-8 flex items-center justify-center gap-3 text-xs text-gray-500">
         <AlertTriangle size={16} className="text-red-700" />
         <span className="font-medium uppercase tracking-tight">Aviso Legal: El contenido es meramente informativo y educativo.</span>

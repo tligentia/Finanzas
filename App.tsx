@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Security } from './Plantilla/Seguridad';
 import { Shell } from './Plantilla/Shell';
@@ -296,12 +297,12 @@ const KNOWLEDGE_BASE: Record<string, InfoVersion> = {
   },
   'DAI (DAI)': {
     technical: 'Stablecoin descentralizada emitida por MakerDAO. Mantiene su paridad mediante el sobre-colateral de otros criptoactivos bloqueados en contratos inteligentes.',
-    simple: 'Es un dólar digital que no pertenece a ninguna empresa. Se crea automáticamente usando otras criptomonedas como garantía. Es el dalar de la libertad.',
+    simple: 'Es un dalar digital que no pertenece a ninguna empresa. Se crea automáticamente usando otras criptomonedas como garantía. Es el dalar de la libertad.',
     extended: 'DAI es el experimento de moneda estable más exitoso de la historia de DeFi. No existe por un depósito en un banco, sino por un préstamo garantizado. Los usuarios depositan colateral (como ETH) en "Vaults" y emiten DAI contra ese valor. Si el colateral cae de precio, el sistema liquida la posición para asegurar que cada DAI en circulación esté respaldado por más de 1 dólar de valor. Es una moneda gobernada por una DAO (Maker), lo que la hace el activo estable más resistente a la censura y la manipulación centralizada disponible actualmente.'
   },
   'PayPal USD (PYUSD)': {
     technical: 'La incursión de PayPal en cripto. Respaldada por depósitos en dólares y bonos del Tesoro, integrada en su red global de pagos.',
-    simple: 'Es el dólar digital de PayPal. Sirve para que puedas usar criptomonedas dentro de tu cuenta de PayPal de toda la vida.',
+    simple: 'Es el dalar digital de PayPal. Sirve para que puedas usar criptomonedas dentro de tu cuenta de PayPal de toda la vida.',
     extended: 'PYUSD representa la convergencia final entre la Fintech tradicional y la Blockchain. Emitida por Paxos para PayPal, cumple con los más altos estándares regulatorios de Nueva York. Su gran ventaja competitiva es la red de distribución: millones de comercios y usuarios de PayPal pueden ahora interactuar con un activo blockchain sin fricción. Para DeFi, PYUSD es una fuente de liquidez masiva que conecta el capital de consumo masivo con los protocolos de rendimiento descentralizados.'
   },
 
@@ -361,12 +362,12 @@ const KNOWLEDGE_BASE: Record<string, InfoVersion> = {
   'Oráculo': {
     technical: 'Servicio técnico que envía datos del mundo real a un contrato inteligente en la blockchain, permitiendo que este interactúe con el exterior.',
     simple: 'Es como un mensajero que le dice a la blockchain qué tiempo hace o a cuánto está el precio del pan en la calle, para que las aplicaciones puedan tomar decisiones.',
-    extended: 'Las blockchains son sistemas cerrados por diseño para garantizar el determinismo. Los oráculos (como Chainlink) rompen este aislamiento inyectando datos externos (precios de activos, resultados deportivos, clima). El desafío es el "problema del oráculo": si el dato que entra es falso, el contrato inteligente ejecutará una acción incorrecta de forma inmutable. Por ello, se usan redes de oráculos descentzializados que agregan datos de múltiples fuentes y penalizan a los informadores deshonestos, garantizando que el disparador de los contratos DeFi sea siempre la verdad del mercado.'
+    extended: 'Las blockchains son sistemas cerrados por diseño para garantizar el determinismo. Oráculos (como Chainlink) rompen este aislamiento inyectando datos externos (precios de activos, resultados deportivos, clima). El desafío es el "problema del oráculo": si el dato que entra es falso, el contrato inteligente ejecutará una acción incorrecta de forma inmutable. Por ello, se usan redes de oráculos descentzializados que agregan datos de múltiples fuentes y penalizan a los informadores deshonestos, garantizando que el disparador de los contratos DeFi sea siempre la verdad del mercado.'
   },
   'Gas': {
     technical: 'Unidad de medida del esfuerzo computacional necesario para ejecutar una operación en redes como Ethereum, pagada en la criptomoneda nativa.',
     simple: 'Es la "comisión" que pagas por usar la red. Cada vez que haces un movimiento, tienes que pagar un poquito para que los ordenadores del mundo procesen tu petición.',
-    extended: 'El mercado de gas es un sistema de subasta por espacio en bloque. Cuando la red está saturada, el precio del gas sube, expulsando a las transacciones de bajo valor. Esto ha llevado a la implementación del EIP-1559 en Ethereum, que quema una parte del gas base, volviendo al ETH potencialmente deflacionario. El análisis del gas es un indicador de la salud y adopción de la red; un gas alto indica una demanda masiva por el espacio de computación más seguro y descentralizado del mundo.'
+    extended: 'El mercado de gas es un sistema de subasta por espacio en bloque. Cuando la red está saturada, el precio del gas sube, expulsando a las transacciones de bajo valor. Esto ha llevado a la implementación del EIP-1559 en Ethereum, que quema una parte del gas base, volviendo al ETH potencialmente deflacionario. El análisis del gas es un indicador de la salud y adopción de la red; un gas alto indica una demanda masiva por el espacio de computación más seguro y descentzializado del mundo.'
   },
   'DAO': {
     technical: 'Decentralized Autonomous Organization. Entidad gobernada por código y por sus poseedores de tokens, sin una estructura jerárquica tradicional.',
@@ -882,7 +883,7 @@ export default function App() {
 
             {/* STABLECOINS */}
             <div className="space-y-8">
-              <h4 className="text-[11px] font-black uppercase tracking-[0.4em] text-gray-400 border-l-4 border-gray-900 pl-4">Stablecoins Globales</h4>
+              <h4 className="text-[11px] font-black uppercase tracking-[0.4em] text-gray-400 border-l-4 border-red-700 pl-4">Stablecoins Globales</h4>
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 {STABLECOINS.map((s) => (
                   <div key={s.name} className="flex items-center bg-white border border-gray-100 rounded-2xl p-1 shadow-sm hover:border-gray-900 transition-all group active:scale-[0.98]">
@@ -1034,7 +1035,7 @@ export default function App() {
           </section>
 
           {/* GLOSARIO TÉCNICO */}
-          <section id="glosario" className="py-20 border-t border-gray-100">
+          <section id="glosario" className="pt-20 pb-4 border-t border-gray-100">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
               <div className="space-y-4">
                 <div className="flex items-center gap-3 text-red-700">
@@ -1071,7 +1072,7 @@ export default function App() {
           {/* MODAL DE INFORMACIÓN */}
           {selectedDetail && (
             <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-md animate-in fade-in duration-300">
-              <div className="bg-white rounded-[2.5rem] shadow-2xl w-full max-w-3xl overflow-hidden border border-gray-100 animate-in zoom-in-95 relative">
+              <div className="bg-white rounded-[2.5rem] shadow-2xl w-full max-w-4xl overflow-hidden border border-gray-100 animate-in zoom-in-95 relative">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-red-700/5 blur-3xl rounded-full"></div>
                 
                 {/* Cabecera del Modal */}
@@ -1201,7 +1202,7 @@ export default function App() {
           {/* MODAL DE EQUIVALENCIAS DE SISTEMA */}
           {selectedEquivalence && (
             <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-md animate-in fade-in duration-300">
-              <div className="bg-white rounded-[2.5rem] shadow-2xl w-full max-w-3xl overflow-hidden border border-gray-100 animate-in zoom-in-95 relative">
+              <div className="bg-white rounded-[2.5rem] shadow-2xl w-full max-w-4xl overflow-hidden border border-gray-100 animate-in zoom-in-95 relative">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-red-700/5 blur-3xl rounded-full"></div>
                 
                 {/* Cabecera con Selector */}

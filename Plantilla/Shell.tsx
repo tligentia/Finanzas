@@ -22,6 +22,15 @@ export const Shell: React.FC<ShellProps> = ({ children }) => {
   const [isKeyValid, setIsKeyValid] = useState<boolean | null>(null);
   const [userIp, setUserIp] = useState<string | null>(null);
 
+  // Add apiKey state to manage the Gemini API key and sync with localStorage
+  const [apiKey, setApiKey] = useState<string>(() => localStorage.getItem('app_apikey') || '');
+
+  // Handler to update the API key state and persist it to localStorage
+  const handleApiKeySave = (key: string) => {
+    setApiKey(key);
+    localStorage.setItem('app_apikey', key);
+  };
+
   const initializeSystem = useCallback(async () => {
     // 1. Detección de IP
     try {
@@ -70,7 +79,7 @@ export const Shell: React.FC<ShellProps> = ({ children }) => {
 
   useEffect(() => {
     initializeSystem();
-  }, [initializeSystem]);
+  }, [initializeSystem, apiKey]); // Re-run initialization when apiKey changes
 
   return (
     <div className={`min-h-screen ${COLORS.bg} font-sans flex flex-col p-4 md:p-8 animate-in fade-in duration-500`}>
@@ -129,10 +138,13 @@ export const Shell: React.FC<ShellProps> = ({ children }) => {
         onShowAjustes={() => setShowAjustes(true)} 
       />
 
+      {/* Fix: Added missing apiKey and onApiKeySave props to Ajustes component */}
       <Ajustes 
         isOpen={showAjustes} 
         onClose={() => setShowAjustes(false)} 
         userIp={userIp}
+        apiKey={apiKey}
+        onApiKeySave={handleApiKeySave}
       />
 
       <Cookies isOpen={showCookies} onClose={() => setShowCookies(false)} />
