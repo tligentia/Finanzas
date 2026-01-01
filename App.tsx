@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Security } from './Plantilla/Seguridad';
 import { Shell } from './Plantilla/Shell';
@@ -249,7 +248,7 @@ const KNOWLEDGE_BASE: Record<string, InfoVersion> = {
   'BitBox': {
     technical: 'Hardware wallet de fabricación suiza enfocada en la simplicidad y la seguridad minimalista. Ofrece una solución muy robusta tanto para Bitcoin-only como para multichain.',
     simple: 'Seguridad suiza para tus monedas. Es un dispositivo pequeño pero muy potente que protege tu dinero de forma sencilla y sin complicaciones.',
-    extended: 'BitBox02 conbina lo mejor de ambos mundos: un microcontrolador de código abierto para el procesamiento de transacciones y un chip de seguridad dedicado para el almacenamiento de claves. Su diseño minimalista evita botones complejos, usando gestos táctiles en los bordes. Ofrece una versión exclusiva para Bitcoin que reduce drásticamente la superficie de ataque al eliminar código innecesario de otras redes. Es el dispositivo ideal para usuarios que buscan seguridad profesional con una curva de aprendizaje mínima.'
+    extended: 'BitBox02 conbina lo mejor de ambos mundos: un microcontrolador de código abierto para el procesamiento de transacciones y un chip de seguridad dedicado para el almacenamiento de claves. Su diseño minimalera evita botones complejos, usando gestos táctiles en los bordes. Ofrece una versión exclusiva para Bitcoin que reduce drásticamente la superficie de ataque al eliminar código innecesario de otras redes. Es el dispositivo ideal para usuarios que buscan seguridad profesional con una curva de aprendizaje mínima.'
   },
 
   // Criptoactivos
@@ -288,11 +287,11 @@ const KNOWLEDGE_BASE: Record<string, InfoVersion> = {
   'Tether (USDT)': {
     technical: 'La stablecoin más veterana con mayor volumen. Respaldada por reservas de efectivo y equivalentes mantenidas por Tether Limited.',
     simple: 'Es la moneda digital más usada para tener dólares en internet. Por cada USDT que existe, hay un dólar de verdad guardado en una reserva.',
-    extended: 'USDT es el activo más líquido de todo el mercado cripto, a menudo con un volumen de trading diario superior al de Bitcoin. A pesar de las controversias históricas sobre sus auditorías, ha demostrado una resiliencia extrema durante múltiples crisis de mercado. Su papel como "moneda de reserva del trading" es indiscutible. Sin embargo, su naturaleza centralizada implica riesgo de censura, ya que Tether puede congelar direcciones de wallets por requerimientos legales, lo que la sitúa en el extremo opuesto de la neutralidad de activos como Bitcoin.'
+    extended: 'USDT es el activo más líquido de todo el mercado cripto, a menudo con un volumen de trading diario superior al de Bitcoin. A pesar de las controversias históricas sobre sus auditorías, ha demostrado una resiliencia extrema durante múltiples crisis de mercado. Su papel como "moneda de reserva del trading" es indiscutible. Sin embargo, su naturaleza centralizada implica riesgo de censura, ya que Tether puede congelar direcciones de wallets por requerimientos legales, lo que la hace el activo estable más resistente a la censura y la manipulación centralizada disponible actualmente.'
   },
   'USD Coin (USDC)': {
     technical: 'Stablecoin emitida por Centre (Circle & Coinbase). Se caracteriza por su enfoque en el cumplimiento regulatorio y transparencia auditada mensualmente.',
-    simple: 'Es como el dólar digital oficial y bien portado. Siempre pasan auditorías para demostrar que tienen el dinero real bien guardado en el banco.',
+    simple: 'Es como el dalar digital oficial y bien portado. Siempre pasan auditorías para demostrar que tienen el dinero real bien guardado en el banco.',
     extended: 'USDC se posiciona como la opción "institucional" de las stablecoins. Sus reservas consisten principalmente en efectivo en bancos estadounidenses protegidos por el FDIC y bonos del Tesoro de EE.UU. a corto plazo gestionados por BlackRock. Esta transparencia la hace preferible para protocolos DeFi que buscan bajo riesgo de colateral y para empresas que operan en jurisdicciones reguladas. Su integración nativa en múltiples blockchains y su protocolo CCTP para transferencias entre cadenas sin puentes la convierten en una pieza clave de la infraestructura financiera global.'
   },
   'DAI (DAI)': {
@@ -362,7 +361,7 @@ const KNOWLEDGE_BASE: Record<string, InfoVersion> = {
   'Oráculo': {
     technical: 'Servicio técnico que envía datos del mundo real a un contrato inteligente en la blockchain, permitiendo que este interactúe con el exterior.',
     simple: 'Es como un mensajero que le dice a la blockchain qué tiempo hace o a cuánto está el precio del pan en la calle, para que las aplicaciones puedan tomar decisiones.',
-    extended: 'Las blockchains son sistemas cerrados por diseño para garantizar el determinismo. Oráculos (como Chainlink) rompen este aislamiento inyectando datos externos (precios de activos, resultados deportivos, clima). El desafío es el "problema del oráculo": si el dato que entra es falso, el contrato inteligente ejecutará una acción incorrecta de forma inmutable. Por ello, se usan redes de oráculos descentzializados que agregan datos de múltiples fuentes y penalizan a los informadores deshonestos, garantizando que el disparador de los contratos DeFi sea siempre la verdad del mercado.'
+    extended: 'Las blockchains son sistemas cerrados por diseño para garantizar el determinismo. Los oráculos (como Chainlink) rompen este aislamiento inyectando datos externos (precios de activos, resultados deportivos, clima). El desafío es el "problema del oráculo": si el dato que entra es falso, el contrato inteligente ejecutará una acción incorrecta de forma inmutable. Por ello, se usan redes de oráculos descentzializados que agregan datos de múltiples fuentes y penalizan a los informadores deshonestos, garantizando que el disparador de los contratos DeFi sea siempre la verdad del mercado.'
   },
   'Gas': {
     technical: 'Unidad de medida del esfuerzo computacional necesario para ejecutar una operación en redes como Ethereum, pagada en la criptomoneda nativa.',
@@ -883,7 +882,7 @@ export default function App() {
 
             {/* STABLECOINS */}
             <div className="space-y-8">
-              <h4 className="text-[11px] font-black uppercase tracking-[0.4em] text-gray-400 border-l-4 border-red-700 pl-4">Stablecoins Globales</h4>
+              <h4 className="text-[11px] font-black uppercase tracking-[0.4em] text-gray-400 border-l-4 border-gray-900 pl-4">Stablecoins Globales</h4>
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 {STABLECOINS.map((s) => (
                   <div key={s.name} className="flex items-center bg-white border border-gray-100 rounded-2xl p-1 shadow-sm hover:border-gray-900 transition-all group active:scale-[0.98]">
@@ -1035,7 +1034,7 @@ export default function App() {
           </section>
 
           {/* GLOSARIO TÉCNICO */}
-          <section id="glosario" className="pt-20 pb-4 border-t border-gray-100">
+          <section id="glosario" className="pt-12 pb-4 border-t border-gray-100">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
               <div className="space-y-4">
                 <div className="flex items-center gap-3 text-red-700">
@@ -1057,10 +1056,10 @@ export default function App() {
                   className="text-left bg-white p-6 rounded-[1.5rem] border border-gray-100 hover:border-red-700 shadow-sm hover:shadow-xl transition-all group relative active:scale-[0.98]"
                 >
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-red-700 font-black text-[12px] uppercase tracking-widest group-hover:italic transition-all">{item.t}</span>
+                    <span className="text-red-700 font-black text-[14px] uppercase tracking-widest group-hover:italic transition-all">{item.t}</span>
                     <Plus size={14} className="text-gray-300 group-hover:text-red-700 group-hover:rotate-90 transition-all" />
                   </div>
-                  <p className="text-[11px] text-gray-400 italic font-medium leading-snug group-hover:text-gray-600 transition-colors">{item.d}</p>
+                  <p className="text-[13px] text-gray-400 italic font-medium leading-snug group-hover:text-gray-600 transition-colors">{item.d}</p>
                   <div className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
                     <Terminal size={10} className="text-gray-200" />
                   </div>
