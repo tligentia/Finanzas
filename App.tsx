@@ -211,7 +211,7 @@ const KNOWLEDGE_BASE: Record<string, InfoVersion> = {
   'Sintéticos': {
     technical: 'Activos digitales que replican el valor de activos del mundo real (oro, petróleo, acciones) mediante oráculos y contratos inteligentes, permitiendo exposición sin salir de la blockchain.',
     simple: 'Son "monedas espejo". Puedes tener algo que vale exactamente lo mismo que el oro o una acción de Apple, pero dentro del mundo cripto, sin tener que ir a un banco tradicional.',
-    extended: 'Los activos sintéticos (Synths) expanden el alcance de DeFi hacia la economía real. Mediante el uso de oráculos de alta fidelidad (como Chainlink), un contrato inteligente puede rastrear el precio de Tesla o del Brent. Esto permite a usuarios en países con restricciones financieras acceder a mercados internacionales. La arquitectura requiere que los emisores de sintéticos estén fuertemente colateralizados (a menudo hasta el 400%) para absorber la volatilidad de los activos subyacentes, creando un sistema robusto de exposición sintética global.'
+    extended: 'Los activos sintéticos (Synths) expanden el alcance de DeFi hacia la economía real. Mediante el uso de oráculos de alta fidelidad (como Chainlink), un contrato inteligente puede rastrear el precio de Tesla o del Brent. Esto permite a usuarios en países con restricciones financieras acceder a mercados internacionales. La arquitectura requiere que los emisores de sintéticos estén fuertemente colateralizados (a menudo hasta el 400%) para absorber la volatilidad de los activos subyacentes, creando un systema robusto de exposición sintética global.'
   },
   'Seguros': {
     technical: 'Protocolos que ofrecen protección contra riesgos específicos como fallos en el código de un contrato inteligente, hackeos de pools o desvinculación (depeg) de stablecoins.',
@@ -219,7 +219,39 @@ const KNOWLEDGE_BASE: Record<string, InfoVersion> = {
     extended: 'El mercado de seguros DeFi (Decentralized Insurance) utiliza pools de capital compartidos donde los "underwriters" (aseguradores) asumen el riesgo a cambio de una parte de la prima. La resolución de siniestros a menudo se realiza mediante jurados descentralizados u oráculos de auditoría. A medida que DeFi busca atraer capital institucional, estos protocolos son críticos para mitigar el riesgo tecnológico. El resto es escalar la liquidez para cubrir hackeos masivos, lo que está llevando a la creación de derivados de riesgo catastrófico (CAT bonds) on-chain.'
   },
   
-  // Wallets
+  // Gráficas - Nuevas entradas
+  'Multiplicador Monetario': {
+    technical: 'Visualización de la expansión de la oferta monetaria desde la Base Monetaria (M0) hasta la Masa Monetaria amplia (M3). Representa el efecto de la reserva fraccionaria donde el crédito bancario multiplica el dinero físico original.',
+    simple: 'Muestra cómo los bancos "crean" dinero digital cada vez que alguien pide un préstamo. Empieza con poco dinero real y acaba con un montón de dinero en cuentas bancarias que solo existe como números en ordenadores.',
+    extended: 'La jerarquía del dinero fiat (M0 a M3) es la base del sistema bancario moderno. Mientras M0 es responsabilidad directa del Banco Central, el salto hacia M3 depende de la voluntad de los bancos comerciales de prestar (velocidad del dinero). Este sistema permite una expansión económica elástica pero introduce el riesgo sistémico de liquidez. En comparación, la mayoría de los protocolos DeFi operan bajo un modelo de reserva íntegra o sobre-colateralizada, eliminando este multiplicador y, con ello, la capacidad de crear activos sin respaldo directo.'
+  },
+  'Erosión del Poder Adquisitivo': {
+    technical: 'Comparativa temporal entre el Valor Nominal del dinero y su Valor Real (Poder Adquisitivo) bajo un escenario de inflación sostenida. Ilustra la pérdida de valor de la unidad de cuenta fiat en el tiempo.',
+    simple: 'Es la prueba de que el dinero guardado debajo del colchón pierde valor. Con los mismos 10.000€, hoy compras un coche y dentro de 20 años quizás solo compres una bicicleta.',
+    extended: 'La inflación actúa como un impuesto silencioso y regresivo. Al aumentar la masa monetaria por encima del crecimiento de la productividad, el valor de cada unidad disminuye. Esta gráfica subraya por qué Bitcoin, con su suministro limitado a 21 millones, se posiciona como una "reserva de valor" frente al fiat; mientras la línea roja (valor real fiat) siempre tiende a bajar, un activo con escasez absoluta busca preservar el esfuerzo del ahorrador frente a la expansión monetaria discrecional.'
+  },
+  'Matriz Riesgo vs Beneficio': {
+    technical: 'Análisis de la frontera de eficiencia que relaciona la volatilidad histórica de un activo con su retorno esperado. Destaca la asimetría entre activos tradicionales (bonos/acciones) y criptoactivos.',
+    simple: 'Es el mapa del inversor. Te dice que si quieres ganar mucho dinero (como con las criptos), tienes que estar dispuesto a ver cómo tu saldo sube y baja muy fuerte. Los bonos son más tranquilos, pero pagan mucho menos.',
+    extended: 'La correlación entre riesgo y retorno es un pilar de la teoría moderna de carteras (Markowitz). Los criptoactivos han introducido una nueva clase de activos con "betas" muy altas. La clave de la gestión financiera moderna no es evitar el riesgo, sino entender la convexidad: buscar activos donde el beneficio potencial sea órdenes de magnitud superior a la pérdida máxima (100% del capital). Esta gráfica ayuda a visualizar por qué el efectivo, aunque parezca seguro, tiene un retorno real negativo tras inflación.'
+  },
+  'Garantía Sistémica': {
+    technical: 'Diferenciación estructural entre el modelo de reserva fraccionaria fiat (donde se presta dinero que no existe físicamente) y el modelo de sobre-colateralización DeFi (donde para tomar 100$ prestados debes bloquear 150$ en garantía).',
+    simple: 'En los bancos normales, por cada 10€ que guardan, prestan 90€ que no tienen. En DeFi, es al revés: para que te presten 100€, tienes que dejar 150€ en prenda. Es mucho más seguro ante crisis.',
+    extended: 'El riesgo de contraparte se gestiona de formas opuestas. El sistema fiat depende de la "confianza" y de los rescates estatales (too big to fail) para cubrir el agujero de la reserva fraccionaria. DeFi utiliza la "certeza algorítmica": si el valor de tu garantía baja, un contrato inteligente te liquida automáticamente para asegurar que el prestamista siempre recupere su dinero. No hay juicios ni esperas; es solvencia matemática pura ejecutada por código inmutable.'
+  },
+  'Radar de Atributos Sistémicos': {
+    technical: 'Evaluación comparativa multidimensional de los sistemas Fiat y DeFi atendiendo a seis vectores críticos: Transparencia, Accesibilidad, Velocidad, Certeza Legal, Estabilidad y Disponibilidad.',
+    simple: 'Es una comparativa de "poderes". DeFi gana en estar abierto a todos, ser transparente y funcionar 24h, pero el sistema tradicional aún ofrece más seguridad legal (leyes del país) y precios más estables.',
+    extended: 'El radar muestra la complementariedad actual de ambos sistemas. Fiat destaca por su "Certeza Legal" y "Estabilidad de Valor" (gracias a la intervención de bancos centrales), mientras que DeFi es imbatible en "Transparencia" (auditoría on-chain) y "Disponibilidad" (sin horarios bancarios). La evolución futura apunta hacia una convergencia donde el sistema tradicional adopte la eficiencia de la blockchain para mejorar su transparencia y velocidad, manteniendo el marco regulatorio protector.'
+  },
+  'Finalidad Transaccional': {
+    technical: 'Métrica de latencia para alcanzar el estado de irreversibilidad de una transacción. Compara los tiempos de asentamiento desde el sistema SWIFT (días) hasta las redes de Capa 2 (milisegundos).',
+    simple: 'Muestra cuánto tarda tu dinero en llegar de verdad a su destino y que nadie pueda echar atrás el pago. Los bancos tardan días en mandarlo a otro país; DeFi lo hace en segundos o minutos.',
+    extended: 'La "finalidad" (finality) es el momento en que una transacción se considera inamovible en el registro. El sistema tradicional es "probabilístico" y lento debido a los múltiples intermediarios que deben conciliar balances manualmente. En blockchain, la finalidad es técnica y rápida. Esto reduce drásticamente el riesgo de liquidación en mercados financieros, permitiendo un comercio global mucho más dinámico y eliminando la necesidad de garantías intermedias durante el tiempo de tránsito del dinero.'
+  },
+
+  // Wallets y otros
   'MetaMask': {
     technical: 'La wallet de navegador más popular para Ethereum. Actúa como puente entre tu navegador y las dApps de DeFi, permitiendo gestionar activos y firmar transacciones de forma sencilla.',
     simple: 'Es como tu cartera digital en el navegador. Con ella puedes entrar a todas las aplicaciones de finanzas modernas y autorizar pagos con un solo clic.',
@@ -270,7 +302,7 @@ const KNOWLEDGE_BASE: Record<string, InfoVersion> = {
   'Cardano (ADA)': {
     technical: 'Plataforma blockchain desarrollada con un enfoque académico riguroso. Busca ofrecer una infraestructura segura y sostenible para aplicaciones financieras.',
     simple: 'Es una red construida con mucho cuidado por científicos para asegurar que sea muy segura y que dure muchos años sin dar problemas.',
-    extended: 'Cardano utiliza el modelo eUTXO (Extended Unspent Transaction Output), una evolución del modelo de Bitcoin que permite contratos inteligentes de forma determinista y escalable. Su proceso de desarrollo se basa en la revisión por pares académica y métodos formales de verificación de código, priorizando la seguridad y la estabilidad sobre la velocidad de lanzamiento. Con su tesorería descentralizada y sistema de gobernanza líquida, Cardano busca ser un sistema operativo social y financiero autosostenible para naciones en desarrollo y grandes corporaciones.'
+    extended: 'Cardano utiliza el modelo eUTXO (Extended Unspent Transaction Output), una evolución del modelo de Bitcoin que permite contratos inteligentes de forma determinista y escalable. Su proceso de desarrollo se basa en la revisión por pares académica y métodos formales de verificación de código, priorizando la seguridad y la estabilidad sobre la velocidad de lanzamiento. Con su tesorería descentralizada y systema de gobernanza líquida, Cardano busca ser un systema operativo social y financiero autosostenible para naciones en desarrollo y grandes corporaciones.'
   },
   'XRP (XRP)': {
     technical: 'Activo nativo del XRP Ledger, diseñado para facilitar pagos transfronterizos rápidos y de bajo coste, actuando como una moneda puente institucional.',
@@ -297,7 +329,7 @@ const KNOWLEDGE_BASE: Record<string, InfoVersion> = {
   'DAI (DAI)': {
     technical: 'Stablecoin descentralizada emitida por MakerDAO. Mantiene su paridad mediante el sobre-colateral de otros criptoactivos bloqueados en contratos inteligentes.',
     simple: 'Es un dalar digital que no pertenece a ninguna empresa. Se crea automáticamente usando otras criptomonedas como garantía. Es el dalar de la libertad.',
-    extended: 'DAI es el experimento de moneda estable más exitoso de la historia de DeFi. No existe por un depósito en un banco, sino por un préstamo garantizado. Los usuarios depositan colateral (como ETH) en "Vaults" y emiten DAI contra ese valor. Si el colateral cae de precio, el sistema liquida la posición para asegurar que cada DAI en circulación esté respaldado por más de 1 dólar de valor. Es una moneda gobernada por una DAO (Maker), lo que la hace el activo estable más resistente a la censura y la manipulación centralizada disponible actualmente.'
+    extended: 'DAI es el experimento de moneda estable más exitoso de la historia de DeFi. No existe por un depósito en un banco, sino por un préstamo garantizado. Los usuarios depositan colateral (como ETH) en "Vaults" y emiten DAI contra ese valor. Si el colateral cae de precio, el systema liquida la posición para asegurar que cada DAI en circulación esté respaldado por más de 1 dólar de valor. Es una moneda gobernada por una DAO (Maker), lo que la hace el activo estable más resistente a la censura y la manipulación centralizada disponible actualmente.'
   },
   'PayPal USD (PYUSD)': {
     technical: 'La incursión de PayPal en cripto. Respaldada por depósitos en dólares y bonos del Tesoro, integrada en su red global de pagos.',
@@ -314,7 +346,7 @@ const KNOWLEDGE_BASE: Record<string, InfoVersion> = {
   'Aave': {
     technical: 'Protocolo de mercado monetario descentralizado donde los usuarios pueden prestar o pedir prestado activos con tipos de interés dinámicos.',
     simple: 'Es el "banco del futuro". Puedes dejar tus ahorros para que otros los usen y te paguen intereses, o pedir prestado dinero tú mismo si dejas una garantía.',
-    extended: 'Aave gestiona miles de millones de dólares en activos mediante un sistema de pools de liquidez compartidos. Su innovación más famosa son los "Flash Loans" (préstamos instantáneos), que permiten pedir prestadas sumas masivas sin colateral siempre que se devuelvan en la misma transacción atómica de la blockchain. Esto ha permitido una eficiencia de arbitraje y refinanciación de deuda sin precedentes, eliminando las barreras de capital para los desarrolladores y traders sofisticados en el ecosistema DeFi.'
+    extended: 'Aave gestiona miles de millones de dólares en activos mediante un systema de pools de liquidez compartidos. Su innovación más famosa son los "Flash Loans" (préstamos instantáneos), que permiten pedir prestadas sumas masivas sin colateral siempre que se devuelvan en la misma transacción atómica de la blockchain. Esto ha permitido una eficiencia de arbitraje y refinanciación de deuda sin precedentes, eliminando las barreras de capital para los desarrolladores y traders sofisticados en el ecosistema DeFi.'
   },
   'Lido': {
     technical: 'Plataforma líder en "Liquid Staking". Permite hacer staking y recibir un activo líquido equivalente para seguir usándolo en DeFi mientras ganas recompensas.',
@@ -322,7 +354,7 @@ const KNOWLEDGE_BASE: Record<string, InfoVersion> = {
     extended: 'Lido soluciona el dilema del staking: ¿seguridad de red o liquidez? Al emitir stETH (staked ETH), Lido permite que el capital que asegura la red de Ethereum siga siendo productivo en pools de liquidez o como colateral en préstamos. Al ser una DAO que delega el stake en múltiples validadores profesionales, Lido reduce el riesgo de centralización de nodos individuales, aunque su enorme cuota de mercado en Ethereum es un tema de debate recurrente sobre la descentralización a largo plazo de la red.'
   },
   'MakerDAO': {
-    technical: 'Organización Autónoma Descentralizada que gestiona el sistema DAI. Actúa como un banco central algorítmico sin intervención humana directa.',
+    technical: 'Organización Autónoma Descentralizada que gestiona el systema DAI. Actúa como un banco central algorítmico sin intervención humana directa.',
     simple: 'Es la organización que fabrica los dólares digitales DAI. Funciona por votación de los usuarios y algoritmos, no por decisiones de políticos.',
     extended: 'MakerDAO es el "Banco Central de DeFi". Gestiona la política de tipos de interés (DSR - DAI Savings Rate) y los parámetros de colateral mediante votaciones de los poseedores del token MKR. Recientemente ha iniciado "Endgame", un plan de reestructuración masivo para diversificar sus reservas en activos del mundo real (RWA) como deuda pública y bonos corporativos, buscando que DAI sea una moneda estable respaldada por una combinación de activos digitales y tradicionales, blindando el protocolo contra riesgos sistémicos del mundo cripto.'
   },
@@ -330,8 +362,8 @@ const KNOWLEDGE_BASE: Record<string, InfoVersion> = {
   // Glosario
   'Liquidación': {
     technical: 'Proceso automático ejecutado por un Smart Contract cuando el colateral cae por debajo de un umbral de seguridad, vendiendo los activos para cubrir la deuda.',
-    simple: 'Si pides un préstamo y la garantía que dejaste baja mucho de precio, el sistema la vende automáticamente para recuperar el dinero. Es como si el banco vendiera tu casa si no pagas la hipoteca.',
-    extended: 'La liquidación es el mecanismo de defensa inmunológica de DeFi. Garantiza que el sistema nunca sea insolvente. Los liquidadores son agentes externos (bots) que compiten por comprar el colateral con descuento cuando una posición se vuelve arriesgada. Este incentivo económico asegura que, incluso en caídas de mercado del 50% en minutos, los protocolos como Aave o MakerDAO sigan teniendo más colateral que deuda, manteniendo la integridad de todo el ecosistema financiero descentralizado.'
+    simple: 'Si pides un préstamo y la garantía que dejaste baja mucho de precio, el systema la vende automáticamente para recuperar el dinero. Es como si el banco vendiera tu casa si no pagas la hipoteca.',
+    extended: 'La liquidación es el mecanismo de defensa inmunológica de DeFi. Garantiza que el systema nunca sea insolvente. Los liquidadores son agentes externos (bots) que compiten por comprar el colateral con descuento cuando una posición se vuelve arriesgada. Este incentivo económico asegura que, incluso en caídas de mercado del 50% en minutos, los protocolos como Aave o MakerDAO sigan teniendo más colateral que deuda, manteniendo la integridad de todo el ecosistema financiero descentralizado.'
   },
   'Impermanent Loss': {
     technical: 'Situación en la que un proveedor de liquidez obtiene menos valor manteniendo activos en un pool que simplemente guardándolos en su wallet, debido a volatilidad.',
@@ -345,7 +377,7 @@ const KNOWLEDGE_BASE: Record<string, InfoVersion> = {
   },
   'TVL': {
     technical: 'Total Value Locked. Métrica que representa la cantidad total de activos que están actualmente depositados o bloqueados en un protocolo DeFi.',
-    simple: 'Es una forma de saber cuánto dinero hay guardado en una aplicación. Cuanto más alto sea el TVL, más gente confía su dinero en ese sistema.',
+    simple: 'Es una forma de saber cuánto dinero hay guardado en una aplicación. Cuanto más alto sea el TVL, más gente confía su dinero en ese systema.',
     extended: 'El TVL es el equivalente al "AUM" (Assets Under Management) en las finanzas tradicionales. Es un indicador de confianza y liquidez. Sin embargo, puede ser engañoso debido al "doble conteo" (por ejemplo, usar un derivado de staking como colateral en otro protocolo). Para un análisis profundo, se debe observar el "TVL ajustado" (eliminando la volatilidad del precio del token nativo) y la ratio de utilización, que indica qué parte de ese capital bloqueado está siendo realmente prestada o utilizada de forma productiva.'
   },
   'Hash': {
@@ -361,12 +393,12 @@ const KNOWLEDGE_BASE: Record<string, InfoVersion> = {
   'Oráculo': {
     technical: 'Servicio técnico que envía datos del mundo real a un contrato inteligente en la blockchain, permitiendo que este interactúe con el exterior.',
     simple: 'Es como un mensajero que le dice a la blockchain qué tiempo hace o a cuánto está el precio del pan en la calle, para que las aplicaciones puedan tomar decisiones.',
-    extended: 'Las blockchains son sistemas cerrados por diseño para garantizar el determinismo. Los oráculos (como Chainlink) rompen este aislamiento inyectando datos externos (precios de activos, resultados deportivos, clima). El desafío es el "problema del oráculo": si el dato que entra es falso, el contrato inteligente ejecutará una acción incorrecta de forma inmutable. Por ello, se usan redes de oráculos descentzializados que agregan datos de múltiples fuentes y penalizan a los informadores deshonestos, garantizando que el disparador de los contratos DeFi sea siempre la verdad del mercado.'
+    extended: 'Las blockchains son systemas cerrados por diseño para garantizar el determinismo. Los oráculos (como Chainlink) rompen este aislamiento inyectando datos externos (precios de activos, resultados deportivos, clima). El desafío es el "problema del oráculo": si el dato que entra es falso, el contrato inteligente ejecutará una acción incorrecta de forma inmutable. Por ello, se usan redes de oráculos descentzializados que agregan datos de múltiples fuentes y penalizan a los informadores deshonestos, garantizando que el disparador de los contratos DeFi sea siempre la verdad del mercado.'
   },
   'Gas': {
     technical: 'Unidad de medida del esfuerzo computacional necesario para ejecutar una operación en redes como Ethereum, pagada en la criptomoneda nativa.',
     simple: 'Es la "comisión" que pagas por usar la red. Cada vez que haces un movimiento, tienes que pagar un poquito para que los ordenadores del mundo procesen tu petición.',
-    extended: 'El mercado de gas es un sistema de subasta por espacio en bloque. Cuando la red está saturada, el precio del gas sube, expulsando a las transacciones de bajo valor. Esto ha llevado a la implementación del EIP-1559 en Ethereum, que quema una parte del gas base, volviendo al ETH potencialmente deflacionario. El análisis del gas es un indicador de la salud y adopción de la red; un gas alto indica una demanda masiva por el espacio de computación más seguro y descentzializado del mundo.'
+    extended: 'El mercado de gas es un systema de subasta por espacio en bloque. Cuando la red está saturada, el precio del gas sube, expulsando a las transacciones de bajo valor. Esto ha llevado a la implementación del EIP-1559 en Ethereum, que quema una parte del gas base, volviendo al ETH potencialmente deflacionario. El análisis del gas es un indicador de la salud y adopción de la red; un gas alto indica una demanda masiva por el espacio de computación más seguro y descentzializado del mundo.'
   },
   'DAO': {
     technical: 'Decentralized Autonomous Organization. Entidad gobernada por código y por sus poseedores de tokens, sin una estructura jerárquica tradicional.',
@@ -475,7 +507,7 @@ const InfoPanel: React.FC<InfoPanelProps> = ({ sectionId }) => {
       const response = await askGemini(`Actúa como un experto en finanzas y economía. Responde de forma concisa pero profunda. Tema: ${String(sectionId)}. Pregunta: ${question}`);
       setAnswer(response);
     } catch (e) {
-      setAnswer("Error al conectar con el motor IA. Verifica la configuración del sistema.");
+      setAnswer("Error al conectar con el motor IA. Verifica la configuración del systema.");
     } finally {
       setIsLoading(false);
     }
@@ -599,7 +631,7 @@ export default function App() {
     }
 
     try {
-      const basePrompt = `Actúa como un profesor emérito de finanzas y criptoeconomía. Genera una Masterclass breve pero de altísimo nivel técnico sobre: "${topic}". Explica su relevancia en la transición del sistema Fiat hacia DeFi.`;
+      const basePrompt = `Actúa como un profesor emérito de finanzas y criptoeconomía. Genera una Masterclass breve pero de altísimo nivel técnico sobre: "${topic}". Explica su relevancia en la transición del systema Fiat hacia DeFi.`;
       const prompt = query ? `Sobre el tema "${topic}", responde a la siguiente duda técnica de seguimiento: "${query}". Mantén el tono de Masterclass técnica de alta fidelidad.` : basePrompt;
       const res = await askGemini(prompt);
       
@@ -660,7 +692,7 @@ export default function App() {
                   <div className="flex items-center gap-1.5 text-[10px] font-black uppercase text-gray-400"><span className="w-1 h-1 rounded-full bg-gray-900"></span> Protocolos On-Chain</div>
                 </div>
               </div>
-              <div className="md:w-1/3 border-l-4 border-gray-900 pl-6 py-1"><p className="text-gray-500 text-[12px] md:text-sm uppercase tracking-tight font-bold leading-relaxed italic max-w-xs">Evolución de los sistemas de dinero cautivo en bancos hacia la infraestructura de protocolos descentralizados.</p></div>
+              <div className="md:w-1/3 border-l-4 border-gray-900 pl-6 py-1"><p className="text-gray-500 text-[12px] md:text-sm uppercase tracking-tight font-bold leading-relaxed italic max-w-xs">Evolución de los systemas de dinero cautivo en bancos hacia la infraestructura de protocolos descentralizados.</p></div>
             </div>
             <a href="https://notebooklm.google.com/notebook/45496add-d540-4b9d-8075-0becfdb16126" target="_blank" rel="noopener noreferrer" className="absolute bottom-4 right-8 text-[10px] font-black uppercase tracking-widest text-red-700 hover:text-gray-900 flex items-center gap-1.5 transition-all group/link bg-white/50 backdrop-blur-sm px-3 py-1.5 rounded-full border border-transparent hover:border-gray-200">Para saber más <ExternalLink size={10} className="group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 transition-transform" /></a>
           </section>
@@ -671,10 +703,68 @@ export default function App() {
               <div><h3 className="text-4xl font-black uppercase tracking-tighter flex items-center gap-4"><Landmark className="text-red-700" size={32} />01. El Ecosistema Fiat</h3><p className="text-gray-400 font-bold uppercase text-[11px] tracking-widest mt-2">Confianza Institucional y Expansión de Deuda</p></div>
               <InfoPanel sectionId="sec-01" />
             </div>
-            <div className="bg-gray-50/50 p-8 rounded-[2rem] border border-gray-100/50 relative overflow-hidden group"><div className="absolute top-0 right-0 w-32 h-32 bg-red-700/5 blur-3xl rounded-full"></div><p className="text-gray-700 text-base md:text-lg leading-relaxed relative z-10 max-w-5xl">El sistema Fiat se sustenta en el <span className="font-black text-gray-900">curso legal</span> y la confianza institucional. Bajo el modelo de <span className="text-red-700 font-black">dinero cautivo en bancos</span>, las entidades financieras crean moneda digital mediante el crédito, multiplicando la base monetaria real.</p></div>
+            <div className="bg-gray-50/50 p-8 rounded-[2rem] border border-gray-100/50 relative overflow-hidden group"><div className="absolute top-0 right-0 w-32 h-32 bg-red-700/5 blur-3xl rounded-full"></div><p className="text-gray-700 text-base md:text-lg leading-relaxed relative z-10 max-w-5xl">El systema Fiat se sustenta en el <span className="font-black text-gray-900">curso legal</span> y la confianza institucional. Bajo el modelo de <span className="text-red-700 font-black">dinero cautivo en bancos</span>, las entidades financieras crean moneda digital mediante el crédito, multiplicando la base monetaria real.</p></div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
-              <div className="bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-xl shadow-gray-100/50 flex flex-col"><h4 className="text-[11px] font-black uppercase tracking-widest mb-8 text-gray-400 border-l-2 border-red-700 pl-3">Multiplicador Monetario (M0-M3)</h4><div className="h-64 flex-1"><ResponsiveContainer width="100%" height="100%"><BarChart margin={{ top: 10, right: 10, left: -20, bottom: 0 }} data={multiplierData}><defs><linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#b91c1c" stopOpacity={1} /><stop offset="100%" stopColor="#7f1d1d" stopOpacity={1} /></linearGradient></defs><CartesianGrid strokeDasharray="4 4" vertical={false} stroke="#f3f4f6" /><XAxis dataKey="name" fontSize={11} axisLine={false} tickLine={false} tick={{ fill: '#9ca3af', fontWeight: 900 }} /><YAxis hide /><Tooltip content={<CustomTooltip />} cursor={{ fill: '#f9fafb', radius: 12 }} /><Bar dataKey="value" fill="url(#barGradient)" radius={[12, 12, 4, 4]} barSize={40} animationDuration={1500} /></BarChart></ResponsiveContainer></div></div>
-              <div className="bg-red-700 text-white p-12 rounded-[3.5rem] shadow-2xl shadow-red-700/30 relative overflow-hidden group flex flex-col justify-between"><div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent pointer-events-none"></div><div className="relative z-10"><div className="flex items-center gap-3 mb-4"><TrendingDown size={32} className="text-red-200 group-hover:scale-110 transition-transform" /><h4 className="text-3xl font-black uppercase italic tracking-tighter leading-none">El Impuesto Silencioso</h4></div><p className="text-red-100 text-[14px] font-bold uppercase tracking-tight leading-tight mb-6">La inflación disuelve el <span className="text-white font-black underline decoration-white/30 decoration-4">poder adquisitivo real</span> del ahorro nominal.</p></div><div className="h-48 bg-white/5 backdrop-blur-sm rounded-[2rem] p-6 relative z-10 border border-white/10 mt-auto"><ResponsiveContainer width="100%" height="100%"><AreaChart data={erosionData} margin={{ top: 5, right: 5, left: -20, bottom: 0 }}><defs><linearGradient id="erosionGradient" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stopColor="#fff" stopOpacity={0.4} /><stop offset="95%" stopColor="#fff" stopOpacity={0} /></linearGradient></defs><Tooltip content={<CustomTooltip />} /><Area type="monotone" dataKey="real" stroke="#fff" fill="url(#erosionGradient)" strokeWidth={4} animationDuration={2000} /><Line type="monotone" dataKey="nominal" stroke="rgba(255,255,255,0.2)" strokeDasharray="5 5" strokeWidth={2} /></AreaChart></ResponsiveContainer></div></div>
+              <div className="bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-xl shadow-gray-100/50 flex flex-col relative group/chart">
+                <button 
+                  onClick={() => setSelectedDetail('Multiplicador Monetario')}
+                  className="absolute top-6 right-6 p-2 bg-gray-50 text-gray-400 hover:text-red-700 rounded-full transition-all active:scale-90 z-10 opacity-0 group-hover/chart:opacity-100"
+                  title="Más información sobre esta gráfica"
+                >
+                  <Info size={18} />
+                </button>
+                <h4 className="text-[11px] font-black uppercase tracking-widest mb-8 text-gray-400 border-l-2 border-red-700 pl-3">Multiplicador Monetario (M0-M3)</h4>
+                <div className="h-64 flex-1">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart margin={{ top: 10, right: 10, left: -20, bottom: 0 }} data={multiplierData}>
+                      <defs>
+                        <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stopColor="#b91c1c" stopOpacity={1} />
+                          <stop offset="100%" stopColor="#7f1d1d" stopOpacity={1} />
+                        </linearGradient>
+                      </defs>
+                      <CartesianGrid strokeDasharray="4 4" vertical={false} stroke="#f3f4f6" />
+                      <XAxis dataKey="name" fontSize={11} axisLine={false} tickLine={false} tick={{ fill: '#9ca3af', fontWeight: 900 }} />
+                      <YAxis hide />
+                      <Tooltip content={<CustomTooltip />} cursor={{ fill: '#f9fafb', radius: 12 }} />
+                      <Bar dataKey="value" fill="url(#barGradient)" radius={[12, 12, 4, 4]} barSize={40} animationDuration={1500} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+
+              <div className="bg-red-700 text-white p-12 rounded-[3.5rem] shadow-2xl shadow-red-700/30 relative overflow-hidden group/chart flex flex-col justify-between">
+                <button 
+                  onClick={() => setSelectedDetail('Erosión del Poder Adquisitivo')}
+                  className="absolute top-8 right-8 p-2 bg-white/10 text-white hover:bg-white hover:text-red-700 rounded-full transition-all active:scale-90 z-10 opacity-0 group-hover/chart:opacity-100"
+                  title="Más información sobre esta gráfica"
+                >
+                  <Info size={18} />
+                </button>
+                <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent pointer-events-none"></div>
+                <div className="relative z-10">
+                  <div className="flex items-center gap-3 mb-4">
+                    <TrendingDown size={32} className="text-red-200 group-hover:scale-110 transition-transform" />
+                    <h4 className="text-3xl font-black uppercase italic tracking-tighter leading-none">El Impuesto Silencioso</h4>
+                  </div>
+                  <p className="text-red-100 text-[14px] font-bold uppercase tracking-tight leading-tight mb-6">La inflación disuelve el <span className="text-white font-black underline decoration-white/30 decoration-4">poder adquisitivo real</span> del ahorro nominal.</p>
+                </div>
+                <div className="h-48 bg-white/5 backdrop-blur-sm rounded-[2rem] p-6 relative z-10 border border-white/10 mt-auto">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart data={erosionData} margin={{ top: 5, right: 5, left: -20, bottom: 0 }}>
+                      <defs>
+                        <linearGradient id="erosionGradient" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor="#fff" stopOpacity={0.4} />
+                          <stop offset="95%" stopColor="#fff" stopOpacity={0} />
+                        </linearGradient>
+                      </defs>
+                      <Tooltip content={<CustomTooltip />} />
+                      <Area type="monotone" dataKey="real" stroke="#fff" fill="url(#erosionGradient)" strokeWidth={4} animationDuration={2000} />
+                      <Line type="monotone" dataKey="nominal" stroke="rgba(255,255,255,0.2)" strokeDasharray="5 5" strokeWidth={2} />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
             </div>
           </section>
 
@@ -707,7 +797,14 @@ export default function App() {
                 </button>
               ))}
             </div>
-            <div className="bg-white rounded-[3rem] p-12 border border-gray-100 shadow-xl shadow-gray-100/50">
+            <div className="bg-white rounded-[3rem] p-12 border border-gray-100 shadow-xl shadow-gray-100/50 relative group/chart">
+               <button 
+                  onClick={() => setSelectedDetail('Matriz Riesgo vs Beneficio')}
+                  className="absolute top-10 right-10 p-2 bg-gray-50 text-gray-400 hover:text-red-700 rounded-full transition-all active:scale-90 z-10 opacity-0 group-hover/chart:opacity-100"
+                  title="Análisis detallado del riesgo vs beneficio"
+                >
+                  <Info size={22} />
+                </button>
                <h4 className="text-center text-[11px] font-black uppercase tracking-[0.4em] mb-12 text-gray-400">Matriz Riesgo vs Beneficio</h4>
                <div className="h-[400px] max-w-5xl mx-auto">
                  <ResponsiveContainer width="100%" height="100%">
@@ -780,7 +877,14 @@ export default function App() {
                 </div>
               </div>
               
-              <div className="bg-white p-12 rounded-[3.5rem] flex flex-col items-center justify-center text-center space-y-8 shadow-xl shadow-gray-100/50 border border-gray-100 relative group overflow-hidden">
+              <div className="bg-white p-12 rounded-[3.5rem] flex flex-col items-center justify-center text-center space-y-8 shadow-xl shadow-gray-100/50 border border-gray-100 relative group/chart overflow-hidden">
+                <button 
+                  onClick={() => setSelectedDetail('Garantía Sistémica')}
+                  className="absolute top-10 right-10 p-2 bg-gray-50 text-gray-400 hover:text-red-700 rounded-full transition-all active:scale-90 z-10 opacity-0 group-hover/chart:opacity-100"
+                  title="Seguridad de las garantías en DeFi"
+                >
+                  <Info size={22} />
+                </button>
                 <div className="absolute top-0 right-0 w-64 h-64 bg-red-700/5 blur-[100px] pointer-events-none"></div>
                 <div className="absolute top-6 right-8 text-[11px] font-black text-gray-300 uppercase tracking-[0.5em] vertical-text">LIQUIDITY CERTAINTY</div>
                 
@@ -976,7 +1080,14 @@ export default function App() {
             </div>
             
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
-               <div className="bg-white p-12 rounded-[3.5rem] shadow-xl border border-gray-100 relative overflow-hidden group">
+               <div className="bg-white p-12 rounded-[3.5rem] shadow-xl border border-gray-100 relative overflow-hidden group/chart">
+                 <button 
+                  onClick={() => setSelectedDetail('Radar de Atributos Sistémicos')}
+                  className="absolute top-10 right-10 p-2 bg-gray-50 text-gray-400 hover:text-red-700 rounded-full transition-all active:scale-90 z-10 opacity-0 group-hover/chart:opacity-100"
+                  title="Comparativa detallada de atributos"
+                >
+                  <Info size={22} />
+                </button>
                  <div className="absolute top-0 right-0 w-64 h-64 bg-red-700/5 blur-[100px] pointer-events-none"></div>
                  <h4 className="text-[11px] font-black uppercase tracking-[0.4em] text-red-700 mb-10 text-center relative z-10">Radar de Atributos Sistémicos</h4>
                  <div className="h-96 relative z-10">
@@ -994,7 +1105,14 @@ export default function App() {
                </div>
 
                <div className="space-y-12">
-                 <div className="bg-white p-10 rounded-[3rem] border border-gray-100 shadow-xl shadow-gray-100/50 relative overflow-hidden group">
+                 <div className="bg-white p-10 rounded-[3rem] border border-gray-100 shadow-xl shadow-gray-100/50 relative group/chart overflow-hidden">
+                   <button 
+                    onClick={() => setSelectedDetail('Finalidad Transaccional')}
+                    className="absolute top-8 right-8 p-2 bg-gray-50 text-gray-400 hover:text-red-700 rounded-full transition-all active:scale-90 z-10 opacity-0 group-hover/chart:opacity-100"
+                    title="Análisis de velocidad de asentamiento"
+                  >
+                    <Info size={18} />
+                  </button>
                    <div className="flex items-center justify-between mb-8 pb-4 border-b border-gray-50">
                       <h4 className="text-[11px] font-black uppercase tracking-widest text-gray-400">Tiempo de Respuesta (Finalidad)</h4>
                       <Clock size={18} className="text-red-700 animate-pulse" />
