@@ -242,6 +242,160 @@ export const DIRECT_LINKS_REGISTRY: Record<string, PlatformLinksResource> = {
       { label: 'Repositorio GitHub Oficial', url: 'https://github.com/safe-global', type: 'github', desc: 'Contratos inteligentes auditados por múltiples firmas de seguridad.' }
     ]
   },
+  'Balancer': {
+    id: 'balancer',
+    name: 'Balancer Protocol',
+    category: 'Plataforma DeFi',
+    tag: 'AMM Multi-Token',
+    badge: 'Pools hasta 8 Tokens',
+    officialSite: 'https://balancer.fi',
+    summary: 'Creador de mercado automatizado generalizado que permite pools con hasta 8 tokens y ponderaciones personalizadas (no solo 50/50), ideal para índices, tesorerías y estrategias complejas.',
+    links: [
+      { label: 'Balancer Web3 App (Pools & Swap)', url: 'https://app.balancer.fi', type: 'dapp', desc: 'Interfaz oficial para provisión de liquidez en pools ponderadas, estables y Boosted Pools.' },
+      { label: 'Documentación Técnica (Docs)', url: 'https://docs.balancer.fi', type: 'docs', desc: 'Arquitectura de Balancer V2/V3, Single Vault, fórmulas matemáticas y SDK.' },
+      { label: 'DefiLlama Balancer Analytics', url: 'https://defillama.com/protocol/balancer', type: 'analytics', desc: 'Métricas de TVL, volumen de swaps y comisiones acumuladas.' },
+      { label: 'Gobernanza veBAL', url: 'https://vote.balancer.fi', type: 'governance', desc: 'Propuestas de la DAO y asignación de gauges de liquidez mediante veBAL.' }
+    ]
+  },
+  'PancakeSwap': {
+    id: 'pancakeswap',
+    name: 'PancakeSwap',
+    category: 'Plataforma DeFi',
+    tag: 'DEX Líder BNB Chain',
+    badge: 'AMM V2/V3 Multicadena',
+    officialSite: 'https://pancakeswap.finance',
+    summary: 'El AMM dominante en BNB Chain y presente en múltiples redes, con pools estándar, granjas de rendimiento (farms) y opciones de liquidez concentrada en sus versiones recientes.',
+    links: [
+      { label: 'PancakeSwap DApp (Swap & Farms)', url: 'https://pancakeswap.finance/swap', type: 'dapp', desc: 'Terminal de intercambio descentralizado, pools de liquidez V3 y farming de CAKE.' },
+      { label: 'Documentación Oficial', url: 'https://docs.pancakeswap.finance', type: 'docs', desc: 'Guías de integración, arquitectura de Smart Router y contratos de lotería/farms.' },
+      { label: 'DefiLlama PancakeSwap Dashboard', url: 'https://defillama.com/protocol/pancakeswap', type: 'analytics', desc: 'Volumen y valor total bloqueado en BNB Chain, Ethereum, Arbitrum y Base.' }
+    ]
+  },
+  'Trader Joe': {
+    id: 'trader-joe',
+    name: 'Trader Joe (LFJ)',
+    category: 'Plataforma DeFi',
+    tag: 'DEX Nativo Avalanche',
+    badge: 'Liquidity Book & Bins',
+    officialSite: 'https://traderjoexyz.com',
+    summary: 'DEX insignia originario de Avalanche expandido a Arbitrum y BNB Chain, pionero del modelo Liquidity Book con bins de precio de deslizamiento nulo.',
+    links: [
+      { label: 'Trade & Liquidity DApp', url: 'https://traderjoexyz.com/trade', type: 'dapp', desc: 'Terminal de trading y gestión de liquidez discreta en Liquidity Book.' },
+      { label: 'Documentación Liquidity Book', url: 'https://docs.traderjoexyz.com', type: 'docs', desc: 'Arquitectura matemática de bins, comisiones de volatilidad variable y SDK.' },
+      { label: 'DefiLlama Trader Joe Stats', url: 'https://defillama.com/protocol/trader-joe', type: 'analytics', desc: 'Evolución de TVL en Avalanche y métricas de volumen transaccionado.' }
+    ]
+  },
+  'Camelot': {
+    id: 'camelot',
+    name: 'Camelot DEX',
+    category: 'Plataforma DeFi',
+    tag: 'DEX Nativo Arbitrum',
+    badge: 'Liquidez Personalizada',
+    officialSite: 'https://camelot.exchange',
+    summary: 'El DEX nativo centrado en el ecosistema Arbitrum, ofreciendo pools duales (clásicas y nitro), comisiones dinámicas e incentivos dirigidos para protocolos locales.',
+    links: [
+      { label: 'Camelot App (Swap & Nitro)', url: 'https://app.camelot.exchange', type: 'dapp', desc: 'Interfaz de intercambio descentralizado y pools de rendimiento en Arbitrum.' },
+      { label: 'Documentación Oficial', url: 'https://docs.camelot.exchange', type: 'docs', desc: 'Arquitectura de spNFT, comisiones dinámicas y pools concentradas algebraicas.' },
+      { label: 'DefiLlama Camelot Analytics', url: 'https://defillama.com/protocol/camelot', type: 'analytics', desc: 'Métricas de dominancia de liquidez local en la red Arbitrum.' }
+    ]
+  },
+  'Raydium': {
+    id: 'raydium',
+    name: 'Raydium Protocol',
+    category: 'Plataforma DeFi',
+    tag: 'DEX Gigante Solana',
+    badge: 'Volumen >35.600M USD/Mes',
+    officialSite: 'https://raydium.io',
+    summary: 'El DEX más grande de la blockchain Solana por volumen mensual (>35.600 millones de USD). Ofrece pools AMM estándar (comisión aprox. 0,25%) y CLMM (liquidez concentrada) con comisiones dinámicas variables.',
+    links: [
+      { label: 'Raydium Swap & CLMM App', url: 'https://raydium.io/swap', type: 'dapp', desc: 'Interfaz principal para swaps en Solana, creación de pools estándar y pools concentradas CLMM.' },
+      { label: 'Documentación para Desarrolladores', url: 'https://docs.raydium.io', type: 'docs', desc: 'Arquitectura de programas de Solana, CLMM, integración de SDKs y APIs.' },
+      { label: 'DefiLlama Raydium Dashboard', url: 'https://defillama.com/protocol/raydium', type: 'analytics', desc: 'Histórico de volumen diario récord, TVL y cuota de mercado en Solana.' }
+    ]
+  },
+  'Orca': {
+    id: 'orca',
+    name: 'Orca (Whirlpools)',
+    category: 'Plataforma DeFi',
+    tag: 'DEX Concentrado Solana',
+    badge: 'Whirlpools CLMM',
+    officialSite: 'https://www.orca.so',
+    summary: 'Segundo DEX de referencia en Solana, especializado en Whirlpools (liquidez concentrada). Sus pools como SOL/USDC superan decenas de millones en TVL con comisiones competitivas entre 0,01% y 1% según la volatilidad del par.',
+    links: [
+      { label: 'Orca Web3 App (Whirlpools)', url: 'https://www.orca.so', type: 'dapp', desc: 'Terminal de intercambio con protección de slippage y provisión de liquidez en rangos de precios.' },
+      { label: 'Documentación Técnica Whirlpools', url: 'https://docs.orca.so', type: 'docs', desc: 'Especificaciones de programas Whirlpool en Rust, SDK de TypeScript y ticks de precios.' },
+      { label: 'DefiLlama Orca Analytics', url: 'https://defillama.com/protocol/orca', type: 'analytics', desc: 'Seguimiento de TVL de Whirlpools y volumen de pares principales en Solana.' }
+    ]
+  },
+  'Beefy Finance': {
+    id: 'beefy',
+    name: 'Beefy Finance',
+    category: 'Plataforma DeFi',
+    tag: 'Agregador de Rendimiento',
+    badge: 'Auto-Compounder Multicadena',
+    officialSite: 'https://beefy.com',
+    summary: 'Optimizador de rendimiento descentralizado y multicadena que automatiza el interés compuesto (auto-compound) sobre posiciones LP de cientos de DEXs sin fricción manual.',
+    links: [
+      { label: 'Beefy App (Vaults Multicadena)', url: 'https://app.beefy.com', type: 'dapp', desc: 'Explorador y depósito en bóvedas autocompuestas en más de 20 blockchains.' },
+      { label: 'Documentación Oficial', url: 'https://docs.beefy.finance', type: 'docs', desc: 'Estrategias de reinversión de cosechas, auditorías de contratos y tokenómica BIFI.' },
+      { label: 'DefiLlama Beefy Dashboard', url: 'https://defillama.com/protocol/beefy', type: 'analytics', desc: 'Estadísticas agregadas de TVL en Arbitrum, Optimism, Polygon, BNB Chain, etc.' }
+    ]
+  },
+  'Yearn Finance': {
+    id: 'yearn',
+    name: 'Yearn Finance',
+    category: 'Plataforma DeFi',
+    tag: 'Agregador Pionero Yield',
+    badge: 'Vaults V3 ERC-4626',
+    officialSite: 'https://yearn.fi',
+    summary: 'El protocolo pionero en bóvedas de rendimiento automatizado, gestionando estrategias complejas multi-pool y minimizando costes de gas mediante contratos estandarizados.',
+    links: [
+      { label: 'Yearn Web3 App (Vaults)', url: 'https://yearn.fi/vaults', type: 'dapp', desc: 'Bóvedas optimizadas de ETH, USDC, DAI y tokens LP con rebalanceo automático.' },
+      { label: 'Documentación Técnica (Docs)', url: 'https://docs.yearn.fi', type: 'docs', desc: 'Especificaciones de Yearn V3, contratos compatibles ERC-4626 y desarrollo de estrategias.' },
+      { label: 'DefiLlama Yearn Analytics', url: 'https://defillama.com/protocol/yearn-finance', type: 'analytics', desc: 'Métricas de TVL histórico, tesorería de la DAO y comisiones de gestión.' }
+    ]
+  },
+  'AutoShark': {
+    id: 'autoshark',
+    name: 'AutoShark Finance',
+    category: 'Plataforma DeFi',
+    tag: 'Agregador BNB Chain',
+    badge: 'Yield Farming Optimizer',
+    officialSite: 'https://autoshark.finance',
+    summary: 'Optimizador de rendimiento y agregador de liquidez orientado a BNB Chain, ofreciendo bóvedas compuestas para pools de PancakeSwap y estrategias de dividendos.',
+    links: [
+      { label: 'AutoShark Portal', url: 'https://autoshark.finance', type: 'dapp', desc: 'Acceso a bóvedas de interés compuesto sobre pares de BNB Chain.' },
+      { label: 'Documentación de Estrategias', url: 'https://autoshark.gitbook.io/autoshark', type: 'docs', desc: 'Mecanismos de reinversión automática y auditorías de seguridad.' }
+    ]
+  },
+  'Rocket Pool': {
+    id: 'rocket-pool',
+    name: 'Rocket Pool',
+    category: 'Plataforma DeFi',
+    tag: 'Liquid Staking Descentralizado',
+    badge: 'rETH & Nodos sin Permiso',
+    officialSite: 'https://rocketpool.net',
+    summary: 'Protocolo descentralizado de staking de Ethereum que permite operar minipools con solo 8 o 16 ETH, emitiendo rETH, un token LST utilizado intensamente en pools de liquidez de Curve y Uniswap.',
+    links: [
+      { label: 'Rocket Pool Staking App', url: 'https://stake.rocketpool.net', type: 'dapp', desc: 'Staking directo de ETH por rETH con recompensas compuestas automáticas.' },
+      { label: 'Documentación Oficial', url: 'https://docs.rocketpool.net', type: 'docs', desc: 'Guía de validadores de nodo, Smartnode CLI y contratos de depósito.' },
+      { label: 'DefiLlama Rocket Pool Stats', url: 'https://defillama.com/protocol/rocket-pool', type: 'analytics', desc: 'Evolución de ETH depositado, número de operadores de nodo y TVL.' }
+    ]
+  },
+  'Jito': {
+    id: 'jito',
+    name: 'Jito Network',
+    category: 'Plataforma DeFi',
+    tag: 'LST & MEV Solana',
+    badge: 'JitoSOL Líder en Solana',
+    officialSite: 'https://jito.network',
+    summary: 'Principal protocolo de staking líquido en Solana que captura recompensas de validación y extracción de MEV institucional. Su token JitoSOL es uno de los colaterales y pares más líquidos en Raydium y Orca.',
+    links: [
+      { label: 'Jito Staking Portal', url: 'https://jito.network/staking', type: 'dapp', desc: 'Conversión de SOL a JitoSOL con rendimiento acumulado por validación y MEV.' },
+      { label: 'Documentación Técnica Jito', url: 'https://docs.jito.network', type: 'docs', desc: 'Cliente validador Jito-Solana, subastas de bloques MEV y gobernanza JTO.' },
+      { label: 'DefiLlama Jito Dashboard', url: 'https://defillama.com/protocol/jito', type: 'analytics', desc: 'Rastreador de TVL en Solana, porcentaje de participación y tarifas capturadas.' }
+    ]
+  },
 
   // --- CRIPTOACTIVOS ---
   'Bitcoin (BTC)': {
@@ -811,6 +965,226 @@ export const DIRECT_LINKS_REGISTRY: Record<string, PlatformLinksResource> = {
       { label: 'CBOE (Chicago Board Options Exchange)', url: 'https://www.cboe.com', type: 'official', desc: 'El mayor mercado de opciones del mundo e inventor del índice de volatilidad VIX.' },
       { label: 'Deribit (Líder en Opciones Cripto)', url: 'https://www.deribit.com', type: 'dapp', desc: 'Plataforma con más del 85% del volumen mundial de opciones sobre Bitcoin y Ethereum.' },
       { label: 'Greeks.live (Analíticas de Volatilidad)', url: 'https://greeks.live', type: 'analytics', desc: 'Análisis de volatilidad implícita, skew y distribución de strikes de opciones.' }
+    ]
+  },
+
+  // --- LAS 14 PLATAFORMAS FINANCIERAS, ON-CHAIN & ANALÍTICAS ---
+  // BLOQUE 1: ANALÍTICA ON-CHAIN, MÉTRICAS DE PROTOCOLOS & AGREGADORES CRIPTO
+  'DefiLlama': {
+    id: 'defillama',
+    name: 'DefiLlama',
+    category: 'Plataforma DeFi',
+    tag: 'Analítica On-Chain',
+    badge: 'Bloque 1 • Analítica On-Chain',
+    officialSite: 'https://defillama.com/',
+    summary: 'La mayor base de datos abierta, transparente e independiente del ecosistema descentralizado. Registra TVL (Total Value Locked), comisiones, ingresos de protocolos, tesorerías de DAOs, stablecoins, yields de pools y auditorías de seguridad sin sesgos comerciales.',
+    links: [
+      { label: 'Portal Oficial DefiLlama', url: 'https://defillama.com/', type: 'official', desc: 'Plataforma completa con rankings, métricas de cadenas y protocolos.' },
+      { label: 'Ranking de DEXs & Volúmenes', url: 'https://defillama.com/dexs', type: 'analytics', desc: 'Comparativa de volumen de trading diario, cuota de mercado y fees generadas.' },
+      { label: 'Monitor de Stablecoins Global', url: 'https://defillama.com/stablecoins', type: 'analytics', desc: 'Suministro circulante, capitalización y flujos de USDT, USDC, USDS y más.' },
+      { label: 'Comparador de Rendimientos (Yields)', url: 'https://defillama.com/yields', type: 'analytics', desc: 'Rastreo y filtrado de APY en miles de pools de liquidez y bóvedas.' },
+      { label: 'Desglose de Cadenas (Chains TVL)', url: 'https://defillama.com/chains', type: 'analytics', desc: 'Distribución de capital entre Ethereum, Solana, Arbitrum, BSC, etc.' }
+    ]
+  },
+  'Glassnode': {
+    id: 'glassnode',
+    name: 'Glassnode Studio',
+    category: 'Plataforma DeFi',
+    tag: 'Inteligencia On-Chain',
+    badge: 'Bloque 1 • Inteligencia On-Chain',
+    officialSite: 'https://studio.glassnode.com/home',
+    summary: 'Plataforma líder de inteligencia on-chain de grado institucional. Ofrece métricas econométricas y forenses avanzadas (MVRV, SOPR, Puell Multiple), flujos de ballenas, saldos en exchanges y comportamiento de acumulación de Bitcoin y Ethereum.',
+    links: [
+      { label: 'Glassnode Studio Home', url: 'https://studio.glassnode.com/home', type: 'official', desc: 'Terminal de gráficos y métricas on-chain en tiempo real.' },
+      { label: 'Glassnode Insights & Research', url: 'https://insights.glassnode.com', type: 'docs', desc: 'Informes semanales sobre la salud económica de Bitcoin y Ethereum.' },
+      { label: 'Glassnode Academy & Documentación', url: 'https://academy.glassnode.com', type: 'docs', desc: 'Definiciones matemáticas de cada indicador on-chain y metodología.' }
+    ]
+  },
+  'Glassnode Studio': {
+    id: 'glassnode-studio',
+    name: 'Glassnode Studio',
+    category: 'Plataforma DeFi',
+    tag: 'Inteligencia On-Chain',
+    badge: 'Bloque 1 • Inteligencia On-Chain',
+    officialSite: 'https://studio.glassnode.com/home',
+    summary: 'Plataforma líder de inteligencia on-chain de grado institucional. Ofrece métricas econométricas y forenses avanzadas (MVRV, SOPR, Puell Multiple), flujos de ballenas, saldos en exchanges y comportamiento de acumulación de Bitcoin y Ethereum.',
+    links: [
+      { label: 'Glassnode Studio Home', url: 'https://studio.glassnode.com/home', type: 'official', desc: 'Terminal de gráficos y métricas on-chain en tiempo real.' },
+      { label: 'Glassnode Insights & Research', url: 'https://insights.glassnode.com', type: 'docs', desc: 'Informes semanales sobre la salud económica de Bitcoin y Ethereum.' },
+      { label: 'Glassnode Academy & Documentación', url: 'https://academy.glassnode.com', type: 'docs', desc: 'Definiciones matemáticas de cada indicador on-chain y metodología.' }
+    ]
+  },
+  'CoinMarketCap': {
+    id: 'coinmarketcap',
+    name: 'CoinMarketCap',
+    category: 'Criptoactivo',
+    tag: 'Agregador de Datos',
+    badge: 'Bloque 1 • Agregador de Datos',
+    officialSite: 'https://coinmarketcap.com/es/',
+    summary: 'El agregador de cotizaciones y capitalización de mercado cripto más consultado del mundo. Proporciona precios en tiempo real, volúmenes de negociación en CEX y DEX, rankings de activos, gráficos históricos y métricas de dominancia.',
+    links: [
+      { label: 'CoinMarketCap en Español', url: 'https://coinmarketcap.com/es/', type: 'official', desc: 'Página principal en español con precios, capitalización y variaciones.' },
+      { label: 'Rankings de Criptomonedas', url: 'https://coinmarketcap.com/es/coins/', type: 'analytics', desc: 'Listado ordenado por capitalización de mercado y volumen transaccional.' },
+      { label: 'Ranking de Exchanges (Spot & Derivados)', url: 'https://coinmarketcap.com/es/rankings/exchanges/', type: 'analytics', desc: 'Puntuación de liquidez, reservas y solvencia de casas de cambio.' },
+      { label: 'Índice de Miedo y Avaricia (Fear & Greed)', url: 'https://coinmarketcap.com/es/insights/fear-and-greed/', type: 'analytics', desc: 'Sentimiento de mercado ponderado por volatilidad y volumen social.' }
+    ]
+  },
+  'Cryptoboard': {
+    id: 'cryptoboard',
+    name: 'Cryptoboard',
+    category: 'Criptoactivo',
+    tag: 'Dashboard de Control',
+    badge: 'Bloque 1 • Dashboard de Control',
+    officialSite: 'https://cryptoboard-psi.vercel.app/dashboard',
+    summary: 'Dashboard interactivo y ligero para la monitorización consolidada de mercados de criptoactivos, carteras y métricas clave en una interfaz visual directa y ágil.',
+    links: [
+      { label: 'Acceso a Cryptoboard Dashboard', url: 'https://cryptoboard-psi.vercel.app/dashboard', type: 'dapp', desc: 'Panel de control interactivo con métricas consolidadas en tiempo real.' },
+      { label: 'Web Oficial Cryptoboard', url: 'https://cryptoboard-psi.vercel.app', type: 'official', desc: 'Página de inicio y características de la plataforma de seguimiento.' }
+    ]
+  },
+
+  // BLOQUE 2: TERMINALES BURSÁTILES, ANÁLISIS TÉCNICO & MACROECONOMÍA GLOBAL
+  'TradingView': {
+    id: 'tradingview',
+    name: 'TradingView',
+    category: 'Mercado',
+    tag: 'Graficación Profesional',
+    badge: 'Bloque 2 • Graficación Avanzada',
+    officialSite: 'https://es.tradingview.com',
+    summary: 'La plataforma de graficación avanzada y análisis técnico multi-activo más extendida entre operadores de todo el mundo. Soporta acciones, Forex, materias primas, bonos, criptoactivos, el lenguaje de programación Pine Script y herramientas colaborativas de mercado.',
+    links: [
+      { label: 'TradingView en Español', url: 'https://es.tradingview.com', type: 'official', desc: 'Portal oficial en español con gráficos interactivos y cotizaciones en vivo.' },
+      { label: 'Supercharts TradingView', url: 'https://es.tradingview.com/chart/', type: 'analytics', desc: 'Espacio de trabajo gráfico con cientos de indicadores técnicos y herramientas de dibujo.' },
+      { label: 'Screener de Acciones y Cripto', url: 'https://es.tradingview.com/screener/', type: 'analytics', desc: 'Filtro multicriterio por ratios financieros, volumen y osciladores.' },
+      { label: 'Comunidad e Ideas de Trading', url: 'https://es.tradingview.com/ideas/', type: 'official', desc: 'Análisis técnicos compartidos por traders profesionales globales.' }
+    ]
+  },
+  'ProRealTime': {
+    id: 'prorealtime',
+    name: 'ProRealTime',
+    category: 'Mercado',
+    tag: 'Terminal Institucional',
+    badge: 'Bloque 2 • Terminal Institucional',
+    officialSite: 'https://www.prorealtime.com/',
+    summary: 'Software profesional de análisis técnico y trading bursátil de alta gama. Reconocido por sus feeds de datos tick a tick de máxima precisión, el escáner de mercado en tiempo real ProScreener, backtesting cuantitativo y conexión directa con los principales brokers.',
+    links: [
+      { label: 'Portal Oficial ProRealTime', url: 'https://www.prorealtime.com/', type: 'official', desc: 'Página web oficial de la plataforma de trading y análisis bursátil.' },
+      { label: 'Herramientas de Análisis ProRealTime', url: 'https://www.prorealtime.com/es/caracteristicas', type: 'docs', desc: 'Detección automática de tendencias, ProScreener y gráficos avanzados.' },
+      { label: 'Brokers Compatibles (Trading Directo)', url: 'https://www.prorealtime.com/es/trading-con-broker', type: 'official', desc: 'Integración para operar en bolsa con Interactive Brokers, Saxo y más.' }
+    ]
+  },
+  'Investing.com': {
+    id: 'investing-com',
+    name: 'Investing.com España',
+    category: 'Mercado',
+    tag: 'Portal Macro & Bursátil',
+    badge: 'Bloque 2 • Macro & Bursátil',
+    officialSite: 'https://es.investing.com',
+    summary: 'Portal global de información financiera y macroeconómica con cotizaciones en tiempo real de índices bursátiles (IBEX 35, S&P 500, Nasdaq), divisas Forex, materias primas, bonos soberanos y el calendario económico de mayor referencia.',
+    links: [
+      { label: 'Investing.com España', url: 'https://es.investing.com', type: 'official', desc: 'Cotizaciones en directo, noticias económicas y mercados financieros.' },
+      { label: 'Calendario Económico Global', url: 'https://es.investing.com/economic-calendar/', type: 'analytics', desc: 'Datos macroeconómicos programados, IPC, PIB, tipos de interés y nóminas no agrícolas.' },
+      { label: 'Mercado de Renta Fija (Bonos)', url: 'https://es.investing.com/rates-bonds/', type: 'analytics', desc: 'Rendimientos de bonos del tesoro de EE.UU., Bund alemán y deuda española.' },
+      { label: 'Materias Primas & Energía', url: 'https://es.investing.com/commodities/', type: 'analytics', desc: 'Precios del petróleo Brent, crudo WTI, oro, plata y gas natural.' }
+    ]
+  },
+  'Yahoo Finanzas': {
+    id: 'yahoo-finanzas',
+    name: 'Yahoo Finanzas',
+    category: 'Mercado',
+    tag: 'Estados Financieros',
+    badge: 'Bloque 2 • Estados Financieros',
+    officialSite: 'https://es.finance.yahoo.com',
+    summary: 'Plataforma clásica de referencia para el análisis fundamental de compañías cotizadas. Permite consultar balances, cuentas de pérdidas y ganancias, flujo de caja libre, ratios de valoración (PER, Price/Book, EV/EBITDA), consenso de analistas y seguimiento de carteras.',
+    links: [
+      { label: 'Yahoo Finanzas en Español', url: 'https://es.finance.yahoo.com', type: 'official', desc: 'Página de inicio con resúmenes bursátiles y noticias empresariales.' },
+      { label: 'Principales Índices Mundiales', url: 'https://es.finance.yahoo.com/world-indices/', type: 'analytics', desc: 'Seguimiento del comportamiento del Dow Jones, S&P 500, DAX e IBEX.' },
+      { label: 'Mercados de Divisas (Forex)', url: 'https://es.finance.yahoo.com/currencies/', type: 'analytics', desc: 'Pares de divisas EUR/USD, USD/JPY, GBP/USD y tipos cruzados.' }
+    ]
+  },
+  'MSN Dinero': {
+    id: 'msn-dinero',
+    name: 'MSN Dinero',
+    category: 'Mercado',
+    tag: 'Actualidad & Mercados',
+    badge: 'Bloque 2 • Actualidad & Mercados',
+    officialSite: 'https://www.msn.com/es-es/dinero',
+    summary: 'Hub de información financiera y económica de Microsoft Start. Agrupa cotizaciones bursátiles en tiempo real, seguimiento de carteras personales, conversor de divisas, previsiones de bancos centrales y recopilación de prensa económica especializada.',
+    links: [
+      { label: 'MSN Dinero en Español', url: 'https://www.msn.com/es-es/dinero', type: 'official', desc: 'Noticias macroeconómicas, seguimiento de mercados e índices.' },
+      { label: 'Seguimiento de Bolsas Globales', url: 'https://www.msn.com/es-es/dinero/mercados', type: 'analytics', desc: 'Comportamiento diario de las principales bolsas y valores destacados.' }
+    ]
+  },
+  'Google Finance': {
+    id: 'google-finance',
+    name: 'Google Finance (Beta)',
+    category: 'Mercado',
+    tag: 'Seguimiento Bursátil Ágil',
+    badge: 'Bloque 2 • Seguimiento Bursátil Ágil',
+    officialSite: 'https://www.google.com/finance/beta',
+    summary: 'Herramienta ágil de Google para el seguimiento en tiempo real de acciones, fondos indexados, índices globales y divisas. Ofrece listas de seguimiento personalizadas, comparativas gráficas directas y noticias relevantes contextualizadas.',
+    links: [
+      { label: 'Google Finance (Beta)', url: 'https://www.google.com/finance/beta', type: 'official', desc: 'Interfaz renovada con listas de seguimiento dinámicas y gráficos rápidos.' },
+      { label: 'Mercados & Índices Google Finance', url: 'https://www.google.com/finance/markets/indexes', type: 'analytics', desc: 'Resumen en tiempo real de índices bursátiles de América, Europa y Asia.' }
+    ]
+  },
+
+  // BLOQUE 3: META-AGREGACIÓN CROSS-CHAIN, GESTIÓN DE LIQUIDEZ AMM & PORTAFOLIOS WEB3
+  'Jumper Exchange': {
+    id: 'jumper-exchange',
+    name: 'Jumper Exchange (by LI.FI)',
+    category: 'Plataforma DeFi',
+    tag: 'Meta-Agregador Cross-Chain',
+    badge: 'Bloque 3 • Meta-Agregador Cross-Chain',
+    officialSite: 'https://jumper.exchange/es',
+    summary: 'El meta-agregador de puentes cross-chain y DEXs líder en Web3. Desarrollado sobre la infraestructura LI.FI, enruta intercambios de activos entre decenas de blockchains (Ethereum, Arbitrum, Solana, Polygon, Optimism, Base, etc.) optimizando coste de gas, deslizamiento y velocidad.',
+    links: [
+      { label: 'DApp Oficial Jumper Exchange (Español)', url: 'https://jumper.exchange/es', type: 'dapp', desc: 'Interfaz de swap y puente entre múltiples blockchains en un solo paso.' },
+      { label: 'Documentación de LI.FI Protocol', url: 'https://docs.li.fi', type: 'docs', desc: 'Especificaciones técnicas de enrutamiento cross-chain y seguridad de puentes.' },
+      { label: 'Jumper Profile & Misiones Web3', url: 'https://jumper.exchange/profile', type: 'official', desc: 'Seguimiento de actividad cross-chain, volumen acumulado y lealtad.' }
+    ]
+  },
+  'Revert Finance': {
+    id: 'revert-finance',
+    name: 'Revert Finance',
+    category: 'Plataforma DeFi',
+    tag: 'Gestor de Liquidez AMM',
+    badge: 'Bloque 3 • Gestión de Liquidez AMM',
+    officialSite: 'https://revert.finance',
+    summary: 'Suite analítica y operativa de grado profesional para proveedores de liquidez (LP) en creadores de mercado concentrado (Uniswap V3). Permite rastrear el rendimiento neto deduciendo la pérdida impermanente (Impermanent Loss), realizar backtesting de rangos y automatizar el auto-compound de comisiones.',
+    links: [
+      { label: 'DApp de Revert Finance', url: 'https://revert.finance', type: 'dapp', desc: 'Conecta tu wallet para auditar tus posiciones de liquidez en Uniswap V3.' },
+      { label: 'Herramienta de Backtesting V3', url: 'https://revert.finance/#/initiator', type: 'analytics', desc: 'Simula rendimientos históricos y riesgos antes de desplegar capital en pools.' },
+      { label: 'Automatizador Auto-Compound', url: 'https://revert.finance/#/automator', type: 'dapp', desc: 'Bóvedas que reinvierten automáticamente las comisiones generadas por tu posición.' }
+    ]
+  },
+  'Krystal DeFi': {
+    id: 'krystal-defi',
+    name: 'Krystal DeFi',
+    category: 'Plataforma DeFi',
+    tag: 'Consola de Gestión Web3',
+    badge: 'Bloque 3 • Consola de Gestión Web3',
+    officialSite: 'https://defi.krystal.app',
+    summary: 'Consola Web3 integral para la gestión de carteras y operaciones multicadena. Facilita la administración de posiciones en pools de liquidez de múltiples DEXs, optimización de depósitos de préstamo, swaps con agregación de rutas y protección integrada contra ataques de sándwich y MEV.',
+    links: [
+      { label: 'Krystal DeFi Web DApp', url: 'https://defi.krystal.app', type: 'dapp', desc: 'Interfaz de gestión de portafolio, swaps y provisión de liquidez en múltiples redes.' },
+      { label: 'Documentación Oficial Krystal', url: 'https://docs.krystal.app', type: 'docs', desc: 'Guías de uso de Smart Swap, gestión de liquidez y oráculos de precios.' },
+      { label: 'Portal Institucional Krystal', url: 'https://krystal.app', type: 'official', desc: 'Características del ecosistema y aplicaciones móviles para iOS y Android.' }
+    ]
+  },
+
+  // BLOQUE 4: INTELIGENCIA FINANCIERA CONVERSACIONAL & MOTORES DE IA EN TIEMPO REAL
+  'Perplexity Finance': {
+    id: 'perplexity-finance',
+    name: 'Perplexity Finance',
+    category: 'Mercado',
+    tag: 'Inteligencia Artificial Financiera',
+    badge: 'Bloque 4 • Inteligencia Artificial Financiera',
+    officialSite: 'https://www.perplexity.ai/finance/',
+    summary: 'Motor de búsqueda conversacional de inteligencia artificial optimizado para el análisis financiero en tiempo real. Proporciona resúmenes ejecutivos de balances corporativos, cotizaciones en vivo, noticias de mercado contrastadas y métricas fundamentales con citas a fuentes primarias fiables.',
+    links: [
+      { label: 'Perplexity Finance Hub', url: 'https://www.perplexity.ai/finance/', type: 'official', desc: 'Terminal conversacional de IA para consultas bursátiles y financieras en directo.' },
+      { label: 'Perplexity AI Search', url: 'https://www.perplexity.ai', type: 'official', desc: 'Motor de búsqueda general con capacidades de razonamiento profundo y citas.' }
     ]
   }
 };

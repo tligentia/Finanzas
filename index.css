@@ -19,6 +19,63 @@ body {
   line-height: 1.6;
 }
 
+/* =========================================================================
+   TIPOGRAFÍA Y ESCALA DE TEXTOS (ENCABEZADOS PROTEGIDOS E INTACTOS)
+   ========================================================================= */
+
+/* Párrafos generales y textos descriptivos con mayor cuerpo y legibilidad */
+p {
+  font-size: 1.0625rem; /* ~17px */
+  line-height: 1.7;
+}
+
+/* Escalado sistemático de textos informativos, descripciones, párrafos y etiquetas
+   Excluyendo explícitamente cualquier encabezado h1, h2, h3, h4, h5, h6 o sus elementos internos */
+:where(p, span, div, label, li, a, td, th, input, textarea, blockquote, dt, dd):not(h1, h2, h3, h4, h5, h6, h1 *, h2 *, h3 *, h4 *, h5 *, h6 *).text-xs {
+  font-size: 0.875rem !important; /* De 12px a 14px */
+  line-height: 1.4rem !important;
+}
+
+:where(p, span, div, label, li, a, td, th, input, textarea, blockquote, dt, dd):not(h1, h2, h3, h4, h5, h6, h1 *, h2 *, h3 *, h4 *, h5 *, h6 *).text-sm {
+  font-size: 1.03125rem !important; /* De 14px a 16.5px */
+  line-height: 1.625rem !important;
+}
+
+:where(p, span, div, label, li, a, td, th, input, textarea, blockquote, dt, dd):not(h1, h2, h3, h4, h5, h6, h1 *, h2 *, h3 *, h4 *, h5 *, h6 *).text-base {
+  font-size: 1.15625rem !important; /* De 16px a 18.5px */
+  line-height: 1.75rem !important;
+}
+
+:where(p, span, div, label, li, a, td, th, input, textarea, blockquote, dt, dd):not(h1, h2, h3, h4, h5, h6, h1 *, h2 *, h3 *, h4 *, h5 *, h6 *).text-\[10px\] {
+  font-size: 0.75rem !important; /* De 10px a 12px */
+  line-height: 1.15rem !important;
+}
+
+:where(p, span, div, label, li, a, td, th, input, textarea, blockquote, dt, dd):not(h1, h2, h3, h4, h5, h6, h1 *, h2 *, h3 *, h4 *, h5 *, h6 *).text-\[11px\] {
+  font-size: 0.8125rem !important; /* De 11px a 13px */
+  line-height: 1.25rem !important;
+}
+
+:where(p, span, div, label, li, a, td, th, input, textarea, blockquote, dt, dd):not(h1, h2, h3, h4, h5, h6, h1 *, h2 *, h3 *, h4 *, h5 *, h6 *).text-\[12px\] {
+  font-size: 0.875rem !important; /* De 12px a 14px */
+  line-height: 1.4rem !important;
+}
+
+:where(p, span, div, label, li, a, td, th, input, textarea, blockquote, dt, dd):not(h1, h2, h3, h4, h5, h6, h1 *, h2 *, h3 *, h4 *, h5 *, h6 *).text-\[13px\] {
+  font-size: 0.9375rem !important; /* De 13px a 15px */
+  line-height: 1.48rem !important;
+}
+
+:where(p, span, div, label, li, a, td, th, input, textarea, blockquote, dt, dd):not(h1, h2, h3, h4, h5, h6, h1 *, h2 *, h3 *, h4 *, h5 *, h6 *).text-\[14px\] {
+  font-size: 1.03125rem !important; /* De 14px a 16.5px */
+  line-height: 1.625rem !important;
+}
+
+:where(p, span, div, label, li, a, td, th, input, textarea, blockquote, dt, dd):not(h1, h2, h3, h4, h5, h6, h1 *, h2 *, h3 *, h4 *, h5 *, h6 *).text-\[15px\] {
+  font-size: 1.09375rem !important; /* De 15px a 17.5px */
+  line-height: 1.7rem !important;
+}
+
 ::selection {
   background-color: #b91c1c;
   color: #ffffff;

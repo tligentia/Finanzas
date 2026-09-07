@@ -8,7 +8,7 @@ import {
   PieChart as PieIcon, Activity, Globe, Info, ExternalLink,
   MessageSquare, ChevronDown, ChevronUp, Send, Loader2, Sparkles, HelpCircle,
   Copy, Check, X, AlertTriangle, Scale, Plus, Coins, Gem, CircleDollarSign, DollarSign, Link as LinkIcon, Share2,
-  RefreshCw, Smartphone, HardDrive, Shield, Lock, Clock, Network, BookOpen, Code, Terminal, User, FileText, Bot, Compass, ArrowRightLeft
+  RefreshCw, Smartphone, HardDrive, Shield, Lock, Clock, Network, BookOpen, Code, Terminal, User, FileText, Bot, Compass, ArrowRightLeft, Database
 } from 'lucide-react';
 import { 
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
@@ -25,6 +25,8 @@ import { EXPANDED_ECOSYSTEM_INSTRUMENTS } from './src/data/ecosystemData';
 import { DirectLinksModal } from './src/components/DirectLinksModal';
 import { getLinksFor, PlatformLinksResource } from './src/data/directLinksData';
 import { DefiVsFiatMatrix } from './src/components/DefiVsFiatMatrix';
+import { DexAmmEcosystemGuide } from './src/components/DexAmmEcosystemGuide';
+import { FinancialPlatformsDirectory } from './src/components/FinancialPlatformsDirectory';
 
 // --- DATA SETS ---
 const multiplierData = [
@@ -248,10 +250,21 @@ const COLD_WALLETS = [
 
 const DEFI_PLATFORMS = [
   { name: 'Uniswap', icon: <RefreshCw />, url: 'https://uniswap.org' },
+  { name: 'Curve Finance', icon: <RefreshCw />, url: 'https://curve.fi' },
+  { name: 'Balancer', icon: <RefreshCw />, url: 'https://balancer.fi' },
+  { name: 'PancakeSwap', icon: <RefreshCw />, url: 'https://pancakeswap.finance' },
+  { name: 'Trader Joe', icon: <Zap />, url: 'https://traderjoexyz.com' },
+  { name: 'Camelot', icon: <Activity />, url: 'https://camelot.exchange' },
+  { name: 'Raydium', icon: <Zap />, url: 'https://raydium.io' },
+  { name: 'Orca', icon: <RefreshCw />, url: 'https://www.orca.so' },
+  { name: 'Beefy Finance', icon: <TrendingUp />, url: 'https://beefy.com' },
+  { name: 'Yearn Finance', icon: <Layers />, url: 'https://yearn.fi' },
+  { name: 'AutoShark', icon: <TrendingUp />, url: 'https://autoshark.finance' },
+  { name: 'Rocket Pool', icon: <ShieldCheck />, url: 'https://rocketpool.net' },
+  { name: 'Jito', icon: <Zap />, url: 'https://jito.network' },
   { name: 'Aave', icon: <TrendingUp />, url: 'https://aave.com' },
   { name: 'Hyperliquid', icon: <TrendingUp />, url: 'https://hyperliquid.xyz' },
   { name: 'Morpho', icon: <Activity />, url: 'https://morpho.org' },
-  { name: 'Curve Finance', icon: <RefreshCw />, url: 'https://curve.fi' },
   { name: 'Lido', icon: <Activity />, url: 'https://lido.fi' },
   { name: 'MakerDAO', icon: <Landmark />, url: 'https://makerdao.com' },
   { name: 'GMX', icon: <TrendingUp />, url: 'https://gmx.io' },
@@ -261,6 +274,20 @@ const DEFI_PLATFORMS = [
   { name: 'Ondo Finance', icon: <Gem />, url: 'https://ondo.finance' },
   { name: 'Across Protocol', icon: <Network />, url: 'https://across.to' },
   { name: 'Ethena', icon: <DollarSign />, url: 'https://ethena.fi' },
+  { name: 'DefiLlama', icon: <Database />, url: 'https://defillama.com/' },
+  { name: 'Glassnode', icon: <Activity />, url: 'https://studio.glassnode.com/home' },
+  { name: 'CoinMarketCap', icon: <BarChart3 />, url: 'https://coinmarketcap.com/es/' },
+  { name: 'Cryptoboard', icon: <Terminal />, url: 'https://cryptoboard-psi.vercel.app/dashboard' },
+  { name: 'TradingView', icon: <Activity />, url: 'https://es.tradingview.com' },
+  { name: 'ProRealTime', icon: <Cpu />, url: 'https://www.prorealtime.com/' },
+  { name: 'Investing.com', icon: <Globe />, url: 'https://es.investing.com' },
+  { name: 'Yahoo Finanzas', icon: <BarChart3 />, url: 'https://es.finance.yahoo.com' },
+  { name: 'MSN Dinero', icon: <Globe />, url: 'https://www.msn.com/es-es/dinero' },
+  { name: 'Google Finance', icon: <Sparkles />, url: 'https://www.google.com/finance/beta' },
+  { name: 'Jumper Exchange', icon: <ArrowRightLeft />, url: 'https://jumper.exchange/es' },
+  { name: 'Revert Finance', icon: <RefreshCw />, url: 'https://revert.finance' },
+  { name: 'Krystal DeFi', icon: <Layers />, url: 'https://defi.krystal.app' },
+  { name: 'Perplexity Finance', icon: <Bot />, url: 'https://www.perplexity.ai/finance/' },
 ];
 
 const GLOSSARY_TERMS = [
@@ -533,9 +560,134 @@ const KNOWLEDGE_BASE: Record<string, InfoVersion> = {
 
   // Plataformas DeFi
   'Uniswap': {
-    technical: 'El protocolo de intercambio (DEX) más grande. Introdujo el estándar de pools de liquidez y es una pieza fundamental de la infraestructura descentralizada.',
-    simple: 'Es la casa de cambio más grande de internet. Entras con una moneda, sales con otra, y todo ocurre sin que ninguna persona tenga que intervenir.',
-    extended: 'Uniswap V3 introdujo la "Liquidez Concentrada", permitiendo a los proveedores de liquidez elegir rangos de precio específicos para sus activos. Esto multiplicó la eficiencia de capital, permitiendo que un DEX compita en spreads con los exchanges centralizados más grandes. Al ser un protocolo inmutable (nadie puede cambiar el código una vez desplegado), Uniswap es una infraestructura pública digital pura, un "bien común" que facilita el intercambio global de valor sin necesidad de permiso ni intermediarios.'
+    technical: 'El DEX con mayor volumen y TVL del ecosistema. Ofrece pools V3/V4 con liquidez concentrada (los proveedores de liquidez eligen rangos de precio específicos) y es el estándar de facto en Ethereum y sus L2s (Arbitrum, Optimism, Base, etc.). Dispone de tiers de comisiones de 0.01%, 0.05%, 0.30% y 1.00%.',
+    simple: 'Es la casa de cambio descentralizada más grande del mundo. Puedes cambiar cualquier moneda por otra al segundo y quien pone dinero en el fondo elige en qué precios quiere trabajar para ganar más comisiones.',
+    extended: 'Uniswap revolucionó las finanzas con el modelo AMM (x·y=k) en V2 y luego con los NFTs de posición de liquidez concentrada en V3. En V4 introduce "Hooks", contratos modulares que permiten pools con órdenes límite dinámicas, oráculos TWAMM integrados y tarifas dinámicas personalizadas. Es el núcleo de liquidez para pares volátiles mayores como ETH/USDC y WBTC/ETH en todas las redes EVM.',
+    defiVsFiat: {
+      fiatTrad: 'Bolsas y brokers tradicionales (NYSE, Nasdaq) que operan en horarios bancarios restringidos con intermediarios comisionistas y custodia forzosa.',
+      defiOnChain: 'Intercambio no custodial disponible 24/7/365, con liquidación atómica inmediata y fondos de liquidez gobernados por contratos inmutables.',
+      coreDifference: 'Monopolio de creadores de mercado institucionales centralizados frente a provisión de liquidez abierta y matemáticamente eficiente.'
+    }
+  },
+  'Curve Finance': {
+    technical: 'Creador de mercado automatizado especializado en activos que deben mantener paridad o correlación estrecha (stablecoins como USDC/USDT/crvUSD y derivados LST como stETH/ETH). Utiliza el invariante Stableswap para minimizar el deslizamiento (slippage).',
+    simple: 'Es el mercado perfecto para cambiar monedas que valen lo mismo (como un dólar digital por otro, o dos tipos de Ethereum). Te asegura que no perderás valor en el cambio.',
+    extended: 'Curve Finance es considerada la "columna vertebral" de la liquidez estable en DeFi. Su algoritmo híbrido combina la curva de suma constante (deslizamiento cero) con la de producto constante (liquidez infinita), permitiendo transacciones de millones de dólares con spreads de centavos. La gobernanza basada en veCRV (Vote-Escrowed CRV) desató las célebres "Curve Wars", donde protocolos como Convex compiten por sobornar votos para dirigir emisiones de liquidez.',
+    defiVsFiat: {
+      fiatTrad: 'Mesas de cambio interbancarias de divisas (Forex) con spreads abusivos y liquidaciones diferidas a través de corresponsales.',
+      defiOnChain: 'Swaps de activos paritarios con slippage prácticamente nulo y comisiones ultra-bajas (0.04%) liquidadas en milisegundos.',
+      coreDifference: 'Spreads opacos fijados por bancos frente a una curva matemática optimizada específicamente para tokens vinculados.'
+    }
+  },
+  'Balancer': {
+    technical: 'Protocolo AMM generalizado que permite crear piscinas de liquidez con hasta 8 activos simultáneos y ponderaciones arbitrarias (no limitadas al 50/50, como 80/20 o 60/40), con arquitectura Single Vault eficiente en gas.',
+    simple: 'Es como crear tu propio fondo de inversión automático con varias monedas a la vez, donde tú decides qué porcentaje tiene cada una.',
+    extended: 'Balancer actúa como un gestor de cartera automatizado e indexador sin comisiones de custodia. Su fórmula de producto ponderado multidimensional rebalancea los activos de forma constante mientras los usuarios hacen swaps pagando comisiones a los LPs. Su modelo 80/20 reduce drásticamente el Impermanent Loss en comparación con pools 50/50 tradicionales, y sus Boosted Pools canalizan la liquidez ociosa hacia protocolos de préstamo como Aave.',
+    defiVsFiat: {
+      fiatTrad: 'Fondos indexados y ETFs tradicionales gestionados por entidades centralizadas con comisiones anuales de gestión y retrasos en rescates.',
+      defiOnChain: 'Piscinas multi-activo autónomas donde los depositantes cobran comisiones de trading en lugar de pagar costes de mantenimiento.',
+      coreDifference: 'Costes de gestión pasiva en banca tradicional frente a rentabilidad generada por rebalanceo algorítmico on-chain.'
+    }
+  },
+  'PancakeSwap': {
+    technical: 'El AMM dominante en la red BNB Chain con presencia multicadena (Ethereum, Arbitrum, Base). Ofrece pares estándar V2, piscinas de liquidez concentrada V3, granjas de rendimiento (farms) y Smart Router.',
+    simple: 'Es el intercambio descentralizado estrella de BNB Chain, muy rápido y con comisiones de red diminutas para cambiar tokens y ponerlos a rentar.',
+    extended: 'PancakeSwap es el principal polo de liquidez para proyectos en el ecosistema BNB Chain. Su evolución ha incorporado pools de liquidez concentrada V3, swaps con descuento mediante el token CAKE, y mecanismos de quema deflacionaria. Para los inversores, representa una alternativa de bajo costo de transacción frente a la red principal de Ethereum.',
+    defiVsFiat: {
+      fiatTrad: 'Mercados secundarios locales con barreras de entrada por divisas nacionales y elevadas tarifas de liquidación.',
+      defiOnChain: 'Intercambio global abierto con comisiones de red de escasos céntimos y programas de liquidez incentivados por el protocolo.',
+      coreDifference: 'Tarifas elevadas por intermediación en finanzas locales frente a micropagos y microswaps fluidos on-chain.'
+    }
+  },
+  'Trader Joe': {
+    technical: 'DEX insignia de Avalanche expandido a Arbitrum y BNB Chain. Desarrolló el modelo "Liquidity Book", una arquitectura de liquidez concentrada basada en "bins" de precio que garantiza deslizamiento cero dentro de cada rango.',
+    simple: 'Un exchange ultra-rápido nacido en Avalanche que organiza los precios en cajitas individuales para que los intercambios no tengan pérdidas por deslizamiento.',
+    extended: 'El Liquidity Book de Trader Joe supuso una innovación fundamental frente a Uniswap V3 al discretizar el espacio de precios en "bins". Los proveedores de liquidez pueden configurar distribuciones personalizadas (spot, bid-ask, curve) y cobran comisiones variables de volatilidad que compensan activamente a los LPs frente a las pérdidas por arbitraje y MEV tóxico.',
+    defiVsFiat: {
+      fiatTrad: 'Libros de órdenes centralizados sujetos a manipulación por creadores de mercado de alta frecuencia propietarios.',
+      defiOnChain: 'Bins de liquidez discretos programables y transparentes con compensación dinámica de volatilidad en beneficio del proveedor.',
+      coreDifference: 'Intermediación asimétrica de firmas bursátiles frente a micro-mercados de liquidez matemática de acceso público.'
+    }
+  },
+  'Camelot': {
+    technical: 'DEX nativo y personalizado para el ecosistema Arbitrum. Combina pools clásicas y algebraicas de liquidez concentrada con comisiones dinámicas y posiciones en spNFTs para incentivos dirigidos.',
+    simple: 'El intercambio especializado en la red Arbitrum que ayuda a los proyectos locales a ofrecer mejores recompensas a quienes aportan liquidez.',
+    extended: 'Camelot se diseñó como el centro de liquidez componible de Arbitrum. Mediante sus posiciones tokenizadas en spNFT (Staked Position NFTs), los protocolos asociados pueden configurar programas de incentivos con bloqueos temporales, multiplicadores de rendimiento y comisiones variables calibradas al par.',
+    defiVsFiat: {
+      fiatTrad: 'Bolsas de valores regionales dependientes de subsidios de cámaras de comercio y agencias estatales.',
+      defiOnChain: 'Infraestructura de liquidez diseñada específicamente para sinergias inter-protocolo en una Capa 2 de Ethereum.',
+      coreDifference: 'Burocracia financiera regional frente a componibilidad de incentivos mediante contratos inteligentes en L2.'
+    }
+  },
+  'Raydium': {
+    technical: 'El mayor DEX de la blockchain Solana por volumen transaccional mensual (>35.600M USD). Dispone de pools AMM estándar (con comisión de aprox. 0.25%) y pools CLMM (Concentrated Liquidity Market Maker) con comisiones variables.',
+    simple: 'Es el gigante de los intercambios en Solana. Procesa miles de millones de dólares al mes a la velocidad de la luz y con comisiones de menos de un céntimo.',
+    extended: 'Raydium es la puerta de entrada de liquidez en Solana. En periodos de alta actividad en tokens SPL, su volumen mensual ha superado los 35.600 millones de USD. Ofrece tanto pools clásicas para nuevos lanzamientos de tokens como piscinas CLMM de alta eficiencia de capital, interconectándose fluidamente con los agregadores de swaps de Solana como Jupiter.',
+    defiVsFiat: {
+      fiatTrad: 'Sistemas bursátiles tradicionales con liquidación en días y costes fijos desproporcionados para órdenes de pequeño tamaño.',
+      defiOnChain: 'Capacidad de procesamiento de miles de transacciones por segundo en Solana con liquidación en 400 milisegundos y coste de milésimas de dólar.',
+      coreDifference: 'Latencia y costes de infraestructura bancaria pesada frente a swaps de alta frecuencia deterministas sobre blockchain monolítica.'
+    }
+  },
+  'Orca': {
+    technical: 'Segundo DEX de referencia en Solana, pionero de Whirlpools (liquidez concentrada en Solana). Gestiona pares institucionales como SOL/USDC con decenas de millones en TVL y comisiones flexibles entre 0.01% y 1.00%.',
+    simple: 'Un exchange en Solana conocido por su facilidad de uso y sus Whirlpools, que permiten ganar buenas comisiones aportando liquidez en rangos de precio controlados.',
+    extended: 'Orca se distingue por su código rigurosamente auditado en Rust y una experiencia de usuario orientada tanto al retail como a integraciones institucionales. Sus Whirlpools ofrecen a los proveedores de liquidez herramientas avanzadas para optimizar el ratio de comisiones frente a impermanent loss, posicionándose como el motor de liquidez más eficiente en los pares mayores de Solana.',
+    defiVsFiat: {
+      fiatTrad: 'Mesas de corretaje privadas donde los inversores minoristas pagan diferenciales muy superiores a los fondos institucionales.',
+      defiOnChain: 'Acceso a la misma estructura de liquidez concentrada y comisiones para cualquier usuario con una billetera Web3.',
+      coreDifference: 'Asimetría de costes entre minoristas e instituciones frente a igualdad matemática absoluta de ejecución on-chain.'
+    }
+  },
+  'Beefy Finance': {
+    technical: 'Optimizador de rendimiento descentralizado y multicadena que automatiza el interés compuesto (auto-compounding) sobre fondos de liquidez de más de 20 blockchains.',
+    simple: 'Un piloto automático para tus inversiones DeFi: reinvierte tus beneficios una y otra vez para que ganes más dinero gracias al interés compuesto sin hacer nada.',
+    extended: 'Beefy Finance resuelve el problema de la gestión manual de recompensas: en lugar de exigir que el usuario reclame tokens de recompensa, pague gas, los venda y re-deposite en el pool, los vaults de Beefy ejecutan cosechas colectivas automatizadas. Esto multiplica el APY efectivo mediante interés compuesto exponencial y minimiza costes de transacción.',
+    defiVsFiat: {
+      fiatTrad: 'Fondos de inversión que retienen dividendos y aplican comisiones de suscripción y custodia periódicas.',
+      defiOnChain: 'Bóvedas no custodiales que ejecutan reinversiones de alto rendimiento mediante smart contracts públicos auditados.',
+      coreDifference: 'Comisiones de gestor tradicional frente a reinversión algorítmica colectiva que maximiza el interés compuesto.'
+    }
+  },
+  'Yearn Finance': {
+    technical: 'Protocolo pionero de agregación de rendimiento y gestión autónoma de activos en DeFi. Sus bóvedas V3 se basan en el estándar ERC-4626 y ejecutan estrategias multi-pool de bajo riesgo.',
+    simple: 'El "cerebro" inversor de DeFi: busca automáticamente los protocolos más seguros y rentables para mover tus ahorros y sacarles el máximo partido.',
+    extended: 'Creado por Andre Cronje, Yearn inauguró la categoría de yield aggregators en Ethereum. Sus yVaults utilizan estrategias codificadas por estrategas independientes que compiten por optimizar la rentabilidad de activos como USDC, DAI o ETH, aprovechando préstamos, arbitrajes y comisiones de pools de liquidez con rigurosas auditorías.',
+    defiVsFiat: {
+      fiatTrad: 'Bancos privados y gestoras de patrimonio con barreras de capital mínimo y contratos de delegación discrecional opacos.',
+      defiOnChain: 'Bóvedas ERC-4626 abiertas a cualquier cantidad, con depósitos y retiros instantáneos bloque a bloque.',
+      coreDifference: 'Gestión patrimonial delegada a ejecutivos de banca privada frente a estrategias abiertas codificadas en smart contracts.'
+    }
+  },
+  'AutoShark': {
+    technical: 'Optimizador de rendimiento y agregador de liquidez orientado principalmente al ecosistema BNB Chain, ofreciendo bóvedas compuestas para pools de PancakeSwap.',
+    simple: 'Una herramienta de interés compuesto para BNB Chain que reinvierte automáticamente los beneficios de tus fondos de liquidez.',
+    extended: 'AutoShark automatiza la reinversión de granjas y piscinas de liquidez de PancakeSwap, optimizando el retorno para usuarios que operan en BNB Chain mediante dividendos de su token nativo y distribución de comisiones.',
+    defiVsFiat: {
+      fiatTrad: 'Cuentas de remuneración escalonada que exigen condiciones comerciales de vinculación.',
+      defiOnChain: 'Estrategias de interés compuesto automático para pares de liquidez en redes EVM de bajo coste.',
+      coreDifference: 'Intereses fijos bancarios devaluados por inflación frente a yield compuesto derivado del volumen de intercambio.'
+    }
+  },
+  'Rocket Pool': {
+    technical: 'Protocolo de staking líquido descentralizado para Ethereum. Permite operar validadores con solo 8 o 16 ETH (minipools) y emite el token líquido rETH, respaldado por una red sin permiso de operadores de nodo.',
+    simple: 'Te permite ganar recompensas por asegurar Ethereum con la cantidad de dinero que quieras, recibiendo rETH a cambio para poder usarlo libremente.',
+    extended: 'A diferencia de competidores centralizados, Rocket Pool prioriza la resistencia a la censura permitiendo que cualquier persona ejecute un validador en su propio hardware. El token rETH devenga valor de forma intrínseca contra ETH a medida que se acumulan las recompensas del consenso, siendo un colateral predilecto en Curve, Balancer y Aave.',
+    defiVsFiat: {
+      fiatTrad: 'Depósitos estructurados bancarios donde la entidad presta los fondos a sus propios clientes sin transparencia.',
+      defiOnChain: 'Participación directa y líquida en la seguridad criptográfica del protocolo descentralizado más grande del mundo.',
+      coreDifference: 'Dependencia del balance bancario frente a rendimiento nativo del consenso de la red Ethereum.'
+    }
+  },
+  'Jito': {
+    technical: 'Protocolo líder de staking líquido en Solana que captura recompensas del consenso Proof of Stake más beneficios de MEV (Maximal Extractable Value). Emite JitoSOL, uno de los activos colaterales más líquidos de la red.',
+    simple: 'Gana intereses por tu Solana combinando las recompensas normales con los beneficios extra que generan los ordenadores más rápidos de la red (MEV).',
+    extended: 'Jito transformó la economía de Solana al crear un cliente validador modificado que subasta el espacio de bloque a buscadores de MEV de forma transparente, redistribuyendo las ganancias a los poseedores de JitoSOL. Esto reduce el spam en la red y maximiza el APR de los usuarios en pools de Raydium y Orca.',
+    defiVsFiat: {
+      fiatTrad: 'Beneficios de intermediación bursátil y subastas de flujo de órdenes (PFOF) capturados exclusivamente por brokers como Robinhood o Citadel.',
+      defiOnChain: 'Redistribución transparente y directa del MEV a los depositantes ordinarios a través del token JitoSOL.',
+      coreDifference: 'Extracción privada de valor por brokers financieros frente a democratización del valor del ordenamiento de transacciones.'
+    }
   },
   'Aave': {
     technical: 'Protocolo de mercado monetario descentralizado donde los usuarios pueden prestar o pedir prestado activos con tipos de interés dinámicos.',
@@ -551,6 +703,165 @@ const KNOWLEDGE_BASE: Record<string, InfoVersion> = {
     technical: 'Organización Autónoma Descentralizada que gestiona el systema DAI. Actúa como un banco central algorítmico sin intervención humana directa.',
     simple: 'Es la organización que fabrica los dólares digitales DAI. Funciona por votación de los usuarios y algoritmos, no por decisiones de políticos.',
     extended: 'MakerDAO es el "Banco Central de DeFi". Gestiona la política de tipos de interés (DSR - DAI Savings Rate) y los parámetros de colateral mediante votaciones de los poseedores del token MKR. Recientemente ha iniciado "Endgame", un plan de reestructuración masivo para diversificar sus reservas en activos del mundo real (RWA) como deuda pública y bonos corporativos, buscando que DAI sea una moneda estable respaldada por una combinación de activos digitales y tradicionales, blindando el protocolo contra riesgos sistémicos del mundo cripto.'
+  },
+
+  // --- LAS 14 PLATAFORMAS EN LOS 4 BLOQUES OPERATIVOS ---
+  // BLOQUE 1: ANALÍTICA ON-CHAIN, MÉTRICAS DE PROTOCOLOS & AGREGADORES CRIPTO
+  'DefiLlama': {
+    technical: 'Plataforma agregadora de analítica on-chain de código abierto y neutral. Rastrea TVL, volumen de DEXs, comisiones, ingresos netos, tesorerías de DAOs, stablecoins y métricas de préstamos en más de 200 cadenas.',
+    simple: 'Es la mayor enciclopedia y observatorio en tiempo real de DeFi: te dice cuánto dinero hay metido en cada protocolo, cuánto ganan y qué cadenas crecen más sin publicidad pagada.',
+    extended: 'DefiLlama se ha consolidado como la fuente de datos primarios definitiva para la comunidad Web3 e inversores institucionales. Al no cobrar a proyectos por ser listados ni manipular rankings con fines publicitarios, sus adaptadores de código abierto leen directamente los contratos inteligentes de cada protocolo. Es indispensable para auditar la relación Precio/Ventas (P/S), ratios de tesorería y el riesgo de concentración de liquidez.',
+    defiVsFiat: {
+      fiatTrad: 'Informes trimestrales de bancos centrales y agencias de calificación privadas con conflictos de interés.',
+      defiOnChain: 'Métricas agregadas leídas directamente de los smart contracts y bloques en tiempo real.',
+      coreDifference: 'Auditoría pública y neutral de liquidez frente a informes financieros periódicos opacos y diferidos.'
+    }
+  },
+  'Glassnode': {
+    technical: 'Terminal de inteligencia on-chain y econometría forense. Genera indicadores derivados de las cadenas de bloques principales (MVRV, SOPR, Realized Cap, flujos de ballenas y mineros).',
+    simple: 'Un microscopio financiero que te muestra exactamente qué están haciendo los grandes inversores (ballenas), mineros y particulares con sus Bitcoin y Ethereum.',
+    extended: 'Glassnode Studio procesa terabytes de datos de transacciones de blockchain para generar modelos econométricos cuantitativos. Permite identificar zonas de sobrecompra o infravaloración extrema analizando el precio al que se movió cada moneda por última vez (Realized Price). Es la herramienta estándar para analistas macro que buscan entender si el mercado está en fase de acumulación o distribución sin basarse en rumores.',
+    defiVsFiat: {
+      fiatTrad: 'Estadísticas opacas de liquidación en cámaras de compensación privadas (DTCC) inaccesibles al público.',
+      defiOnChain: 'Telemetría forense de cada satoshi y wei movido entre billeteras y exchanges en la blockchain.',
+      coreDifference: 'Opacidad de custodia institucional frente a trazabilidad matemática verificable de flujos de capital.'
+    }
+  },
+  'Glassnode Studio': {
+    technical: 'Terminal de inteligencia on-chain y econometría forense. Genera indicadores derivados de las cadenas de bloques principales (MVRV, SOPR, Realized Cap, flujos de ballenas y mineros).',
+    simple: 'Un microscopio financiero que te muestra exactamente qué están haciendo los grandes inversores (ballenas), mineros y particulares con sus Bitcoin y Ethereum.',
+    extended: 'Glassnode Studio procesa terabytes de datos de transacciones de blockchain para generar modelos econométricos cuantitativos. Permite identificar zonas de sobrecompra o infravaloración extrema analizando el precio al que se movió cada moneda por última vez (Realized Price). Es la herramienta estándar para analistas macro que buscan entender si el mercado está en fase de acumulación o distribución sin basarse en rumores.',
+    defiVsFiat: {
+      fiatTrad: 'Estadísticas opacas de liquidación en cámaras de compensación privadas (DTCC) inaccesibles al público.',
+      defiOnChain: 'Telemetría forense de cada satoshi y wei movido entre billeteras y exchanges en la blockchain.',
+      coreDifference: 'Opacidad de custodia institucional frente a trazabilidad matemática verificable de flujos de capital.'
+    }
+  },
+  'CoinMarketCap': {
+    technical: 'Agregador de precios, capitalización bursátil, volúmenes de trading y liquidez de criptoactivos en exchanges centralizados y descentralizados a nivel mundial.',
+    simple: 'La lista de precios más popular del mundo cripto: te enseña el valor actual de cada moneda, cuánto dinero mueve y qué puesto ocupa en el ranking.',
+    extended: 'Adquirido por Binance, CoinMarketCap unifica datos de libros de órdenes y pools de miles de pares comerciales. Introduce puntuaciones de liquidez para combatir el volumen falso (wash trading), publica ratios de prueba de reservas (Proof of Reserves) de exchanges y monitoriza métricas de dominancia de Bitcoin e índices de sentimiento social.',
+    defiVsFiat: {
+      fiatTrad: 'Listados de cotizaciones en diarios económicos y terminales bancarias cerradas.',
+      defiOnChain: 'Pizarra global 24/7 abierta que recopila miles de mercados simultáneamente.',
+      coreDifference: 'Pizarras de cotización con horarios de apertura y cierre frente a mercados globales continuos e ininterrumpidos.'
+    }
+  },
+  'Cryptoboard': {
+    technical: 'Dashboard web interactivo enfocado en la visualización sintética de carteras cripto, variaciones de precios intradiarios y métricas esenciales de mercado.',
+    simple: 'Un cuadro de mando limpio y rápido para mirar cómo van tus monedas y el mercado sin complicarte la vida con menús pesados.',
+    extended: 'Cryptoboard resuelve la sobrecarga informativa mediante una interfaz minimalista y ágil. Permite monitorizar de un vistazo la salud y el rendimiento porcentual de una cesta de criptoactivos, sirviendo como monitor de cabecera en entornos de control y salas de operaciones.',
+    defiVsFiat: {
+      fiatTrad: 'Extractos de cuenta bancaria que tardan días en consolidar y reflejar el valor neto patrimonial.',
+      defiOnChain: 'Consolidación visual instantánea de activos con precios actualizados al segundo.',
+      coreDifference: 'Actualización periódica bancaria con retraso frente a monitorización en tiempo real.'
+    }
+  },
+
+  // BLOQUE 2: TERMINALES BURSÁTILES, ANÁLISIS TÉCNICO & MACROECONOMÍA GLOBAL
+  'TradingView': {
+    technical: 'Plataforma líder mundial de graficación técnica interactiva y desarrollo algorítmico multi-activo con lenguaje propio Pine Script.',
+    simple: 'La pantalla definitiva para dibujar líneas, ver velas japonesas y estudiar el precio de acciones, oro, divisas o criptomonedas con las mejores herramientas.',
+    extended: 'TradingView es el estándar de facto para el análisis chartista en todo el planeta. Su arquitectura web permite trazar canales de regresión, perfiles de volumen (Volume Profile), medias exponenciales y osciladores con fluidez extrema. Su lenguaje Pine Script permite compilar y ejecutar estrategias cuantitativas con backtesting histórico detallado.',
+    defiVsFiat: {
+      fiatTrad: 'Software propietario costoso con licencias rígidas como Bloomberg Terminal o Reuters Eikon.',
+      defiOnChain: 'Plataforma web colaborativa que analiza tanto bolsas de Nueva York o Madrid como pares de Uniswap.',
+      coreDifference: 'Herramientas de trading restringidas a mesas institucionales frente a análisis técnico democratizado universal.'
+    }
+  },
+  'ProRealTime': {
+    technical: 'Estación de trabajo bursátil profesional e institucional con feeds de datos tick a tick sin filtrado, detector de patrones y escaneo ProScreener.',
+    simple: 'Un programa para ordenadores que usan los traders de bolsa más serios para ver cada movimiento exacto del mercado y operar directamente con sus brokers.',
+    extended: 'ProRealTime destaca por la fidelidad de sus feeds de datos bursátiles y su motor de escaneo ProScreener, capaz de filtrar miles de valores simultáneamente en busca de condiciones de ruptura de volatilidad o volumen inusual. Permite la integración directa con brokers institucionales (Interactive Brokers, Saxo Bank) para ejecutar órdenes con algoritmos avanzados.',
+    defiVsFiat: {
+      fiatTrad: 'El pináculo del análisis técnico regulado en acciones, materias primas y futuros bursátiles europeos.',
+      defiOnChain: 'Modelo de ejecución mediante intermediarios regulados frente al auto-enrutamiento por smart contract.',
+      coreDifference: 'Trading institucional con cámara de compensación centralizada frente a liquidación atómica on-chain.'
+    }
+  },
+  'Investing.com': {
+    technical: 'Portal global de información macroeconómica, tipos de interés de bancos centrales, rendimientos de deuda soberana y calendario de anuncios económicos.',
+    simple: 'El sitio donde mirar cuándo habla el presidente del banco central, qué pasa con la inflación y cuánto pagan los bonos del Estado.',
+    extended: 'Investing.com es fundamental para anticipar la volatilidad del mercado provocada por eventos de política monetaria. Su calendario económico en tiempo real detalla el impacto esperado (bajo, medio, alto) de cada publicación macro (IPC, NFP, PIB, decisiones de la Fed y BCE), correlacionando las variaciones del dólar (DXY) con los activos de riesgo y Bitcoin.',
+    defiVsFiat: {
+      fiatTrad: 'Mide las decisiones de emisión y política monetaria de los bancos centrales fiduciarios (Fiat).',
+      defiOnChain: 'Proporciona las variables externas de inflación y tipos que condicionan el coste de oportunidad en DeFi.',
+      coreDifference: 'Monedas gestionadas por comités políticos frente a políticas monetarias programadas matemáticamente.'
+    }
+  },
+  'Yahoo Finanzas': {
+    technical: 'Repositorio de análisis fundamental y contable de corporaciones públicas. Proporciona balances, cuentas de resultados, flujos de caja y múltiplos bursátiles.',
+    simple: 'La biblioteca clásica para ver las cuentas de una empresa: cuánto gana, cuánta deuda tiene y qué dividendos paga.',
+    extended: 'Yahoo Finanzas es la herramienta de iniciación y consulta estándar para el inversor en valor (Value Investing). Permite revisar el historial de cuentas anuales 10-K, el ratio PER (Price to Earnings), el valor contable y el consenso de analistas de Wall Street para miles de empresas cotizadas.',
+    defiVsFiat: {
+      fiatTrad: 'Estados contables trimestrales validados por firmas auditoras tradicionales (Big Four).',
+      defiOnChain: 'En DeFi la contabilidad es pública y continua: cada fee ingresada se refleja en la blockchain en vivo.',
+      coreDifference: 'Auditorías contables con meses de desfase frente a contabilidad en triple entrada en tiempo real.'
+    }
+  },
+  'MSN Dinero': {
+    technical: 'Hub agregador de noticias macroeconómicas, seguimiento de índices mundiales y conversor de tipos de cambio de divisas de Microsoft Start.',
+    simple: 'Una portada rápida de noticias de dinero, economía y cotizaciones de bolsas para estar informado de lo que pasa en el mundo.',
+    extended: 'MSN Dinero conecta fuentes de noticias de primer nivel para ofrecer un panorama general del clima macroeconómico. Es especialmente útil para seguir la reacción de la opinión pública y los medios tradicionales ante cambios en hipotecas, desempleo y comercio internacional.',
+    defiVsFiat: {
+      fiatTrad: 'Distribución de información económica filtrada para el público inversor minorista.',
+      defiOnChain: 'Comunidades descentralizadas y foros de gobernanza abiertos donde los datos fluyen sin filtro editorial.',
+      coreDifference: 'Prensa financiera mediada frente a foros de gobernanza y canales abiertos de Discord y X.'
+    }
+  },
+  'Google Finance': {
+    technical: 'Módulo bursátil ultraligero de Google para seguimiento de activos, índices bursátiles mundiales, listas personalizadas y comparación de rendimiento relativo.',
+    simple: 'La forma más rápida de mirar en Google cómo van tus acciones o monedas favoritas y compararlas en un solo gráfico.',
+    extended: 'Google Finance Beta se enfoca en la velocidad de respuesta y la integración con el motor de búsqueda global. Permite contrastar de forma interactiva el rendimiento porcentual de varios índices o activos en un horizonte temporal común, vinculando picos de volatilidad con noticias de última hora.',
+    defiVsFiat: {
+      fiatTrad: 'Herramienta de búsqueda masiva de cotizaciones de acciones y fondos tradicionales.',
+      defiOnChain: 'Buscadores on-chain como Etherscan y DexScreener que analizan transacciones de billetera a billetera.',
+      coreDifference: 'Indexación de cotizaciones corporativas frente a indexación de transacciones descentralizadas.'
+    }
+  },
+
+  // BLOQUE 3: META-AGREGACIÓN CROSS-CHAIN, GESTIÓN DE LIQUIDEZ AMM & PORTAFOLIOS WEB3
+  'Jumper Exchange': {
+    technical: 'Meta-agregador de puentes cross-chain y DEXs impulsado por el protocolo LI.FI. Enruta intercambios de activos entre decenas de cadenas optimizando coste, slippage y seguridad.',
+    simple: 'El mejor puente para mover dinero entre blockchains distintas: encuentra el camino más rápido y barato para cambiar tus tokens de una red a otra en un solo paso.',
+    extended: 'Jumper Exchange elimina los silos entre blockchains. En lugar de obligar al usuario a transferir a un puente, esperar, pagar comisiones y luego buscar un DEX en la cadena de destino, Jumper ejecuta la operación compuesta de forma atómica: Swap origen -> Puente óptimo -> Swap destino. Se integra con puentes verificados (Across, Stargate, CCTP) garantizando la mínima exposición al riesgo de puente.',
+    defiVsFiat: {
+      fiatTrad: 'Transferencias internacionales SWIFT que tardan entre 2 y 5 días laborables con comisiones del 3% al 5%.',
+      defiOnChain: 'Enrutamiento cross-chain autónomo entre blockchains completado en segundos con total trazabilidad.',
+      coreDifference: 'Red de corresponsales bancarios lenta y costosa frente a puentes criptográficos programables y fluidos.'
+    }
+  },
+  'Revert Finance': {
+    technical: 'Suite analítica y de automatización para proveedores de liquidez (LP) en AMMs concentrados (Uniswap V3). Audita Impermanent Loss, realiza backtesting y ofrece auto-compounding.',
+    simple: 'Una herramienta imprescindible si pones dinero en piscinas de liquidez: te calcula exactamente si estás ganando o perdiendo frente a solo guardar las monedas, y reinvierte tus ganancias automáticamente.',
+    extended: 'Gestionar liquidez en Uniswap V3 requiere calcular la pérdida impermanente en rangos de precios específicos. Revert Finance ofrece paneles de PnL exactos, herramientas de backtesting basadas en datos históricos reales de volumen y ticks, y bóvedas automatizadas que reinvierten las comisiones devengadas sin que el usuario deba pagar gas manualmente cada pocas horas.',
+    defiVsFiat: {
+      fiatTrad: 'Departamentos de gestión de tesorería y creación de mercado en bancos de inversión cerrados al público.',
+      defiOnChain: 'Herramientas abiertas que permiten a cualquier inversor particular actuar como creador de mercado algorítmico profesional.',
+      coreDifference: 'Market making reservado a entidades con licencia bursátil frente a provisión de liquidez abierta con análisis riguroso.'
+    }
+  },
+  'Krystal DeFi': {
+    technical: 'Consola Web3 integral para gestión de portafolios multicadena, agregación de swaps con protección anti-MEV y administración unificada de pools de liquidez.',
+    simple: 'Tu aplicación de banca digital Web3: te permite ver todos tus tokens repartidos en distintas redes, cambiarlos al mejor precio y meterlos en piscinas para ganar intereses.',
+    extended: 'Krystal DeFi consolida la operativa dispersa de Web3 en una única interfaz. Su motor Smart Swap divide órdenes entre múltiples creadores de mercado para minimizar el impacto en precio, al tiempo que incorpora protección contra transacciones sandwich en la mempool, permitiendo depósitos y retiros en protocolos de préstamo y pools desde una misma consola.',
+    defiVsFiat: {
+      fiatTrad: 'Portales de banca online que solo gestionan dinero de una única entidad financiera bajo control central.',
+      defiOnChain: 'Consola multi-red no custodiada donde el usuario interactúa con decenas de protocolos manteniendo sus claves.',
+      coreDifference: 'Custodia delegada en un banco que puede congelar tu cuenta frente a soberanía total no custodiada.'
+    }
+  },
+
+  // BLOQUE 4: INTELIGENCIA FINANCIERA CONVERSACIONAL & MOTORES DE IA EN TIEMPO REAL
+  'Perplexity Finance': {
+    technical: 'Motor de búsqueda conversacional impulsado por modelos de lenguaje avanzados con acceso en tiempo real a bases de datos financieras y noticias contrastadas.',
+    simple: 'Un asistente con inteligencia artificial al que le preguntas cualquier duda de economía, empresas o balances y te responde al instante explicándolo con fuentes y datos oficiales.',
+    extended: 'Perplexity Finance transforma la investigación de inversiones al sintetizar memorias anuales, conferencias de resultados corporativos (earnings calls), cotizaciones en vivo y noticias macroeconómicas en segundos. Cada afirmación incluye enlaces directos a las fuentes primarias de información, eliminando alucinaciones y acelerando la validación de tesis de inversión.',
+    defiVsFiat: {
+      fiatTrad: 'Análisis bursátiles de bancos de inversión que tardan días en publicarse y requieren costosas suscripciones.',
+      defiOnChain: 'Síntesis inmediata por inteligencia artificial con acceso abierto a información financiera en tiempo real.',
+      coreDifference: 'Monopolio de informes de analistas institucionales frente a análisis interactivo con IA y fuentes abiertas.'
+    }
   },
 
   // Glosario
@@ -1025,7 +1336,7 @@ export default function App() {
                   <div className="flex items-center gap-1.5 text-xs font-bold uppercase text-gray-700"><span className="w-1.5 h-1.5 rounded-full bg-gray-900"></span> Protocolos On-Chain</div>
                 </div>
               </div>
-              <div className="md:w-1/3 border-l-4 border-gray-900 pl-6 py-1"><p className="text-gray-700 text-sm uppercase tracking-tight font-bold leading-relaxed max-w-xs">Evolución de los systemas de dinero cautivo en bancos hacia la infraestructura de protocolos descentralizados.</p></div>
+              <div className="md:w-1/3 border-l-4 border-gray-900 pl-6 py-1"><p className="text-gray-700 text-base uppercase tracking-tight font-bold leading-relaxed max-w-sm">Evolución de los systemas de dinero cautivo en bancos hacia la infraestructura de protocolos descentralizados.</p></div>
             </div>
             <a href="https://notebooklm.google.com/notebook/45496add-d540-4b9d-8075-0becfdb16126" target="_blank" rel="noopener noreferrer" className="absolute bottom-4 right-8 text-xs font-black uppercase tracking-wider text-red-700 hover:text-gray-900 flex items-center gap-1.5 transition-all group/link bg-white/70 backdrop-blur-sm px-3.5 py-1.5 rounded-full border border-gray-200 shadow-sm">Para saber más <ExternalLink size={12} className="group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 transition-transform" /></a>
           </section>
@@ -1036,7 +1347,7 @@ export default function App() {
               <div><h3 className="text-4xl font-black uppercase tracking-tighter flex items-center gap-4"><Landmark className="text-red-700" size={32} />01. El Ecosistema Fiat</h3><p className="text-gray-600 font-bold uppercase text-xs tracking-wider mt-2">Confianza Institucional y Expansión de Deuda</p></div>
               <InfoPanel sectionId="sec-01" />
             </div>
-            <div className="bg-gray-50/50 p-8 rounded-[2rem] border border-gray-100/50 relative overflow-hidden group"><div className="absolute top-0 right-0 w-32 h-32 bg-red-700/5 blur-3xl rounded-full"></div><p className="text-gray-800 text-base md:text-lg leading-relaxed relative z-10 max-w-5xl">El systema Fiat se sustenta en el <span className="font-black text-gray-900">curso legal</span> y la confianza institucional. Bajo el modelo de <span className="text-red-700 font-black">dinero cautivo en bancos</span>, las entidades financieras crean moneda digital mediante el crédito, multiplicando la base monetaria real.</p></div>
+            <div className="bg-gray-50/50 p-8 rounded-[2rem] border border-gray-100/50 relative overflow-hidden group"><div className="absolute top-0 right-0 w-32 h-32 bg-red-700/5 blur-3xl rounded-full"></div><p className="text-gray-800 text-lg md:text-xl leading-relaxed relative z-10 max-w-5xl">El systema Fiat se sustenta en el <span className="font-black text-gray-900">curso legal</span> y la confianza institucional. Bajo el modelo de <span className="text-red-700 font-black">dinero cautivo en bancos</span>, las entidades financieras crean moneda digital mediante el crédito, multiplicando la base monetaria real.</p></div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
               <div className="bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-xl shadow-gray-100/50 flex flex-col relative group/chart">
                 <button 
@@ -1080,7 +1391,7 @@ export default function App() {
                     <TrendingDown size={32} className="text-red-200 group-hover:scale-110 transition-transform" />
                     <h4 className="text-3xl font-black uppercase italic tracking-tighter leading-none">El Impuesto Silencioso</h4>
                   </div>
-                  <p className="text-red-100 text-[14px] font-bold uppercase tracking-tight leading-tight mb-6">La inflación disuelve el <span className="text-white font-black underline decoration-white/30 decoration-4">poder adquisitivo real</span> del ahorro nominal.</p>
+                  <p className="text-red-100 text-base md:text-lg font-bold uppercase tracking-tight leading-tight mb-6">La inflación disuelve el <span className="text-white font-black underline decoration-white/30 decoration-4">poder adquisitivo real</span> del ahorro nominal.</p>
                 </div>
                 <div className="h-48 bg-white/5 backdrop-blur-sm rounded-[2rem] p-6 relative z-10 border border-white/10 mt-auto">
                   <ResponsiveContainer width="100%" height="100%">
@@ -1114,16 +1425,20 @@ export default function App() {
                 { title: 'Futuros', desc: 'Compromiso de intercambio en fecha futura.', icon: <Zap /> },
                 { title: 'Opciones', desc: 'Derecho a compra o venta de activos.', icon: <Layers /> },
               ].map(item => (
-                <button 
+                <div 
                   key={item.title} 
+                  role="button"
+                  tabIndex={0}
                   onClick={() => setSelectedDetail(item.title)}
-                  className="p-8 text-left rounded-[2.5rem] border bg-white border-gray-100 shadow-sm transition-all hover:-translate-y-2 hover:shadow-2xl duration-300 group relative active:scale-95"
+                  onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelectedDetail(item.title); } }}
+                  className="p-8 text-left rounded-[2.5rem] border bg-white border-gray-100 shadow-sm transition-all hover:-translate-y-2 hover:shadow-2xl duration-300 group relative active:scale-95 cursor-pointer"
                 >
                    <div className="mb-4 transition-transform group-hover:scale-125 duration-300 text-red-700">{item.icon}</div>
                    <div className="flex items-center justify-between gap-2 mb-2">
                      <h4 className="font-black text-xl uppercase italic tracking-tighter text-gray-900">{item.title}</h4>
                      <div className="flex items-center gap-1.5">
                        <button
+                         type="button"
                          onClick={(e) => { e.stopPropagation(); openDirectLinks(item.title); }}
                          className="p-1.5 rounded-full bg-gray-50 text-gray-400 hover:text-red-700 hover:bg-red-50 transition-all border border-gray-100"
                          title={`Opciones con URLs y links directos de ${item.title}`}
@@ -1135,8 +1450,8 @@ export default function App() {
                        </div>
                      </div>
                    </div>
-                   <p className="text-xs leading-relaxed font-semibold text-gray-600">{item.desc}</p>
-                </button>
+                   <p className="text-sm leading-relaxed font-semibold text-gray-600">{item.desc}</p>
+                </div>
               ))}
             </div>
             <div className="bg-white rounded-[3rem] p-12 border border-gray-100 shadow-xl shadow-gray-100/50 relative group/chart">
@@ -1234,7 +1549,7 @@ export default function App() {
                    <Scale size={32} className="text-red-700 group-hover:rotate-12 transition-transform duration-500" />
                    <h4 className="text-2xl font-black uppercase tracking-tighter italic text-gray-900">Garantía Sistémica</h4>
                 </div>
-                <p className="text-gray-700 text-sm font-semibold max-w-sm mx-auto mb-4 relative z-10 leading-relaxed">Diferencia entre la ilusión del crédito Fiat y el respaldo real DeFi.</p>
+                <p className="text-gray-700 text-base font-semibold max-w-md mx-auto mb-4 relative z-10 leading-relaxed">Diferencia entre la ilusión del crédito Fiat y el respaldo real DeFi.</p>
                 
                 <div className="h-64 w-full relative z-10">
                   <ResponsiveContainer width="100%" height="100%">
@@ -1323,7 +1638,7 @@ export default function App() {
                       <h4 className="font-black text-lg uppercase italic text-gray-900 group-hover:text-red-700 tracking-tighter group-hover:scale-105 transition-transform origin-left">{item.t}</h4>
                       <span className="bg-red-50 text-red-700 border border-red-100 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">{item.tag}</span>
                     </div>
-                    <p className="text-xs text-gray-600 leading-relaxed font-semibold">{item.d}</p>
+                    <p className="text-sm text-gray-600 leading-relaxed font-semibold">{item.d}</p>
                   </div>
                   <div className="mt-4 flex items-center justify-between pt-3 border-t border-gray-100 text-xs font-bold uppercase text-gray-500">
                     <div className="flex items-center gap-1.5 group-hover:text-red-700 transition-colors">
@@ -1501,6 +1816,14 @@ export default function App() {
                 ))}
               </div>
             </div>
+
+            {/* DIRECTORIO MAESTRO DE PLATAFORMAS & ANALÍTICA EN 4 BLOQUES */}
+            <div className="pt-12 border-t-2 border-gray-100">
+              <FinancialPlatformsDirectory 
+                onSelectPlatform={(name) => setSelectedDetail(name)}
+                onOpenDirectLinks={(name) => openDirectLinks(name)}
+              />
+            </div>
           </section>
 
           {/* 06. COMPARATIVA */}
@@ -1597,15 +1920,16 @@ export default function App() {
             </div>
 
             <div className="bg-gray-50/50 p-8 rounded-[2rem] border border-gray-100/50 relative overflow-hidden">
-              <p className="text-gray-800 text-base md:text-lg leading-relaxed relative z-10 max-w-5xl">
+              <p className="text-gray-800 text-lg md:text-xl leading-relaxed relative z-10 max-w-5xl">
                 Los <span className="font-black text-gray-900">Creadores de Mercado Automatizados (AMM)</span> eliminan los intermediarios bursátiles tradicionales mediante fórmulas deterministas (<code className="bg-white px-2 py-0.5 rounded font-mono font-black text-red-700 border border-gray-200">x · y = k</code>). Paralelamente, los <span className="text-red-700 font-black">Contratos Perpetuos (Perps)</span> replican futuros financieros sin vencimiento mediante un <span className="font-black text-gray-900">Funding Rate</span> algorítmico y aislamiento con <span className="font-black text-gray-900">Mark Price</span>.
               </p>
             </div>
 
-            {/* Simulators */}
+            {/* Simulators & Ecosystem Platform Guide */}
             <div className="space-y-12">
               <LiquidityPoolSimulator />
               <PerpetualsEngine />
+              <DexAmmEcosystemGuide onSelectPlatform={(name) => setSelectedDetail(name)} />
             </div>
           </section>
 
@@ -1624,7 +1948,7 @@ export default function App() {
             </div>
 
             <div className="bg-gray-50/50 p-8 rounded-[2rem] border border-gray-100/50 relative overflow-hidden">
-              <p className="text-gray-800 text-base md:text-lg leading-relaxed relative z-10 max-w-5xl">
+              <p className="text-gray-800 text-lg md:text-xl leading-relaxed relative z-10 max-w-5xl">
                 A diferencia de la reserva bancaria fraccionaria que crea depósitos de la nada, los mercados monetarios DeFi (<span className="font-black text-gray-900">Aave, Morpho</span>) exigen <span className="text-red-700 font-black">sobre-colateralización algorítmica</span> rigurosa controlada por el <span className="font-black text-gray-900">Health Factor</span>. Explora el simulador de liquidaciones y la biblioteca interactiva de arquitectura de protocolos.
               </p>
             </div>
@@ -1657,11 +1981,21 @@ export default function App() {
                   Reglamento Europeo MiCA (UE 2023/1114), Directiva DAC8, Travel Rule y Modelos 172, 173 y 721 AEAT
                 </p>
               </div>
-              <InfoPanel sectionId="sec-09" />
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => window.dispatchEvent(new CustomEvent('open-manual', { detail: { target: 'cap-18' } }))}
+                  className="flex items-center gap-1.5 px-3 py-2 bg-red-50 hover:bg-red-100 border border-red-200 text-red-700 text-xs font-black uppercase rounded-xl transition-all shadow-sm"
+                  title="Abrir Capítulo 18 (MiCA) y Capítulo 19 (Fiscalidad España) en el Manual"
+                >
+                  <BookOpen size={14} />
+                  <span>Manual Cap. 18 & 19</span>
+                </button>
+                <InfoPanel sectionId="sec-09" />
+              </div>
             </div>
 
             <div className="bg-gray-50/50 p-8 rounded-[2rem] border border-gray-100/50 relative overflow-hidden">
-              <p className="text-gray-800 text-base md:text-lg leading-relaxed relative z-10 max-w-5xl">
+              <p className="text-gray-800 text-lg md:text-xl leading-relaxed relative z-10 max-w-5xl">
                 La transición institucional exige total certidumbre jurídica. El <span className="font-black text-gray-900">Reglamento MiCA</span> unifica la supervisión de proveedores (CASP) y emisores de tokens en los 27 Estados de la UE. Paralelamente, en España la <span className="text-red-700 font-black">AEAT</span> aplica un exhaustivo régimen informativo mediante los <span className="font-black text-gray-900">Modelos 172, 173 y 721</span> con trazabilidad total bajo la directiva DAC8.
               </p>
             </div>
@@ -1681,11 +2015,21 @@ export default function App() {
                   Gestión de Aprobaciones Ilimitadas, Firma Ciega, Riesgo de Contraparte y Auditoría de Seguridad
                 </p>
               </div>
-              <InfoPanel sectionId="sec-10" />
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => window.dispatchEvent(new CustomEvent('open-manual', { detail: { target: 'cap-15' } }))}
+                  className="flex items-center gap-1.5 px-3 py-2 bg-gray-100 hover:bg-gray-200 border border-gray-300 text-gray-900 text-xs font-black uppercase rounded-xl transition-all shadow-sm"
+                  title="Abrir Capítulo 15 (Matriz de Riesgo) y Capítulo 16 (Seguridad) en el Manual"
+                >
+                  <BookOpen size={14} />
+                  <span>Manual Cap. 15 & 16</span>
+                </button>
+                <InfoPanel sectionId="sec-10" />
+              </div>
             </div>
 
             <div className="bg-gray-50/50 p-8 rounded-[2rem] border border-gray-100/50 relative overflow-hidden">
-              <p className="text-gray-800 text-base md:text-lg leading-relaxed relative z-10 max-w-5xl">
+              <p className="text-gray-800 text-lg md:text-xl leading-relaxed relative z-10 max-w-5xl">
                 Operar en DeFi con seguridad institucional requiere auditar las <span className="font-black text-gray-900">8 dimensiones de riesgo estructural</span>: mercado, contraparte/crédito, smart contract, despeg de stablecoin, operativo, ciberseguridad, legal/fiscal y concentración. Evalúa tu índice de higiene operativa frente a las dos mayores amenazas silenciosas: <span className="text-red-700 font-black">aprobaciones ilimitadas (infinite allowances)</span> y la <span className="text-red-700 font-black">firma ciega (blind signing)</span>.
               </p>
             </div>
@@ -1705,7 +2049,7 @@ export default function App() {
                 <h3 className="text-4xl font-black uppercase italic tracking-tighter text-gray-900 leading-none">Glosario<br/><span className="text-red-700">Estructural</span></h3>
               </div>
               <div className="max-w-md">
-                <p className="text-gray-600 text-sm font-semibold uppercase leading-relaxed text-right border-r-4 border-red-700 pr-6">Conceptos fundamentales para comprender la infraestructura de las finanzas programables y la criptoeconomía moderna.</p>
+                <p className="text-gray-600 text-base font-semibold uppercase leading-relaxed text-right border-r-4 border-red-700 pr-6">Conceptos fundamentales para comprender la infraestructura de las finanzas programables y la criptoeconomía moderna.</p>
               </div>
             </div>
 
@@ -1720,7 +2064,7 @@ export default function App() {
                     <span className="text-red-700 font-black text-sm uppercase tracking-wider group-hover:italic transition-all">{item.t}</span>
                     <Plus size={16} className="text-gray-400 group-hover:text-red-700 group-hover:rotate-90 transition-all" />
                   </div>
-                  <p className="text-xs text-gray-600 font-medium leading-relaxed group-hover:text-gray-900 transition-colors">{item.d}</p>
+                  <p className="text-sm text-gray-600 font-medium leading-relaxed group-hover:text-gray-900 transition-colors">{item.d}</p>
                   <div className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
                     <Terminal size={12} className="text-gray-400" />
                   </div>
@@ -1825,7 +2169,7 @@ export default function App() {
                               <Landmark size={18} className="text-gray-500" />
                               <span className="text-xs font-black uppercase tracking-wider text-gray-500">Mecanismo Fiat Tradicional</span>
                             </div>
-                            <p className="text-xs md:text-sm text-gray-800 leading-relaxed font-semibold">
+                            <p className="text-sm md:text-base text-gray-800 leading-relaxed font-semibold">
                               {KNOWLEDGE_BASE[selectedDetail]?.defiVsFiat?.fiatTrad || 'Intermediación centralizada dependiente de bancos, cámaras de compensación, liquidación diferida en días hábiles (T+1/T+2) y supervisión discrecional.'}
                             </p>
                           </div>
@@ -1836,7 +2180,7 @@ export default function App() {
                               <Cpu size={18} />
                               <span className="text-xs font-black uppercase tracking-wider text-red-700">Protocolo DeFi On-Chain</span>
                             </div>
-                            <p className="text-xs md:text-sm text-gray-900 leading-relaxed font-bold">
+                            <p className="text-sm md:text-base text-gray-900 leading-relaxed font-bold">
                               {KNOWLEDGE_BASE[selectedDetail]?.defiVsFiat?.defiOnChain || 'Liquidación atómica inmediata (T+0) gobernada por Smart Contracts auditables, autocustodia con claves privadas y operatividad ininterrumpida 24/7/365.'}
                             </p>
                           </div>
@@ -1845,14 +2189,14 @@ export default function App() {
                         {/* Diferencia Crítica */}
                         <div className="bg-white p-5 rounded-2xl border-l-4 border-red-700 border-gray-200 shadow-sm">
                           <span className="text-[11px] font-black uppercase text-red-700 tracking-wider block mb-1">Diferencia Estructural Crítica:</span>
-                          <p className="text-xs md:text-sm font-semibold text-gray-900 leading-relaxed">
+                          <p className="text-sm md:text-base font-semibold text-gray-900 leading-relaxed">
                             {KNOWLEDGE_BASE[selectedDetail]?.defiVsFiat?.coreDifference || 'Sustitución de la confianza institucional opaca y riesgo de contraparte por certeza matemática criptográfica y liquidez global accesible sin permiso.'}
                           </p>
                         </div>
                       </div>
                     ) : modalViewMode === 'simple' ? (
                       <div className="bg-red-50/30 p-8 rounded-3xl border border-red-100 animate-in fade-in slide-in-from-bottom-2">
-                        <p className="text-base text-gray-900 leading-relaxed font-bold italic">
+                        <p className="text-lg md:text-xl text-gray-900 leading-relaxed font-bold italic">
                           {KNOWLEDGE_BASE[selectedDetail]?.simple || "Traducción a lenguaje sencillo próximamente disponible."}
                         </p>
                       </div>
@@ -1865,7 +2209,7 @@ export default function App() {
                            <FileText size={18} className="text-red-700" />
                            <span className="text-[11px] font-black uppercase tracking-widest text-red-700">Tesis de Investigación</span>
                          </div>
-                         <p className="text-[15px] text-gray-900 leading-relaxed font-semibold relative z-10">
+                         <p className="text-base md:text-lg text-gray-900 leading-relaxed font-semibold relative z-10">
                            {KNOWLEDGE_BASE[selectedDetail]?.extended || "El análisis detallado para este término está siendo verificado por el equipo de investigación."}
                          </p>
                       </div>
@@ -1910,7 +2254,7 @@ export default function App() {
                       </div>
                     ) : (
                       <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm animate-in fade-in slide-in-from-bottom-2">
-                        <p className="text-base text-gray-900 leading-relaxed font-semibold">
+                        <p className="text-lg text-gray-900 leading-relaxed font-semibold">
                           {KNOWLEDGE_BASE[selectedDetail]?.technical || "Información técnica detallada en proceso de sincronización."}
                         </p>
                       </div>
@@ -2009,7 +2353,7 @@ export default function App() {
                               <Landmark size={18} className="text-gray-500" />
                               <span className="text-xs font-black uppercase tracking-wider text-gray-500">Modelo TradFi / Fiat</span>
                             </div>
-                            <p className="text-xs md:text-sm text-gray-800 leading-relaxed font-semibold">
+                            <p className="text-sm md:text-base text-gray-800 leading-relaxed font-semibold">
                               {selectedEquivalence.fiatModel || selectedEquivalence.trad}
                             </p>
                           </div>
@@ -2020,7 +2364,7 @@ export default function App() {
                               <Cpu size={18} />
                               <span className="text-xs font-black uppercase tracking-wider text-red-700">Modelo DeFi On-Chain</span>
                             </div>
-                            <p className="text-xs md:text-sm text-gray-900 leading-relaxed font-bold">
+                            <p className="text-sm md:text-base text-gray-900 leading-relaxed font-bold">
                               {selectedEquivalence.defiModel || selectedEquivalence.defi}
                             </p>
                           </div>
@@ -2029,12 +2373,12 @@ export default function App() {
                         {/* Diferencia Crítica */}
                         <div className="bg-white p-5 rounded-2xl border-l-4 border-red-700 border-gray-200 shadow-sm space-y-2">
                           <span className="text-[11px] font-black uppercase text-red-700 tracking-wider block">Diferencia Crítica Estructural:</span>
-                          <p className="text-xs md:text-sm font-semibold text-gray-900 leading-relaxed">
+                          <p className="text-sm md:text-base font-semibold text-gray-900 leading-relaxed">
                             {selectedEquivalence.coreDiff || selectedEquivalence.desc}
                           </p>
                           {selectedEquivalence.example && (
-                            <div className="pt-2 border-t border-gray-100 flex items-start gap-2 text-xs text-gray-600 font-medium">
-                              <span className="text-gray-400 font-bold uppercase text-[10px]">Ejemplo Práctico:</span>
+                            <div className="pt-2 border-t border-gray-100 flex items-start gap-2 text-sm text-gray-600 font-medium">
+                              <span className="text-gray-400 font-bold uppercase text-[11px]">Ejemplo Práctico:</span>
                               <span>{selectedEquivalence.example}</span>
                             </div>
                           )}
@@ -2042,7 +2386,7 @@ export default function App() {
                       </div>
                     ) : modalViewMode === 'simple' ? (
                       <div className="bg-red-50/30 p-8 rounded-3xl border border-red-100 animate-in fade-in slide-in-from-bottom-2">
-                        <p className="text-base text-gray-900 leading-relaxed italic font-bold">
+                        <p className="text-lg md:text-xl text-gray-900 leading-relaxed italic font-bold">
                           {selectedEquivalence.simple}
                         </p>
                       </div>
@@ -2055,7 +2399,7 @@ export default function App() {
                            <FileText size={18} className="text-red-700" />
                            <span className="text-[11px] font-black uppercase tracking-widest text-red-700">Análisis Estructural</span>
                          </div>
-                         <p className="text-[15px] text-gray-900 leading-relaxed font-semibold relative z-10 italic">
+                         <p className="text-base md:text-lg text-gray-900 leading-relaxed font-semibold relative z-10 italic">
                            {selectedEquivalence.extended}
                          </p>
                       </div>
@@ -2100,7 +2444,7 @@ export default function App() {
                       </div>
                     ) : (
                       <div className="bg-gray-50 p-8 rounded-3xl border border-gray-100 animate-in fade-in slide-in-from-bottom-2">
-                        <p className="text-base text-gray-700 leading-relaxed font-semibold italic">
+                        <p className="text-lg text-gray-700 leading-relaxed font-semibold italic">
                           {selectedEquivalence.desc}
                         </p>
                       </div>

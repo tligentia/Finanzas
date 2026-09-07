@@ -18,6 +18,16 @@ export const Shell: React.FC<ShellProps> = ({ children, userIp: propUserIp }) =>
   const [showAjustes, setShowAjustes] = useState(false);
   const [showCookies, setShowCookies] = useState(false);
   const [showManual, setShowManual] = useState(false);
+  const [manualTarget, setManualTarget] = useState<string | undefined>(undefined);
+  
+  useEffect(() => {
+    const handleOpenManual = (e: CustomEvent<{ target?: string }>) => {
+      setManualTarget(e.detail?.target);
+      setShowManual(true);
+    };
+    window.addEventListener('open-manual' as any, handleOpenManual);
+    return () => window.removeEventListener('open-manual' as any, handleOpenManual);
+  }, []);
   
   // [PROCESO DE INICIALIZACIÓN CENTRALIZADO]
   const [isKeyValid, setIsKeyValid] = useState<boolean | null>(null);
@@ -162,7 +172,7 @@ export const Shell: React.FC<ShellProps> = ({ children, userIp: propUserIp }) =>
       />
 
       <Cookies isOpen={showCookies} onClose={() => setShowCookies(false)} />
-      <Manual isOpen={showManual} onClose={() => setShowManual(false)} />
+      <Manual isOpen={showManual} onClose={() => { setShowManual(false); setManualTarget(undefined); }} initialTarget={manualTarget} />
     </div>
   );
 };
