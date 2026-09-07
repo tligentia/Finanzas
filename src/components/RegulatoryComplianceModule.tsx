@@ -2,11 +2,14 @@ import React, { useState } from 'react';
 import { 
   Scale, FileText, AlertTriangle, CheckCircle2, 
   Calendar, Building2, ShieldCheck, HelpCircle, 
-  DollarSign, ArrowRight, BookOpen, Clock, AlertCircle
+  DollarSign, ArrowRight, BookOpen, Clock, AlertCircle,
+  Star
 } from 'lucide-react';
+import { useFavorites } from '../hooks/useFavorites';
 
 export const RegulatoryComplianceModule: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'mica' | 'aeat' | 'criterios'>('aeat');
+  const { isFavorite, toggleFavorite } = useFavorites();
 
   // Simulator for Spain Model 721 threshold
   const [foreignExchangesBalance, setForeignExchangesBalance] = useState<number>(38000);
@@ -24,6 +27,18 @@ export const RegulatoryComplianceModule: React.FC = () => {
           <div className="flex items-center gap-2 mb-1">
             <span className="w-2.5 h-2.5 bg-red-700 rounded-full animate-pulse"></span>
             <span className="text-[11px] font-black uppercase tracking-[0.3em] text-red-700">Marco Normativo y Fiscal</span>
+            <button
+              type="button"
+              onClick={() => toggleFavorite('Regulación UE (MiCA, DAC8) & Hacienda España')}
+              className={`p-1.5 rounded-lg border transition-all active:scale-90 ml-2 ${
+                isFavorite('Regulación UE (MiCA, DAC8) & Hacienda España')
+                  ? 'bg-red-50 text-red-700 border-red-200 shadow-sm'
+                  : 'bg-white text-gray-400 hover:text-red-700 border-gray-200'
+              }`}
+              title={isFavorite('Regulación UE (MiCA, DAC8) & Hacienda España') ? "Quitar de favoritos" : "Marcar como favorito"}
+            >
+              <Star size={13} className={isFavorite('Regulación UE (MiCA, DAC8) & Hacienda España') ? 'fill-red-700 text-red-700' : ''} />
+            </button>
           </div>
           <h4 className="text-2xl md:text-3xl font-black uppercase italic tracking-tighter text-gray-900">
             Regulación UE (MiCA, DAC8) & Hacienda España (721, 172, 173)

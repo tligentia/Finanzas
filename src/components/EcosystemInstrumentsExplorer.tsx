@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { 
   RefreshCw, TrendingUp, ShieldCheck, Layers, Landmark, 
   Cpu, Wallet, BarChart3, Activity, Globe, DollarSign, 
@@ -6,11 +6,15 @@ import {
   Lock, ArrowRightLeft, Radio, Network, FileText, 
   ShieldAlert, Clock, CheckCircle2, AlertTriangle, Building2,
   Receipt, Landmark as BankIcon, Database, KeyRound, HelpCircle,
-  ChevronRight, ExternalLink, Info, X, Compass, Copy, Check
+  ChevronRight, ExternalLink, Info, X, Compass, Copy, Check,
+  Star, NotebookPen
 } from 'lucide-react';
 import { EXPANDED_ECOSYSTEM_INSTRUMENTS, EcosystemInstrument } from '../data/ecosystemData';
 import { DirectLinksModal } from './DirectLinksModal';
 import { getLinksFor, PlatformLinksResource } from '../data/directLinksData';
+import { useFavorites } from '../hooks/useFavorites';
+import { ConceptNotesEditor } from './ConceptNotesEditor';
+import { hasConceptNote } from '../utils/notesStorage';
 
 interface Props {
   onSelectInstrument?: (instrument: EcosystemInstrument) => void;
@@ -20,15 +24,30 @@ interface Props {
 export const EcosystemInstrumentsExplorer: React.FC<Props> = ({ onSelectInstrument, onOpenDirectLinks }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>('Todos');
   const [activeModalInstrument, setActiveModalInstrument] = useState<EcosystemInstrument | null>(null);
-  const [viewMode, setViewMode] = useState<'simple' | 'technical' | 'extended' | 'diff'>('technical');
+  const [viewMode, setViewMode] = useState<'simple' | 'technical' | 'extended' | 'diff' | 'notes'>('technical');
   const [directLinksResource, setDirectLinksResource] = useState<PlatformLinksResource | null>(null);
   const [isDirectLinksOpen, setIsDirectLinksOpen] = useState(false);
+  const { isFavorite, toggleFavorite, sortWithFavoritesFirst } = useFavorites();
 
   const categories = ['Todos', 'DeFi Core', 'Derivados', 'Infraestructura', 'RWA', 'Regulación'];
 
-  const filtered = selectedCategory === 'Todos'
-    ? EXPANDED_ECOSYSTEM_INSTRUMENTS
-    : EXPANDED_ECOSYSTEM_INSTRUMENTS.filter(i => i.category === selectedCategory);
+  useEffect(() => {
+    if (!activeModalInstrument) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setActiveModalInstrument(null);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [activeModalInstrument]);
+
+  const filtered = useMemo(() => {
+    const list = selectedCategory === 'Todos'
+      ? EXPANDED_ECOSYSTEM_INSTRUMENTS
+      : EXPANDED_ECOSYSTEM_INSTRUMENTS.filter(i => i.category === selectedCategory);
+    return sortWithFavoritesFirst(list);
+  }, [selectedCategory, sortWithFavoritesFirst]);
 
   const handleOpen = (inst: EcosystemInstrument) => {
     setActiveModalInstrument(inst);
@@ -104,6 +123,21 @@ export const EcosystemInstrumentsExplorer: React.FC<Props> = ({ onSelectInstrume
                   <span className="text-[10px] font-black uppercase text-gray-400">
                     {inst.category}
                   </span>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleFavorite(inst.name);
+                    }}
+                    className={`p-1.5 rounded-lg border transition-all active:scale-90 ${
+                      isFavorite(inst.name)
+                        ? 'bg-red-50 text-red-700 border-red-200 shadow-sm'
+                        : 'bg-gray-50 text-gray-400 hover:text-red-700 hover:border-gray-300'
+                    }`}
+                    title={isFavorite(inst.name) ? `Quitar ${inst.name} de favoritos` : `Marcar ${inst.name} como favorito`}
+                    aria-label={`Favorito ${inst.name}`}
+                  >
+                    <Star size={12} className={isFavorite(inst.name) ? 'fill-red-700 text-red-700' : ''} />
+                  </button>
                   <button
                     onClick={(e) => handleOpenLinks(e, inst.name)}
                     className="p-1.5 rounded-lg bg-gray-50 hover:bg-red-50 text-gray-500 hover:text-red-700 border border-gray-200 transition-all flex items-center gap-1 text-[9px] font-black uppercase"
@@ -224,10 +258,32 @@ export const EcosystemInstrumentsExplorer: React.FC<Props> = ({ onSelectInstrume
                 <ArrowRightLeft size={13} />
                 <span>Vs Mercado Fiat</span>
               </button>
+              <button
+                onClick={() => setViewMode('notes')}
+                className={`flex-1 py-2 px-3 rounded-xl text-[11px] font-black uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 ${
+                  viewMode === 'notes' 
+                    ? 'bg-red-700 text-white shadow-md' 
+                    : 'text-gray-500 hover:text-red-700 hover:bg-red-50'
+                }`}
+                title="Mis notas personales con texto enriquecido"
+              >
+                <NotebookPen size={13} />
+                <span>Mis Notas</span>
+                {hasConceptNote(activeModalInstrument.name) && (
+                  <span className="w-1.5 h-1.5 rounded-full bg-red-400"></span>
+                )}
+              </button>
             </div>
 
             {/* Description Text */}
-            {viewMode === 'diff' ? (
+            {viewMode === 'notes' ? (
+              <div className="animate-in fade-in duration-200">
+                <ConceptNotesEditor
+                  conceptId={activeModalInstrument.name}
+                  conceptTitle={activeModalInstrument.name}
+                />
+              </div>
+            ) : viewMode === 'diff' ? (
               <div className="space-y-4 animate-in fade-in duration-200">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="p-5 bg-gray-50 rounded-2xl border border-gray-200 space-y-2">

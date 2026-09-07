@@ -1042,6 +1042,24 @@ export const DIRECT_LINKS_REGISTRY: Record<string, PlatformLinksResource> = {
       { label: 'Web Oficial Cryptoboard', url: 'https://cryptoboard-psi.vercel.app', type: 'official', desc: 'Página de inicio y características de la plataforma de seguimiento.' }
     ]
   },
+  'Coinglass': {
+    id: 'coinglass',
+    name: 'Coinglass',
+    category: 'Plataforma DeFi',
+    tag: 'Derivados & Liquidaciones',
+    badge: 'Bloque 1 • Inteligencia de Futuros',
+    officialSite: 'https://www.coinglass.com/es',
+    summary: 'La plataforma líder en analítica de futuros y derivados de criptomonedas. Monitorea en tiempo real mapas de calor de liquidaciones masivas, interés abierto (Open Interest), tasas de financiación (Funding Rates) y ratios Long/Short.',
+    links: [
+      { label: 'Portal Oficial Coinglass (Español)', url: 'https://www.coinglass.com/es', type: 'official', desc: 'Terminal integral en español con cotizaciones de derivados y métricas en vivo.' },
+      { label: 'Mapa de Calor de Liquidaciones (HeatMap)', url: 'https://www.coinglass.com/es/pro/futures/LiquidationHeatMap', type: 'analytics', desc: 'Visualización gráfica de cúmulos de órdenes de liquidación y niveles de barrido de liquidez.' },
+      { label: 'Monitor de Liquidaciones en Vivo (24h)', url: 'https://www.coinglass.com/es/LiquidationData', type: 'analytics', desc: 'Desglose detallado de posiciones liquidadas en Long vs Short en los principales exchanges.' },
+      { label: 'Interés Abierto Agregado (Open Interest)', url: 'https://www.coinglass.com/es/open-interest', type: 'analytics', desc: 'Volumen total de contratos de futuros abiertos y flujos de capital en derivados.' },
+      { label: 'Tasas de Financiación (Funding Rates)', url: 'https://www.coinglass.com/es/funding-rates', type: 'analytics', desc: 'Comparativa en vivo del Funding Rate entre Binance, Bybit, OKX y DEXs como Hyperliquid.' },
+      { label: 'Ratio Long / Short de Cuentas Top', url: 'https://www.coinglass.com/es/LongShortRatio', type: 'analytics', desc: 'Distribución porcentual de posicionamiento alcista y bajista de operadores líderes.' },
+      { label: 'Métricas de Opciones Cripto (BTC & ETH)', url: 'https://www.coinglass.com/es/options', type: 'analytics', desc: 'Volatilidad implícita, niveles Max Pain, Put/Call ratios y open interest de opciones.' }
+    ]
+  },
 
   // BLOQUE 2: TERMINALES BURSÁTILES, ANÁLISIS TÉCNICO & MACROECONOMÍA GLOBAL
   'TradingView': {

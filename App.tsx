@@ -8,7 +8,8 @@ import {
   PieChart as PieIcon, Activity, Globe, Info, ExternalLink,
   MessageSquare, ChevronDown, ChevronUp, Send, Loader2, Sparkles, HelpCircle,
   Copy, Check, X, AlertTriangle, Scale, Plus, Coins, Gem, CircleDollarSign, DollarSign, Link as LinkIcon, Share2,
-  RefreshCw, Smartphone, HardDrive, Shield, Lock, Clock, Network, BookOpen, Code, Terminal, User, FileText, Bot, Compass, ArrowRightLeft, Database
+  RefreshCw, Smartphone, HardDrive, Shield, Lock, Clock, Network, BookOpen, Code, Terminal, User, FileText, Bot, Compass, ArrowRightLeft, Database,
+  Star, NotebookPen
 } from 'lucide-react';
 import { 
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
@@ -27,6 +28,9 @@ import { getLinksFor, PlatformLinksResource } from './src/data/directLinksData';
 import { DefiVsFiatMatrix } from './src/components/DefiVsFiatMatrix';
 import { DexAmmEcosystemGuide } from './src/components/DexAmmEcosystemGuide';
 import { FinancialPlatformsDirectory } from './src/components/FinancialPlatformsDirectory';
+import { useFavorites } from './src/hooks/useFavorites';
+import { ConceptNotesEditor } from './src/components/ConceptNotesEditor';
+import { hasConceptNote } from './src/utils/notesStorage';
 
 // --- DATA SETS ---
 const multiplierData = [
@@ -215,79 +219,80 @@ const EQUIVALENCES: EquivalenceItem[] = [
 ];
 
 const CRYPTO_ASSETS = [
-  { name: 'Bitcoin (BTC)', icon: <Coins />, url: 'https://bitcoin.org' },
-  { name: 'Ethereum (ETH)', icon: <Gem />, url: 'https://ethereum.org' },
-  { name: 'Solana (SOL)', icon: <Zap />, url: 'https://solana.com' },
-  { name: 'Cardano (ADA)', icon: <ShieldCheck />, url: 'https://cardano.org' },
-  { name: 'XRP (XRP)', icon: <Globe />, url: 'https://ripple.com/xrp/' },
-  { name: 'Polkadot (DOT)', icon: <Share2 />, url: 'https://polkadot.network' },
-  { name: 'BNB Chain (BNB)', icon: <Coins />, url: 'https://www.bnbchain.org' },
-  { name: 'Avalanche (AVAX)', icon: <Zap />, url: 'https://avax.network' },
+  { name: 'Bitcoin (BTC)', icon: <Coins />, url: 'https://bitcoin.org', category: 'Capa 1 • PoW', desc: 'Reserva de valor digital descentralizada y política monetaria inmutable fijada en 21 millones de unidades.' },
+  { name: 'Ethereum (ETH)', icon: <Gem />, url: 'https://ethereum.org', category: 'Capa 1 • PoS', desc: 'Plataforma líder de computación descentralizada, contratos inteligentes y capa de liquidación de rollups L2.' },
+  { name: 'Solana (SOL)', icon: <Zap />, url: 'https://solana.com', category: 'Capa 1 • PoH', desc: 'Blockchain monolítica de alto rendimiento con consenso Proof of History, finalización sub-segundo y micro-comisiones.' },
+  { name: 'Cardano (ADA)', icon: <ShieldCheck />, url: 'https://cardano.org', category: 'Capa 1 • PoS', desc: 'Red de contratos inteligentes desarrollada con revisión por pares científicos y modelo de transacciones EUTXO.' },
+  { name: 'XRP (XRP)', icon: <Globe />, url: 'https://ripple.com/xrp/', category: 'Red de Pagos', desc: 'Red de pagos transfronterizos y liquidación interbancaria instantánea con mínimas comisiones de red.' },
+  { name: 'Polkadot (DOT)', icon: <Share2 />, url: 'https://polkadot.network', category: 'Capa 0 • Interop', desc: 'Protocolo de interoperabilidad multicadena gobernado por una Relay Chain que comunica parachains soberanas.' },
+  { name: 'BNB Chain (BNB)', icon: <Coins />, url: 'https://www.bnbchain.org', category: 'Capa 1 • EVM', desc: 'Ecosistema de contratos inteligentes compatible con EVM respaldado por Binance, enfocado en alto volumen.' },
+  { name: 'Avalanche (AVAX)', icon: <Zap />, url: 'https://avax.network', category: 'Capa 1 • Subnets', desc: 'Plataforma escalable de contratos inteligentes basada en consenso Snowman y arquitectura modular de subredes.' },
 ];
 
 const STABLECOINS = [
-  { name: 'Tether (USDT)', icon: <DollarSign />, url: 'https://tether.to' },
-  { name: 'USD Coin (USDC)', icon: <CircleDollarSign />, url: 'https://www.circle.com/en/usdc' },
-  { name: 'DAI (DAI)', icon: <Layers />, url: 'https://makerdao.com' },
-  { name: 'EURC (EURC)', icon: <CircleDollarSign />, url: 'https://www.circle.com/en/eurc' },
-  { name: 'USDS (Sky)', icon: <Layers />, url: 'https://sky.money' },
-  { name: 'PayPal USD (PYUSD)', icon: <Wallet />, url: 'https://www.paypal.com/us/digital-wallet/manage-money/crypto/pyusd' },
+  { name: 'Tether (USDT)', icon: <DollarSign />, url: 'https://tether.to', category: 'Fiduciaria Off-Chain', desc: 'La mayor stablecoin del mercado por volumen y liquidez, respaldada por Letras del Tesoro de EE.UU. y efectivo.' },
+  { name: 'USD Coin (USDC)', icon: <CircleDollarSign />, url: 'https://www.circle.com/en/usdc', category: 'Ficha EMT MiCA', desc: 'Moneda digital de Circle regulada bajo normativa MiCA en la UE, auditada mensualmente y con respaldo 1:1 en bancos.' },
+  { name: 'DAI (DAI)', icon: <Layers />, url: 'https://makerdao.com', category: 'Sobre-Colateralizada', desc: 'Stablecoin descentralizada emitida por MakerDAO mediante contratos inteligentes colateralizados con criptoactivos y RWA.' },
+  { name: 'EURC (EURC)', icon: <CircleDollarSign />, url: 'https://www.circle.com/en/eurc', category: 'Ficha EMT Euro MiCA', desc: 'Stablecoin referenciada 1:1 al Euro emitida por Circle conforme a la regulación de activos digitales de la Unión Europea.' },
+  { name: 'USDS (Sky)', icon: <Layers />, url: 'https://sky.money', category: 'DeFi • Ecosistema Sky', desc: 'Evolución de DAI integrada en el protocolo Sky, con recompensas de ahorro nativas (Sky Savings Rate) y gobernanza abierta.' },
+  { name: 'PayPal USD (PYUSD)', icon: <Wallet />, url: 'https://www.paypal.com/us/digital-wallet/manage-money/crypto/pyusd', category: 'Fiduciaria Institucional', desc: 'Stablecoin emitida por Paxos Trust para PayPal respaldada al 100% por depósitos en dólares y bonos federales.' },
 ];
 
 const HOT_WALLETS = [
-  { name: 'MetaMask', icon: <Smartphone />, url: 'https://metamask.io' },
-  { name: 'Rabby Wallet', icon: <Smartphone />, url: 'https://rabby.io' },
-  { name: 'Phantom', icon: <Smartphone />, url: 'https://phantom.app' },
-  { name: 'Trust Wallet', icon: <Smartphone />, url: 'https://trustwallet.com' },
-  { name: 'Safe (Gnosis)', icon: <Lock />, url: 'https://safe.global' },
+  { name: 'MetaMask', icon: <Smartphone />, url: 'https://metamask.io', category: 'Hot Wallet • EVM', desc: 'La extensión de navegador y app móvil más extendida del mundo para conectar con dApps de Ethereum y redes EVM.' },
+  { name: 'Rabby Wallet', icon: <Smartphone />, url: 'https://rabby.io', category: 'Seguridad DeFi', desc: 'Monedero Web3 con escaneo de seguridad predictivo antes de firmar transacciones y cambio automático de red.' },
+  { name: 'Phantom', icon: <Smartphone />, url: 'https://phantom.app', category: 'Solana & Multi-Chain', desc: 'Billetera líder de Solana con soporte multi-cadena para Ethereum, Bitcoin y Base, con interfaz ágil para tokens y NFTs.' },
+  { name: 'Trust Wallet', icon: <Smartphone />, url: 'https://trustwallet.com', category: 'Multicadena Móvil', desc: 'Billetera móvil con soporte para más de 70 blockchains y visor integrado de finanzas descentralizadas.' },
+  { name: 'Safe (Gnosis)', icon: <Lock />, url: 'https://safe.global', category: 'Smart Wallet Multi-Sig', desc: 'Contrato inteligente de custodia con multifirma (Multi-Signature) estándar para tesorerías institucionales y DAOs.' },
 ];
 
 const COLD_WALLETS = [
-  { name: 'Ledger', icon: <HardDrive />, url: 'https://www.ledger.com' },
-  { name: 'Trezor', icon: <HardDrive />, url: 'https://trezor.io' },
-  { name: 'BitBox', icon: <HardDrive />, url: 'https://shiftcrypto.ch' },
+  { name: 'Ledger', icon: <HardDrive />, url: 'https://www.ledger.com', category: 'Hardware • Secure Element', desc: 'Monedero hardware con chip certificado Secure Element (EAL5+/EAL6+) para aislamiento total de claves fuera de línea.' },
+  { name: 'Trezor', icon: <HardDrive />, url: 'https://trezor.io', category: 'Hardware Open-Source', desc: 'El primer monedero hardware de la historia con código fuente y esquemas de hardware totalmente abiertos y auditables.' },
+  { name: 'BitBox', icon: <HardDrive />, url: 'https://shiftcrypto.ch', category: 'Hardware Suizo', desc: 'Dispositivo suizo de máxima seguridad con edición dedicada para Bitcoin y arquitectura de doble chip de protección.' },
 ];
 
 const DEFI_PLATFORMS = [
-  { name: 'Uniswap', icon: <RefreshCw />, url: 'https://uniswap.org' },
-  { name: 'Curve Finance', icon: <RefreshCw />, url: 'https://curve.fi' },
-  { name: 'Balancer', icon: <RefreshCw />, url: 'https://balancer.fi' },
-  { name: 'PancakeSwap', icon: <RefreshCw />, url: 'https://pancakeswap.finance' },
-  { name: 'Trader Joe', icon: <Zap />, url: 'https://traderjoexyz.com' },
-  { name: 'Camelot', icon: <Activity />, url: 'https://camelot.exchange' },
-  { name: 'Raydium', icon: <Zap />, url: 'https://raydium.io' },
-  { name: 'Orca', icon: <RefreshCw />, url: 'https://www.orca.so' },
-  { name: 'Beefy Finance', icon: <TrendingUp />, url: 'https://beefy.com' },
-  { name: 'Yearn Finance', icon: <Layers />, url: 'https://yearn.fi' },
-  { name: 'AutoShark', icon: <TrendingUp />, url: 'https://autoshark.finance' },
-  { name: 'Rocket Pool', icon: <ShieldCheck />, url: 'https://rocketpool.net' },
-  { name: 'Jito', icon: <Zap />, url: 'https://jito.network' },
-  { name: 'Aave', icon: <TrendingUp />, url: 'https://aave.com' },
-  { name: 'Hyperliquid', icon: <TrendingUp />, url: 'https://hyperliquid.xyz' },
-  { name: 'Morpho', icon: <Activity />, url: 'https://morpho.org' },
-  { name: 'Lido', icon: <Activity />, url: 'https://lido.fi' },
-  { name: 'MakerDAO', icon: <Landmark />, url: 'https://makerdao.com' },
-  { name: 'GMX', icon: <TrendingUp />, url: 'https://gmx.io' },
-  { name: 'Pendle', icon: <Zap />, url: 'https://pendle.finance' },
-  { name: 'EigenLayer', icon: <Layers />, url: 'https://eigenlayer.xyz' },
-  { name: 'Chainlink', icon: <Network />, url: 'https://chain.link' },
-  { name: 'Ondo Finance', icon: <Gem />, url: 'https://ondo.finance' },
-  { name: 'Across Protocol', icon: <Network />, url: 'https://across.to' },
-  { name: 'Ethena', icon: <DollarSign />, url: 'https://ethena.fi' },
-  { name: 'DefiLlama', icon: <Database />, url: 'https://defillama.com/' },
-  { name: 'Glassnode', icon: <Activity />, url: 'https://studio.glassnode.com/home' },
-  { name: 'CoinMarketCap', icon: <BarChart3 />, url: 'https://coinmarketcap.com/es/' },
-  { name: 'Cryptoboard', icon: <Terminal />, url: 'https://cryptoboard-psi.vercel.app/dashboard' },
-  { name: 'TradingView', icon: <Activity />, url: 'https://es.tradingview.com' },
-  { name: 'ProRealTime', icon: <Cpu />, url: 'https://www.prorealtime.com/' },
-  { name: 'Investing.com', icon: <Globe />, url: 'https://es.investing.com' },
-  { name: 'Yahoo Finanzas', icon: <BarChart3 />, url: 'https://es.finance.yahoo.com' },
-  { name: 'MSN Dinero', icon: <Globe />, url: 'https://www.msn.com/es-es/dinero' },
-  { name: 'Google Finance', icon: <Sparkles />, url: 'https://www.google.com/finance/beta' },
-  { name: 'Jumper Exchange', icon: <ArrowRightLeft />, url: 'https://jumper.exchange/es' },
-  { name: 'Revert Finance', icon: <RefreshCw />, url: 'https://revert.finance' },
-  { name: 'Krystal DeFi', icon: <Layers />, url: 'https://defi.krystal.app' },
-  { name: 'Perplexity Finance', icon: <Bot />, url: 'https://www.perplexity.ai/finance/' },
+  { name: 'Uniswap', icon: <RefreshCw />, url: 'https://uniswap.org', category: 'AMM DEX Líder', desc: 'DEX creador de mercado automatizado (AMM) pionero en liquidez concentrada (V3) y hooks programables (V4).' },
+  { name: 'Curve Finance', icon: <RefreshCw />, url: 'https://curve.fi', category: 'AMM Stablecoins', desc: 'DEX hiper-eficiente optimizado para swaps entre activos de paridad similar con mínimo deslizamiento.' },
+  { name: 'Balancer', icon: <RefreshCw />, url: 'https://balancer.fi', category: 'Pools Multi-Token', desc: 'Protocolo de liquidez programable con piscinas ponderadas de hasta 8 activos y vaults inteligentes.' },
+  { name: 'PancakeSwap', icon: <RefreshCw />, url: 'https://pancakeswap.finance', category: 'DEX Multicadena', desc: 'Exchange descentralizado nacido en BNB Chain con swaps, pools de liquidez y mercados de futuros.' },
+  { name: 'Trader Joe', icon: <Zap />, url: 'https://traderjoexyz.com', category: 'DEX Liquidity Book', desc: 'DEX líder en Avalanche y Arbitrum con arquitectura de liquidez concentrada en tramos de precio discretos.' },
+  { name: 'Camelot', icon: <Activity />, url: 'https://camelot.exchange', category: 'DEX L2 Arbitrum', desc: 'DEX nativo de Arbitrum centrado en infraestructura de liquidez componible y pools duales.' },
+  { name: 'Raydium', icon: <Zap />, url: 'https://raydium.io', category: 'DEX Solana AMM', desc: 'AMM y libro de órdenes on-chain en Solana integrado con la liquidez compartida del ecosistema SPL.' },
+  { name: 'Orca', icon: <RefreshCw />, url: 'https://www.orca.so', category: 'DEX Whirlpools', desc: 'DEX de referencia en Solana basado en pools de liquidez concentrada de ultra-baja latencia.' },
+  { name: 'Beefy Finance', icon: <TrendingUp />, url: 'https://beefy.com', category: 'Yield Optimizer', desc: 'Optimizador multi-cadena que reinvierte automáticamente los rendimientos de piscinas DeFi (auto-compounder).' },
+  { name: 'Yearn Finance', icon: <Layers />, url: 'https://yearn.fi', category: 'Yield Aggregator', desc: 'Protocolo pionero en bóvedas de rendimiento que ejecutan complejas estrategias automatizadas de inversión.' },
+  { name: 'AutoShark', icon: <TrendingUp />, url: 'https://autoshark.finance', category: 'Yield Farming', desc: 'Agregador de rendimiento y optimizador de granjas de liquidez con estrategias de auto-reinversión.' },
+  { name: 'Rocket Pool', icon: <ShieldCheck />, url: 'https://rocketpool.net', category: 'Liquid Staking ETH', desc: 'Protocolo descentralizado y permisionless de Liquid Staking para Ethereum con operadores de nodo comunitarios.' },
+  { name: 'Jito', icon: <Zap />, url: 'https://jito.network', category: 'LST + MEV Solana', desc: 'Protocolo líder de Liquid Staking y extracción ética de MEV en Solana que comparte propinas con los stakers.' },
+  { name: 'Aave', icon: <TrendingUp />, url: 'https://aave.com', category: 'Lending & Borrowing', desc: 'Mercado monetario descentralizado líder mundial para depósitos y préstamos sobre-colateralizados y flash loans.' },
+  { name: 'Hyperliquid', icon: <TrendingUp />, url: 'https://hyperliquid.xyz', category: 'Perps L1 On-Chain', desc: 'Blockchain de Capa 1 específica para un libro de órdenes de futuros perpetuos con ejecución atómica y 0 gas.' },
+  { name: 'Morpho', icon: <Activity />, url: 'https://morpho.org', category: 'Lending Modular', desc: 'Protocolo de crédito modular con mercados aislados y vaults que optimizan el rendimiento sobre Aave y Compound.' },
+  { name: 'Lido', icon: <Activity />, url: 'https://lido.fi', category: 'Liquid Staking Líder', desc: 'El mayor protocolo de staking líquido del mundo, emisor de stETH respaldado por validadores institucionales.' },
+  { name: 'MakerDAO', icon: <Landmark />, url: 'https://makerdao.com', category: 'CDP & Sky Protocol', desc: 'Emisor de la stablecoin descentralizada DAI y arquitectura Sky respaldada por colateral cripto y bonos RWA.' },
+  { name: 'GMX', icon: <TrendingUp />, url: 'https://gmx.io', category: 'Perpetuals DEX', desc: 'Exchange descentralizado de contratos de futuros perpetuos con apalancamiento de hasta 50x y liquidez GM.' },
+  { name: 'Pendle', icon: <Zap />, url: 'https://pendle.finance', category: 'Mercado de Yields', desc: 'Protocolo de negociación y tokenización de rendimiento futuro dividiendo los activos en tokens PT y YT.' },
+  { name: 'EigenLayer', icon: <Layers />, url: 'https://eigenlayer.xyz', category: 'Restaking Líder', desc: 'Infraestructura de restaking que permite reutilizar el ETH en staking para asegurar servicios validados (AVS).' },
+  { name: 'Chainlink', icon: <Network />, url: 'https://chain.link', category: 'Oráculos & CCIP', desc: 'Red descentralizada de oráculos de referencia en la industria que suministra datos de precios y CCIP a DeFi.' },
+  { name: 'Ondo Finance', icon: <Gem />, url: 'https://ondo.finance', category: 'RWA Tokenizados', desc: 'Pionero en activos del mundo real (RWA), facilitando acceso on-chain a bonos del Tesoro de EE.UU. (USDY).' },
+  { name: 'Across Protocol', icon: <Network />, url: 'https://across.to', category: 'Puente Cross-Chain', desc: 'Puente interoperable de alta velocidad y bajo coste impulsado por intents e incentivos de rebalanceo.' },
+  { name: 'Ethena', icon: <DollarSign />, url: 'https://ethena.fi', category: 'Dólar Sintético', desc: 'Protocolo emisor de USDe respaldado por cobertura delta-neutral en futuros de ETH/BTC y rendimientos de staking.' },
+  { name: 'DefiLlama', icon: <Database />, url: 'https://defillama.com/', category: 'Analítica On-Chain', desc: 'La mayor base de datos abierta de métricas on-chain, TVL, comisiones, ingresos y auditorías del ecosistema.' },
+  { name: 'Glassnode', icon: <Activity />, url: 'https://studio.glassnode.com/home', category: 'Inteligencia On-Chain', desc: 'Plataforma econométrica institucional con métricas avanzadas (MVRV, SOPR) y análisis forense de Bitcoin.' },
+  { name: 'CoinMarketCap', icon: <BarChart3 />, url: 'https://coinmarketcap.com/es/', category: 'Rankings Globales', desc: 'Agregador de precios, capitalizaciones de mercado, volumen 24h y rankings de criptoactivos y exchanges.' },
+  { name: 'Cryptoboard', icon: <Terminal />, url: 'https://cryptoboard-psi.vercel.app/dashboard', category: 'Dashboard Ejecutivo', desc: 'Panel interactivo ligero de monitoreo ágil y condensado de carteras y cotizaciones en tiempo real.' },
+  { name: 'Coinglass', icon: <TrendingUp />, url: 'https://www.coinglass.com/es', category: 'Derivados & Liquidaciones', desc: 'Terminal analítica líder en futuros: mapas de calor de liquidaciones, open interest, funding rates y ratios long/short.' },
+  { name: 'TradingView', icon: <Activity />, url: 'https://es.tradingview.com', category: 'Graficación Técnica', desc: 'Plataforma líder mundial de graficación interactiva, indicadores financieros avanzados y scripts cuantitativos.' },
+  { name: 'ProRealTime', icon: <Cpu />, url: 'https://www.prorealtime.com/', category: 'Trading Institucional', desc: 'Software profesional de análisis técnico con ejecución directa de órdenes, backtesting y escáneres bursátiles.' },
+  { name: 'Investing.com', icon: <Globe />, url: 'https://es.investing.com', category: 'Portal Macro & Forex', desc: 'Portal financiero global con calendarios macroeconómicos, materias primas, bonos, divisas y criptoactivos.' },
+  { name: 'Yahoo Finanzas', icon: <BarChart3 />, url: 'https://es.finance.yahoo.com', category: 'Datos Bursátiles', desc: 'Portal de referencia en cotizaciones de bolsa, estados financieros corporativos y noticias económicas.' },
+  { name: 'MSN Dinero', icon: <Globe />, url: 'https://www.msn.com/es-es/dinero', category: 'Seguimiento Financiero', desc: 'Plataforma de seguimiento patrimonial, tendencias macroeconómicas y cotizaciones bursátiles internacionales.' },
+  { name: 'Google Finance', icon: <Sparkles />, url: 'https://www.google.com/finance/beta', category: 'Monitor de Mercados', desc: 'Buscador financiero ágil de cotizaciones en tiempo real, seguimiento de carteras personales y noticias.' },
+  { name: 'Jumper Exchange', icon: <ArrowRightLeft />, url: 'https://jumper.exchange/es', category: 'Meta-Agregador Puentes', desc: 'Meta-agregador de puentes y DEXs desarrollado por LI.FI que localiza la ruta óptima de swap cross-chain.' },
+  { name: 'Revert Finance', icon: <RefreshCw />, url: 'https://revert.finance', category: 'Gestión Uniswap V3', desc: 'Herramienta especializada en analítica y optimización de posiciones de liquidez concentrada en AMMs.' },
+  { name: 'Krystal DeFi', icon: <Layers />, url: 'https://defi.krystal.app', category: 'Gestor de Carteras', desc: 'Consola integral para monitoreo de carteras Web3, préstamos, swaps multired y exploración de dApps.' },
+  { name: 'Perplexity Finance', icon: <Bot />, url: 'https://www.perplexity.ai/finance/', category: 'IA Financiera', desc: 'Motor de búsqueda conversacional con inteligencia artificial enfocado en balances y datos macroeconómicos.' },
 ];
 
 const GLOSSARY_TERMS = [
@@ -757,6 +762,16 @@ const KNOWLEDGE_BASE: Record<string, InfoVersion> = {
       coreDifference: 'Actualización periódica bancaria con retraso frente a monitorización en tiempo real.'
     }
   },
+  'Coinglass': {
+    technical: 'Terminal analítica especializada en derivados y futuros de criptomonedas, con mapas de calor de liquidaciones masivas (Liquidation Heatmaps), interés abierto agregado (Open Interest), tasas de financiación (Funding Rates) y ratios Long/Short.',
+    simple: 'Es la pantalla de referencia para ver dónde están los niveles de riesgo extremo del mercado: te muestra cuánto dinero apalancado hay apostando a que el precio sube o baja y a qué precios exactos se ejecutarán liquidaciones masivas.',
+    extended: 'Coinglass es la infraestructura analítica por excelencia para comprender la liquidez oculta y el posicionamiento especulativo en los mercados de futuros cripto. Sus algoritmos procesan millones de órdenes en Binance, Bybit, OKX y plataformas descentralizadas para proyectar los mapas de calor de liquidación. Estos niveles actúan como zonas magnéticas de atracción del precio antes de reversiones bruscas, permitiendo anticipar barridos de liquidez y cascadas de liquidación provocadas por desapalancamiento forzoso.',
+    defiVsFiat: {
+      fiatTrad: 'Informes semanales COT (Commitments of Traders) de la CFTC estadounidense con días de desfase y datos agregados opacos de bolsas cerradas.',
+      defiOnChain: 'Telemetría de derivados y liquidaciones en tiempo real segundo a segundo, accesible públicamente a cualquier operador e investigador.',
+      coreDifference: 'Información institucional diferida y asimétrica frente a transparencia radical de liquidez y apalancamiento en vivo.'
+    }
+  },
 
   // BLOQUE 2: TERMINALES BURSÁTILES, ANÁLISIS TÉCNICO & MACROECONOMÍA GLOBAL
   'TradingView': {
@@ -866,9 +881,14 @@ const KNOWLEDGE_BASE: Record<string, InfoVersion> = {
 
   // Glosario
   'Liquidación': {
-    technical: 'Proceso automático ejecutado por un Smart Contract cuando el colateral cae por debajo de un umbral de seguridad, vendiendo los activos para cubrir la deuda.',
-    simple: 'Si pides un préstamo y la garantía que dejaste baja mucho de precio, el systema la vende automáticamente para recuperar el dinero. Es como si el banco vendiera tu casa si no pagas la hipoteca.',
-    extended: 'La liquidación es el mecanismo de defensa inmunológica de DeFi. Garantiza que el systema nunca sea insolvente. Los liquidadores son agentes externos (bots) que compiten por comprar el colateral con descuento cuando una posición se vuelve arriesgada. Este incentivo económico asegura que, incluso en caídas de mercado del 50% en minutos, los protocolos como Aave o MakerDAO sigan teniendo más colateral que deuda, manteniendo la integridad de todo el ecosistema financiero descentralizado.'
+    technical: 'Mecanismo algorítmico de gestión de riesgo mediante el cual una posición apalancada en futuros o un préstamo en DeFi se cierra forzosamente al cruzar el precio de liquidación o al caer el Health Factor por debajo de 1.0, vendiendo el colateral para preservar la solvencia.',
+    simple: 'Si pides un préstamo o te apalancas y el valor de tu garantía baja de forma peligrosa, el sistema vende tu garantía de inmediato para pagar la deuda. No hay llamadas telefónicas ni esperas: el código actúa en segundos para que nadie incurra en pérdidas impagadas.',
+    extended: 'La liquidación es el cortafuegos de defensa inmunológica de los mercados descentralizados y de futuros. En protocolos de préstamo (Aave, Morpho, MakerDAO), los bots liquidadores externos compiten en milisegundos por adquirir el colateral en riesgo con un descuento (bonificación del 5% al 10%), amortizando la deuda del prestatario y garantizando que el protocolo permanezca 100% solvente en cualquier caída súbita. En mercados de futuros y contratos perpetuos (analizados exhaustivamente por Coinglass), las liquidaciones masivas desencadenan las denominadas "cascadas de liquidación" (Long o Short Squeezes), barriendo cúmulos de órdenes y provocando mechas de alta volatilidad.',
+    defiVsFiat: {
+      fiatTrad: 'Llamadas de margen discrecionales (Margin Call) con plazos de cortesía y riesgo de rescates estatales cuando quiebran grandes firmas.',
+      defiOnChain: 'Ejecución matemática en tiempo real (T+0) gobernada por Smart Contracts y oráculos, liquidada por bots sin discriminación de usuario.',
+      coreDifference: 'Rescates políticos y opacidad en finanzas tradicionales frente a liquidación algorítmica sin clemencia ni rescates con dinero público.'
+    }
   },
   'Impermanent Loss': {
     technical: 'Situación en la que un proveedor de liquidez obtiene menos valor manteniendo activos en un pool que simplemente guardándolos en su wallet, debido a volatilidad.',
@@ -1100,11 +1120,23 @@ interface InfoPanelProps {
 
 const InfoPanel: React.FC<InfoPanelProps> = ({ sectionId }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState<'consulting' | 'notes'>('consulting');
   const [query, setQuery] = useState('');
   const [answer, setAnswer] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [copied, setCopied] = useState(false);
   const faqs = SECTION_FAQS[sectionId];
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setIsOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen]);
 
   const handleAsk = async (text?: string) => {
     const question = text || query;
@@ -1129,6 +1161,20 @@ const InfoPanel: React.FC<InfoPanelProps> = ({ sectionId }) => {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const sectionTitles: Record<string, string> = {
+    'sec-01': 'Dinero y Deuda Fiat',
+    'sec-02': 'Mercados y Bolsa Tradicional',
+    'sec-03': 'Arquitectura DeFi & On-Chain',
+    'sec-04': 'Ecosistema DeFi & Finanzas Cripto',
+    'sec-05': 'Protocolos Líderes & Infraestructura',
+    'sec-06': 'Glosario Crítico y Tesis',
+    'sec-07': 'AMM, Pools & Perpetuales',
+    'sec-08': 'Préstamos On-Chain, Staking & Arquitectura',
+    'sec-09': 'Regulación MiCA, Fiscalidad & Compliance',
+    'sec-10': 'Matriz de Riesgo en 8 Dimensiones'
+  };
+  const sectionLabel = sectionTitles[String(sectionId)] || `Sección ${String(sectionId)}`;
+
   return (
     <div className="relative">
       <button 
@@ -1139,69 +1185,128 @@ const InfoPanel: React.FC<InfoPanelProps> = ({ sectionId }) => {
       >
         <MessageSquare size={16} className={isOpen ? 'text-red-500' : 'group-hover:rotate-12 transition-transform'} />
         <span className="text-[11px] font-black uppercase tracking-widest">Saber Más</span>
+        {hasConceptNote(String(sectionId)) && (
+          <span className="w-1.5 h-1.5 rounded-full bg-red-700" title="Contiene notas guardadas"></span>
+        )}
         {isOpen ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-4 w-full md:w-[480px] bg-white border border-gray-100 rounded-[2.5rem] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.15)] z-40 overflow-hidden animate-in slide-in-from-top-4 duration-500 flex flex-col">
-          <div className="p-6 bg-gray-50/50 border-b border-gray-100 flex items-center gap-3">
-             <div className="p-2 bg-red-700 rounded-xl text-white shadow-lg shadow-red-700/20">
-               <HelpCircle size={18} />
+        <div className="absolute right-0 mt-4 w-full md:w-[500px] bg-white border border-gray-200 rounded-[2.5rem] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.18)] z-40 overflow-hidden animate-in slide-in-from-top-4 duration-300 flex flex-col">
+          {/* Header */}
+          <div className="p-5 bg-gray-50/80 border-b border-gray-100 flex items-center justify-between gap-3">
+             <div className="flex items-center gap-3 min-w-0">
+               <div className="p-2 bg-red-700 rounded-xl text-white shadow-lg shadow-red-700/20 shrink-0">
+                 {activeTab === 'notes' ? <NotebookPen size={18} /> : <HelpCircle size={18} />}
+               </div>
+               <div className="min-w-0">
+                 <h4 className="text-[12px] font-black uppercase tracking-tight text-gray-900 truncate">
+                   {activeTab === 'notes' ? `Mis Notas: ${sectionLabel}` : 'Consultoría Inteligente'}
+                 </h4>
+                 <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-0.5 truncate">
+                   {activeTab === 'notes' ? 'Texto Enriquecido Memorizado' : `Soporte IA • ${sectionLabel}`}
+                 </p>
+               </div>
              </div>
-             <div>
-               <h4 className="text-[12px] font-black uppercase tracking-tighter text-gray-900 leading-none">Consultoría Inteligente</h4>
-               <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mt-1">Soporte IA en Tiempo Real</p>
+
+             <div className="flex items-center gap-1.5 shrink-0">
+               <button
+                 onClick={() => setActiveTab('consulting')}
+                 className={`px-2.5 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all ${
+                   activeTab === 'consulting' 
+                     ? 'bg-gray-900 text-white shadow-sm' 
+                     : 'bg-white text-gray-500 hover:text-gray-900 border border-gray-200'
+                 }`}
+               >
+                 IA
+               </button>
+               <button
+                 onClick={() => setActiveTab('notes')}
+                 className={`px-2.5 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all flex items-center gap-1 ${
+                   activeTab === 'notes' 
+                     ? 'bg-red-700 text-white shadow-sm' 
+                     : 'bg-white text-gray-500 hover:text-red-700 border border-gray-200'
+                 }`}
+                 title="Mis Notas con texto enriquecido para esta sección"
+               >
+                 <NotebookPen size={12} />
+                 <span>Notas</span>
+                 {hasConceptNote(String(sectionId)) && (
+                   <span className="w-1.5 h-1.5 rounded-full bg-red-400"></span>
+                 )}
+               </button>
+               <button
+                 onClick={() => setIsOpen(false)}
+                 className="p-1.5 rounded-xl bg-white text-gray-400 hover:text-red-700 border border-gray-200 transition-colors active:scale-90"
+                 title="Cerrar panel (ESC)"
+               >
+                 <X size={15} />
+               </button>
              </div>
           </div>
-          <div className="p-6 space-y-6 max-h-[500px] overflow-y-auto custom-scrollbar">
-            <div className="space-y-3">
-              <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Preguntas Frecuentes</p>
-              <div className="flex flex-col gap-2">
-                {faqs.map((faq, i) => (
-                  <button key={i} onClick={() => { setQuery(faq); handleAsk(faq); }} className="text-left p-3 rounded-2xl bg-white border border-gray-100 text-[11px] font-bold text-gray-700 hover:border-red-700 hover:text-red-700 transition-all group">
-                    <div className="flex items-center justify-between">
-                      <span className="max-w-[90%]">{faq}</span>
-                      <ArrowRight size={10} className="opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0" />
-                    </div>
-                  </button>
-                ))}
-              </div>
+
+          {/* Panel Body */}
+          {activeTab === 'notes' ? (
+            <div className="p-6 max-h-[520px] overflow-y-auto custom-scrollbar">
+              <ConceptNotesEditor
+                conceptId={String(sectionId)}
+                conceptTitle={sectionLabel}
+              />
             </div>
-            <div className="space-y-3">
-              <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Consulta Personalizada</p>
-              <div className="relative">
-                <textarea value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Escribe tu duda técnica..." className="w-full bg-gray-50 border border-gray-200 p-4 rounded-3xl text-[12px] font-medium min-h-[80px] outline-none focus:ring-2 focus:ring-gray-900 transition-all resize-none shadow-inner" />
-                <button onClick={() => handleAsk()} disabled={isLoading || !query.trim()} className="absolute bottom-3 right-3 p-3 bg-gray-900 text-white rounded-2xl hover:bg-black shadow-lg disabled:opacity-20 active:scale-90 transition-all">
-                  {isLoading ? <Loader2 size={16} className="animate-spin" /> : <Send size={16} />}
-                </button>
-              </div>
-            </div>
-            {(answer || isLoading) && (
-              <div className="bg-gray-900 text-white p-7 rounded-[2.5rem] shadow-2xl animate-in fade-in zoom-in-95 duration-500 relative overflow-hidden group border-l-4 border-red-700">
-                <div className="absolute top-0 right-0 w-48 h-48 bg-red-700/5 blur-[80px] rounded-full"></div>
-                <div className="flex items-center justify-between mb-4 relative z-10 border-b border-white/5 pb-2">
-                   <div className="flex items-center gap-2">
-                      <span className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400">Análisis del Motor</span>
-                   </div>
-                   {!isLoading && answer && (
-                     <button onClick={copyAnswer} className="p-1.5 hover:bg-white/10 rounded-lg text-gray-400 hover:text-white transition-all active:scale-90 flex items-center gap-1.5" title="Copiar respuesta">
-                       {copied ? <Check size={12} className="text-green-500" /> : <Copy size={12} />}
-                       <span className="text-[10px] font-black uppercase tracking-widest">{copied ? 'Copiado' : 'Copiar'}</span>
-                     </button>
-                   )}
+          ) : (
+            <div className="p-6 space-y-6 max-h-[500px] overflow-y-auto custom-scrollbar">
+              <div className="space-y-3">
+                <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Preguntas Frecuentes</p>
+                <div className="flex flex-col gap-2">
+                  {faqs.map((faq, i) => (
+                    <button key={i} onClick={() => { setQuery(faq); handleAsk(faq); }} className="text-left p-3 rounded-2xl bg-white border border-gray-100 text-[11px] font-bold text-gray-700 hover:border-red-700 hover:text-red-700 transition-all group">
+                      <div className="flex items-center justify-between">
+                        <span className="max-w-[90%]">{faq}</span>
+                        <ArrowRight size={10} className="opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0" />
+                      </div>
+                    </button>
+                  ))}
                 </div>
-                {isLoading ? (
-                  <div className="flex flex-col items-center justify-center py-6 gap-3 text-[12px] text-gray-500 uppercase font-black tracking-widest">
-                    <Loader2 size={24} className="animate-spin text-red-700" /> 
-                    <span>Sincronizando Conocimiento...</span>
-                  </div>
-                ) : (
-                  <div className="relative z-10">{formatAiResponse(answer)}</div>
-                )}
               </div>
-            )}
+              <div className="space-y-3">
+                <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Consulta Personalizada</p>
+                <div className="relative">
+                  <textarea value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Escribe tu duda técnica..." className="w-full bg-gray-50 border border-gray-200 p-4 rounded-3xl text-[12px] font-medium min-h-[80px] outline-none focus:ring-2 focus:ring-gray-900 transition-all resize-none shadow-inner" />
+                  <button onClick={() => handleAsk()} disabled={isLoading || !query.trim()} className="absolute bottom-3 right-3 p-3 bg-gray-900 text-white rounded-2xl hover:bg-black shadow-lg disabled:opacity-20 active:scale-90 transition-all">
+                    {isLoading ? <Loader2 size={16} className="animate-spin" /> : <Send size={16} />}
+                  </button>
+                </div>
+              </div>
+              {(answer || isLoading) && (
+                <div className="bg-gray-900 text-white p-7 rounded-[2.5rem] shadow-2xl animate-in fade-in zoom-in-95 duration-500 relative overflow-hidden group border-l-4 border-red-700">
+                  <div className="absolute top-0 right-0 w-48 h-48 bg-red-700/5 blur-[80px] rounded-full"></div>
+                  <div className="flex items-center justify-between mb-4 relative z-10 border-b border-white/5 pb-2">
+                     <div className="flex items-center gap-2">
+                        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400">Análisis del Motor</span>
+                     </div>
+                     {!isLoading && answer && (
+                       <button onClick={copyAnswer} className="p-1.5 hover:bg-white/10 rounded-lg text-gray-400 hover:text-white transition-all active:scale-90 flex items-center gap-1.5" title="Copiar respuesta">
+                         {copied ? <Check size={12} className="text-green-500" /> : <Copy size={12} />}
+                         <span className="text-[10px] font-black uppercase tracking-widest">{copied ? 'Copiado' : 'Copiar'}</span>
+                       </button>
+                     )}
+                  </div>
+                  {isLoading ? (
+                    <div className="flex flex-col items-center justify-center py-6 gap-3 text-[12px] text-gray-500 uppercase font-black tracking-widest">
+                      <Loader2 size={24} className="animate-spin text-red-700" /> 
+                      <span>Sincronizando Conocimiento...</span>
+                    </div>
+                  ) : (
+                    <div className="relative z-10">{formatAiResponse(answer)}</div>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+          <div className="p-4 bg-gray-50 border-t border-gray-100 flex items-center justify-between px-6">
+            <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Cerrar con tecla [ESC]</p>
+            <p className="text-[10px] font-black text-gray-300 uppercase tracking-[0.2em]">IA Engine: Gemini v3 Flash</p>
           </div>
-          <div className="p-4 bg-gray-50 border-t border-gray-100 flex justify-center"><p className="text-[10px] font-black text-gray-300 uppercase tracking-[0.3em]">IA Engine: Gemini v3 Flash</p></div>
         </div>
       )}
     </div>
@@ -1224,13 +1329,28 @@ export default function App() {
       .catch(() => setUserIp('Offline'));
   }, []);
 
+  const { isFavorite, toggleFavorite, sortWithFavoritesFirst } = useFavorites();
+
   const [selectedDetail, setSelectedDetail] = useState<string | null>(null);
   const [selectedEquivalence, setSelectedEquivalence] = useState<typeof EQUIVALENCES[0] | null>(null);
   
-  const [modalViewMode, setModalViewMode] = useState<'technical' | 'simple' | 'extended' | 'ai' | 'diff'>('technical');
+  const [modalViewMode, setModalViewMode] = useState<'technical' | 'simple' | 'extended' | 'ai' | 'diff' | 'notes'>('technical');
   const [aiModalResponse, setAiModalResponse] = useState<string>('');
   const [isAiModalLoading, setIsAiModalLoading] = useState(false);
   const [aiFollowUp, setAiFollowUp] = useState('');
+
+  // ESC key listener to close modals
+  useEffect(() => {
+    const handleGlobalEsc = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setSelectedDetail(null);
+        setSelectedEquivalence(null);
+        setIsDirectLinksOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleGlobalEsc);
+    return () => window.removeEventListener('keydown', handleGlobalEsc);
+  }, []);
 
   const [directLinksResource, setDirectLinksResource] = useState<PlatformLinksResource | null>(null);
   const [isDirectLinksOpen, setIsDirectLinksOpen] = useState(false);
@@ -1350,13 +1470,30 @@ export default function App() {
             <div className="bg-gray-50/50 p-8 rounded-[2rem] border border-gray-100/50 relative overflow-hidden group"><div className="absolute top-0 right-0 w-32 h-32 bg-red-700/5 blur-3xl rounded-full"></div><p className="text-gray-800 text-lg md:text-xl leading-relaxed relative z-10 max-w-5xl">El systema Fiat se sustenta en el <span className="font-black text-gray-900">curso legal</span> y la confianza institucional. Bajo el modelo de <span className="text-red-700 font-black">dinero cautivo en bancos</span>, las entidades financieras crean moneda digital mediante el crédito, multiplicando la base monetaria real.</p></div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
               <div className="bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-xl shadow-gray-100/50 flex flex-col relative group/chart">
-                <button 
-                  onClick={() => setSelectedDetail('Multiplicador Monetario')}
-                  className="absolute top-6 right-6 p-2 bg-gray-50 text-gray-500 hover:text-red-700 rounded-full transition-all active:scale-90 z-10 opacity-0 group-hover/chart:opacity-100"
-                  title="Más información sobre esta gráfica"
-                >
-                  <Info size={18} />
-                </button>
+                <div className="absolute top-6 right-6 flex items-center gap-1.5 z-10 opacity-0 group-hover/chart:opacity-100 transition-opacity">
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleFavorite('Multiplicador Monetario');
+                    }}
+                    className={`p-2 rounded-full border transition-all active:scale-90 cursor-pointer ${
+                      isFavorite('Multiplicador Monetario')
+                        ? 'bg-red-50 text-red-700 border-red-200 shadow-sm'
+                        : 'bg-gray-50 text-gray-400 hover:text-red-700 border-gray-200'
+                    }`}
+                    title={isFavorite('Multiplicador Monetario') ? 'Quitar de favoritos' : 'Marcar como favorito'}
+                  >
+                    <Star size={16} className={isFavorite('Multiplicador Monetario') ? 'fill-red-700 text-red-700' : ''} />
+                  </button>
+                  <button 
+                    onClick={() => setSelectedDetail('Multiplicador Monetario')}
+                    className="p-2 bg-gray-50 text-gray-500 hover:text-red-700 rounded-full border border-gray-200 transition-all active:scale-90"
+                    title="Más información sobre esta gráfica"
+                  >
+                    <Info size={18} />
+                  </button>
+                </div>
                 <h4 className="text-xs font-black uppercase tracking-wider mb-8 text-gray-700 border-l-2 border-red-700 pl-3">Multiplicador Monetario (M0-M3)</h4>
                 <div className="h-64 flex-1">
                   <ResponsiveContainer width="100%" height="100%">
@@ -1378,13 +1515,30 @@ export default function App() {
               </div>
 
               <div className="bg-red-700 text-white p-12 rounded-[3.5rem] shadow-2xl shadow-red-700/30 relative overflow-hidden group/chart flex flex-col justify-between">
-                <button 
-                  onClick={() => setSelectedDetail('Erosión del Poder Adquisitivo')}
-                  className="absolute top-8 right-8 p-2 bg-white/10 text-white hover:bg-white hover:text-red-700 rounded-full transition-all active:scale-90 z-10 opacity-0 group-hover/chart:opacity-100"
-                  title="Más información sobre esta gráfica"
-                >
-                  <Info size={18} />
-                </button>
+                <div className="absolute top-8 right-8 flex items-center gap-1.5 z-10 opacity-0 group-hover/chart:opacity-100 transition-opacity">
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleFavorite('Erosión del Poder Adquisitivo');
+                    }}
+                    className={`p-2 rounded-full border transition-all active:scale-90 cursor-pointer ${
+                      isFavorite('Erosión del Poder Adquisitivo')
+                        ? 'bg-white text-red-700 border-white shadow-sm'
+                        : 'bg-white/10 text-white hover:bg-white hover:text-red-700 border-white/20'
+                    }`}
+                    title={isFavorite('Erosión del Poder Adquisitivo') ? 'Quitar de favoritos' : 'Marcar como favorito'}
+                  >
+                    <Star size={16} className={isFavorite('Erosión del Poder Adquisitivo') ? 'fill-red-700 text-red-700' : ''} />
+                  </button>
+                  <button 
+                    onClick={() => setSelectedDetail('Erosión del Poder Adquisitivo')}
+                    className="p-2 bg-white/10 text-white hover:bg-white hover:text-red-700 rounded-full border border-white/20 transition-all active:scale-90"
+                    title="Más información sobre esta gráfica"
+                  >
+                    <Info size={18} />
+                  </button>
+                </div>
                 <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent pointer-events-none"></div>
                 <div className="relative z-10">
                   <div className="flex items-center gap-3 mb-4">
@@ -1419,12 +1573,12 @@ export default function App() {
               <InfoPanel sectionId="sec-02" />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {[
+              {sortWithFavoritesFirst([
                 { title: 'Acciones', desc: 'Renta Variable. Títulos de propiedad corporativa.', icon: <Activity /> },
                 { title: 'Bonos', desc: 'Renta Fija. Deuda emitida con retorno predecible.', icon: <ShieldCheck /> },
                 { title: 'Futuros', desc: 'Compromiso de intercambio en fecha futura.', icon: <Zap /> },
                 { title: 'Opciones', desc: 'Derecho a compra o venta de activos.', icon: <Layers /> },
-              ].map(item => (
+              ]).map(item => (
                 <div 
                   key={item.title} 
                   role="button"
@@ -1437,6 +1591,22 @@ export default function App() {
                    <div className="flex items-center justify-between gap-2 mb-2">
                      <h4 className="font-black text-xl uppercase italic tracking-tighter text-gray-900">{item.title}</h4>
                      <div className="flex items-center gap-1.5">
+                       <button
+                         type="button"
+                         onClick={(e) => {
+                           e.stopPropagation();
+                           toggleFavorite(item.title);
+                         }}
+                         className={`p-1.5 rounded-full border transition-all active:scale-90 ${
+                           isFavorite(item.title)
+                             ? 'bg-red-50 text-red-700 border-red-200 shadow-sm'
+                             : 'bg-gray-50 text-gray-400 hover:text-red-700 hover:bg-red-50 border-gray-100'
+                         }`}
+                         title={isFavorite(item.title) ? `Quitar ${item.title} de favoritos` : `Marcar ${item.title} como favorito`}
+                         aria-label={`Favorito ${item.title}`}
+                       >
+                         <Star size={15} className={isFavorite(item.title) ? 'fill-red-700 text-red-700' : ''} />
+                       </button>
                        <button
                          type="button"
                          onClick={(e) => { e.stopPropagation(); openDirectLinks(item.title); }}
@@ -1455,13 +1625,30 @@ export default function App() {
               ))}
             </div>
             <div className="bg-white rounded-[3rem] p-12 border border-gray-100 shadow-xl shadow-gray-100/50 relative group/chart">
-               <button 
-                  onClick={() => setSelectedDetail('Matriz Riesgo vs Beneficio')}
-                  className="absolute top-10 right-10 p-2 bg-gray-50 text-gray-500 hover:text-red-700 rounded-full transition-all active:scale-90 z-10 opacity-0 group-hover/chart:opacity-100"
-                  title="Análisis detallado del riesgo vs beneficio"
-                >
-                  <Info size={22} />
-                </button>
+               <div className="absolute top-10 right-10 flex items-center gap-1.5 z-10 opacity-0 group-hover/chart:opacity-100 transition-opacity">
+                 <button
+                   type="button"
+                   onClick={(e) => {
+                     e.stopPropagation();
+                     toggleFavorite('Matriz Riesgo vs Beneficio');
+                   }}
+                   className={`p-2 rounded-full border transition-all active:scale-90 cursor-pointer ${
+                     isFavorite('Matriz Riesgo vs Beneficio')
+                       ? 'bg-red-50 text-red-700 border-red-200 shadow-sm'
+                       : 'bg-gray-50 text-gray-400 hover:text-red-700 border-gray-200'
+                   }`}
+                   title={isFavorite('Matriz Riesgo vs Beneficio') ? 'Quitar de favoritos' : 'Marcar como favorito'}
+                 >
+                   <Star size={18} className={isFavorite('Matriz Riesgo vs Beneficio') ? 'fill-red-700 text-red-700' : ''} />
+                 </button>
+                 <button 
+                   onClick={() => setSelectedDetail('Matriz Riesgo vs Beneficio')}
+                   className="p-2 bg-gray-50 text-gray-500 hover:text-red-700 rounded-full border border-gray-200 transition-all active:scale-90"
+                   title="Análisis detallado del riesgo vs beneficio"
+                 >
+                   <Info size={22} />
+                 </button>
+               </div>
                <h4 className="text-center text-xs font-black uppercase tracking-wider mb-12 text-gray-700">Matriz Riesgo vs Beneficio</h4>
                <div className="h-[400px] max-w-5xl mx-auto">
                  <ResponsiveContainer width="100%" height="100%">
@@ -1506,11 +1693,27 @@ export default function App() {
                 </div>
                 
                 <div className="space-y-4">
-                  {EQUIVALENCES.map((item) => (
-                    <div key={item.trad} className="flex items-center gap-4">
+                  {sortWithFavoritesFirst(EQUIVALENCES, (item) => item.defi).map((item) => (
+                    <div key={item.trad} className="flex items-center gap-3">
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          toggleFavorite(item.defi);
+                        }}
+                        className={`p-2.5 rounded-xl border transition-all active:scale-90 shrink-0 cursor-pointer ${
+                          isFavorite(item.defi)
+                            ? 'bg-red-50 text-red-700 border-red-200 shadow-sm'
+                            : 'bg-white text-gray-400 hover:text-red-700 border-gray-200 hover:border-red-300'
+                        }`}
+                        title={isFavorite(item.defi) ? `Quitar ${item.defi} de favoritos` : `Marcar ${item.defi} como favorito`}
+                        aria-label={`Favorito ${item.defi}`}
+                      >
+                        <Star size={16} className={isFavorite(item.defi) ? 'fill-red-700 text-red-700' : ''} />
+                      </button>
                       <button 
                         onClick={() => setSelectedEquivalence(item)}
-                        className="flex-1 bg-white border border-gray-200 p-6 rounded-[1.5rem] flex justify-between items-center group hover:border-gray-600 transition-all shadow-sm hover:shadow-md duration-300 relative overflow-hidden"
+                        className="flex-1 bg-white border border-gray-200 p-5 rounded-[1.3rem] flex justify-between items-center group hover:border-gray-600 transition-all shadow-sm hover:shadow-md duration-300 relative overflow-hidden"
                       >
                         <span className="font-bold text-xs uppercase text-gray-700 tracking-wider group-hover:text-gray-900 transition-colors">{item.trad}</span>
                         <div className="p-1.5 bg-gray-50 rounded-lg text-gray-500 group-hover:text-gray-900 transition-colors">
@@ -1518,11 +1721,11 @@ export default function App() {
                         </div>
                       </button>
                       <div className="flex-shrink-0">
-                        <ArrowRight className="text-red-700" size={18} strokeWidth={3} />
+                        <ArrowRight className="text-red-700" size={16} strokeWidth={3} />
                       </div>
                       <button 
                         onClick={() => setSelectedEquivalence(item)}
-                        className="flex-1 bg-white border border-gray-200 p-6 rounded-[1.5rem] flex justify-between items-center group hover:border-red-600 transition-all shadow-sm hover:shadow-xl hover:-translate-y-0.5 duration-300 relative overflow-hidden"
+                        className="flex-1 bg-white border border-gray-200 p-5 rounded-[1.3rem] flex justify-between items-center group hover:border-red-600 transition-all shadow-sm hover:shadow-xl hover:-translate-y-0.5 duration-300 relative overflow-hidden"
                       >
                         <span className="font-extrabold text-xs uppercase text-gray-900 tracking-tight">{item.defi}</span>
                         <div className="p-1.5 bg-red-50 rounded-lg text-red-700">
@@ -1535,13 +1738,30 @@ export default function App() {
               </div>
               
               <div className="bg-white p-12 rounded-[3.5rem] flex flex-col items-center justify-center text-center space-y-8 shadow-xl shadow-gray-100/50 border border-gray-100 relative group/chart overflow-hidden">
-                <button 
-                  onClick={() => setSelectedDetail('Garantía Sistémica')}
-                  className="absolute top-10 right-10 p-2 bg-gray-50 text-gray-500 hover:text-red-700 rounded-full transition-all active:scale-90 z-10 opacity-0 group-hover/chart:opacity-100"
-                  title="Seguridad de las garantías en DeFi"
-                >
-                  <Info size={22} />
-                </button>
+                <div className="absolute top-10 right-10 flex items-center gap-1.5 z-10 opacity-0 group-hover/chart:opacity-100 transition-opacity">
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleFavorite('Garantía Sistémica');
+                    }}
+                    className={`p-2 rounded-full border transition-all active:scale-90 cursor-pointer ${
+                      isFavorite('Garantía Sistémica')
+                        ? 'bg-red-50 text-red-700 border-red-200 shadow-sm'
+                        : 'bg-gray-50 text-gray-400 hover:text-red-700 border-gray-200'
+                    }`}
+                    title={isFavorite('Garantía Sistémica') ? 'Quitar de favoritos' : 'Marcar como favorito'}
+                  >
+                    <Star size={18} className={isFavorite('Garantía Sistémica') ? 'fill-red-700 text-red-700' : ''} />
+                  </button>
+                  <button 
+                    onClick={() => setSelectedDetail('Garantía Sistémica')}
+                    className="p-2 bg-gray-50 text-gray-500 hover:text-red-700 rounded-full border border-gray-200 transition-all active:scale-90"
+                    title="Seguridad de las garantías en DeFi"
+                  >
+                    <Info size={22} />
+                  </button>
+                </div>
                 <div className="absolute top-0 right-0 w-64 h-64 bg-red-700/5 blur-[100px] pointer-events-none"></div>
                 <div className="absolute top-6 right-8 text-xs font-black text-gray-400 uppercase tracking-widest vertical-text">LIQUIDITY CERTAINTY</div>
                 
@@ -1607,7 +1827,7 @@ export default function App() {
               <InfoPanel sectionId="sec-04" />
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-               {[ 
+               {sortWithFavoritesFirst([ 
                  { t: 'Stablecoins', d: 'Tokens vinculados al Fiat. Estabilidad on-chain.', tag: 'Anclaje' }, 
                  { t: 'DEX', d: 'Intercambio mediante pools algorítmicos.', tag: 'Liquidez' }, 
                  { t: 'Pools de Liquidez', d: 'Curvas AMM (x·y=k) y liquidez concentrada V3.', tag: 'AMM Core' },
@@ -1627,16 +1847,38 @@ export default function App() {
                  { t: 'EURC & Fichas EMT', d: 'Dinero electrónico respaldado 1:1 en euros bajo regulación MiCA.', tag: 'MiCA EMT' },
                  { t: 'Reglamento MiCA', d: 'Marco regulatorio uniforme UE (fichas EMT y ART).', tag: 'Legal UE' },
                  { t: 'Modelo 721 AEAT', d: 'Declaración informativa española para custodia exterior.', tag: 'Fiscalidad' }
-               ].map(item => (
-                 <button 
+               ]).map(item => (
+                 <div 
                   key={item.t} 
+                  role="button"
+                  tabIndex={0}
                   onClick={() => setSelectedDetail(item.t)}
-                  className="text-left bg-white p-7 rounded-[2rem] border border-gray-100 hover:border-red-700/40 hover:shadow-2xl transition-all group active:scale-[0.98] flex flex-col justify-between"
+                  onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelectedDetail(item.t); } }}
+                  className="text-left bg-white p-7 rounded-[2rem] border border-gray-100 hover:border-red-700/40 hover:shadow-2xl transition-all group active:scale-[0.98] flex flex-col justify-between cursor-pointer"
                 >
                   <div>
                     <div className="flex justify-between items-center mb-3">
                       <h4 className="font-black text-lg uppercase italic text-gray-900 group-hover:text-red-700 tracking-tighter group-hover:scale-105 transition-transform origin-left">{item.t}</h4>
-                      <span className="bg-red-50 text-red-700 border border-red-100 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">{item.tag}</span>
+                      <div className="flex items-center gap-2">
+                        <button 
+                          type="button"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            toggleFavorite(item.t);
+                          }}
+                          className={`p-1.5 rounded-xl border transition-all active:scale-90 cursor-pointer ${
+                            isFavorite(item.t)
+                              ? 'bg-red-50 text-red-700 border-red-200 shadow-sm'
+                              : 'bg-gray-50 text-gray-400 hover:text-red-700 hover:border-gray-200'
+                          }`}
+                          title={isFavorite(item.t) ? `Quitar ${item.t} de favoritos` : `Marcar ${item.t} como favorito`}
+                          aria-label={`Favorito ${item.t}`}
+                        >
+                          <Star size={13} className={isFavorite(item.t) ? 'fill-red-700 text-red-700' : ''} />
+                        </button>
+                        <span className="bg-red-50 text-red-700 border border-red-100 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">{item.tag}</span>
+                      </div>
                     </div>
                     <p className="text-sm text-gray-600 leading-relaxed font-semibold">{item.d}</p>
                   </div>
@@ -1645,8 +1887,10 @@ export default function App() {
                       <span>Ver Análisis</span>
                       <Info size={16} />
                     </div>
-                    <div
+                    <button
+                      type="button"
                       onClick={(e) => {
+                        e.preventDefault();
                         e.stopPropagation();
                         openDirectLinks(item.t);
                       }}
@@ -1655,9 +1899,9 @@ export default function App() {
                     >
                       <Compass size={13} className="text-red-700 group-hover:text-white" />
                       <span>Links</span>
-                    </div>
+                    </button>
                   </div>
-                </button>
+                </div>
                ))}
             </div>
           </section>
@@ -1673,8 +1917,33 @@ export default function App() {
             <div className="space-y-8">
               <h4 className="text-xs font-black uppercase tracking-wider text-gray-700 border-l-4 border-red-700 pl-4">Criptoactivos de Reserva</h4>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                {CRYPTO_ASSETS.map((c) => (
-                  <div key={c.name} className="flex items-center bg-white border border-gray-100 rounded-2xl p-1 shadow-sm hover:border-red-500 transition-all group overflow-hidden">
+                {sortWithFavoritesFirst(CRYPTO_ASSETS).map((c) => (
+                  <div 
+                    key={c.name} 
+                    className="flex items-center bg-white border border-gray-100 rounded-2xl p-1 shadow-sm hover:border-red-600 transition-all group relative hover:z-30"
+                    title={`${c.name} (${c.category}): ${c.desc}`}
+                  >
+                    {/* Tooltip explicativo al pasar el cursor */}
+                    <div 
+                      className="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-72 max-w-[90vw] p-3 bg-gray-950 text-white rounded-xl shadow-2xl opacity-0 group-hover:opacity-100 transition-all duration-200 z-50 border border-gray-800"
+                      role="tooltip"
+                    >
+                      <div className="flex items-center justify-between gap-2 mb-1.5 pb-1 border-b border-gray-800">
+                        <span className="font-black text-white text-[11px] uppercase tracking-tight truncate">{c.name}</span>
+                        <span className="text-[9px] font-bold text-red-400 uppercase tracking-wider bg-red-950/80 px-1.5 py-0.5 rounded border border-red-800/40 shrink-0">
+                          {c.category}
+                        </span>
+                      </div>
+                      <p className="text-gray-300 text-[11px] font-normal leading-relaxed">
+                        {c.desc}
+                      </p>
+                      <div className="mt-2 pt-1 border-t border-gray-800 flex items-center justify-between text-[9px] text-gray-400 uppercase tracking-wider font-mono">
+                        <span>Pasa a ver detalles</span>
+                        <span className="text-red-400 font-bold">Ver análisis →</span>
+                      </div>
+                      <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-gray-950"></div>
+                    </div>
+
                     <button 
                       onClick={() => window.open(c.url, '_blank')}
                       className="p-3 bg-gray-900 text-white rounded-xl hover:bg-red-700 transition-colors flex-shrink-0 active:scale-90"
@@ -1687,6 +1956,21 @@ export default function App() {
                       className="flex-1 px-3 py-3 text-left font-bold text-xs uppercase tracking-tight text-gray-900 truncate hover:text-red-700 transition-colors"
                     >
                       {c.name}
+                    </button>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleFavorite(c.name);
+                      }}
+                      className={`p-2 rounded-xl border transition-all active:scale-90 flex-shrink-0 mr-1 ${
+                        isFavorite(c.name)
+                          ? 'bg-red-50 text-red-700 border-red-200 shadow-sm'
+                          : 'bg-gray-50 text-gray-400 hover:text-red-700 hover:border-gray-300'
+                      }`}
+                      title={isFavorite(c.name) ? `Quitar ${c.name} de favoritos` : `Marcar ${c.name} como favorito`}
+                      aria-label={`Favorito ${c.name}`}
+                    >
+                      <Star size={14} className={isFavorite(c.name) ? 'fill-red-700 text-red-700' : ''} />
                     </button>
                     <button
                       onClick={(e) => { e.stopPropagation(); openDirectLinks(c.name); }}
@@ -1704,8 +1988,33 @@ export default function App() {
             <div className="space-y-8">
               <h4 className="text-xs font-black uppercase tracking-wider text-gray-700 border-l-4 border-gray-900 pl-4">Stablecoins Globales & Fichas EMT</h4>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                {STABLECOINS.map((s) => (
-                  <div key={s.name} className="flex items-center bg-white border border-gray-100 rounded-2xl p-1 shadow-sm hover:border-gray-900 transition-all group active:scale-[0.98]">
+                {sortWithFavoritesFirst(STABLECOINS).map((s) => (
+                  <div 
+                    key={s.name} 
+                    className="flex items-center bg-white border border-gray-100 rounded-2xl p-1 shadow-sm hover:border-gray-900 transition-all group relative hover:z-30"
+                    title={`${s.name} (${s.category}): ${s.desc}`}
+                  >
+                    {/* Tooltip explicativo al pasar el cursor */}
+                    <div 
+                      className="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-72 max-w-[90vw] p-3 bg-gray-950 text-white rounded-xl shadow-2xl opacity-0 group-hover:opacity-100 transition-all duration-200 z-50 border border-gray-800"
+                      role="tooltip"
+                    >
+                      <div className="flex items-center justify-between gap-2 mb-1.5 pb-1 border-b border-gray-800">
+                        <span className="font-black text-white text-[11px] uppercase tracking-tight truncate">{s.name}</span>
+                        <span className="text-[9px] font-bold text-red-400 uppercase tracking-wider bg-red-950/80 px-1.5 py-0.5 rounded border border-red-800/40 shrink-0">
+                          {s.category}
+                        </span>
+                      </div>
+                      <p className="text-gray-300 text-[11px] font-normal leading-relaxed">
+                        {s.desc}
+                      </p>
+                      <div className="mt-2 pt-1 border-t border-gray-800 flex items-center justify-between text-[9px] text-gray-400 uppercase tracking-wider font-mono">
+                        <span>Pasa a ver detalles</span>
+                        <span className="text-red-400 font-bold">Ver análisis →</span>
+                      </div>
+                      <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-gray-950"></div>
+                    </div>
+
                     <button 
                       onClick={() => window.open(s.url, '_blank')}
                       className="p-3 bg-red-700 text-white rounded-xl hover:bg-gray-900 transition-colors flex-shrink-0"
@@ -1718,6 +2027,21 @@ export default function App() {
                       className="flex-1 px-3 py-3 text-left font-bold text-xs uppercase tracking-tight text-gray-900 truncate hover:text-red-700 transition-colors"
                     >
                       {s.name}
+                    </button>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleFavorite(s.name);
+                      }}
+                      className={`p-2 rounded-xl border transition-all active:scale-90 flex-shrink-0 mr-1 ${
+                        isFavorite(s.name)
+                          ? 'bg-red-50 text-red-700 border-red-200 shadow-sm'
+                          : 'bg-gray-50 text-gray-400 hover:text-red-700 hover:border-gray-300'
+                      }`}
+                      title={isFavorite(s.name) ? `Quitar ${s.name} de favoritos` : `Marcar ${s.name} como favorito`}
+                      aria-label={`Favorito ${s.name}`}
+                    >
+                      <Star size={14} className={isFavorite(s.name) ? 'fill-red-700 text-red-700' : ''} />
                     </button>
                     <button
                       onClick={(e) => { e.stopPropagation(); openDirectLinks(s.name); }}
@@ -1740,13 +2064,53 @@ export default function App() {
                     <Smartphone size={16} /> Hot Wallets (Uso Diario & Smart Wallets)
                   </span>
                   <div className="grid grid-cols-1 gap-3">
-                    {HOT_WALLETS.map((w) => (
-                      <div key={w.name} className="flex items-center bg-white border border-gray-100 rounded-2xl p-1 shadow-sm hover:border-red-700 transition-all group">
+                    {sortWithFavoritesFirst(HOT_WALLETS).map((w) => (
+                      <div 
+                        key={w.name} 
+                        className="flex items-center bg-white border border-gray-100 rounded-2xl p-1 shadow-sm hover:border-red-700 transition-all group relative hover:z-30"
+                        title={`${w.name} (${w.category}): ${w.desc}`}
+                      >
+                        {/* Tooltip explicativo al pasar el cursor */}
+                        <div 
+                          className="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-72 max-w-[90vw] p-3 bg-gray-950 text-white rounded-xl shadow-2xl opacity-0 group-hover:opacity-100 transition-all duration-200 z-50 border border-gray-800"
+                          role="tooltip"
+                        >
+                          <div className="flex items-center justify-between gap-2 mb-1.5 pb-1 border-b border-gray-800">
+                            <span className="font-black text-white text-[11px] uppercase tracking-tight truncate">{w.name}</span>
+                            <span className="text-[9px] font-bold text-red-400 uppercase tracking-wider bg-red-950/80 px-1.5 py-0.5 rounded border border-red-800/40 shrink-0">
+                              {w.category}
+                            </span>
+                          </div>
+                          <p className="text-gray-300 text-[11px] font-normal leading-relaxed">
+                            {w.desc}
+                          </p>
+                          <div className="mt-2 pt-1 border-t border-gray-800 flex items-center justify-between text-[9px] text-gray-400 uppercase tracking-wider font-mono">
+                            <span>Pasa a ver detalles</span>
+                            <span className="text-red-400 font-bold">Ver análisis →</span>
+                          </div>
+                          <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-gray-950"></div>
+                        </div>
+
                         <button onClick={() => window.open(w.url, '_blank')} className="p-3 bg-gray-900 text-white rounded-xl hover:bg-red-700 transition-colors flex-shrink-0">
                           {React.cloneElement(w.icon as React.ReactElement<any>, { size: 16 })}
                         </button>
                         <button onClick={() => setSelectedDetail(w.name)} className="flex-1 px-3 py-3 text-left font-bold text-xs uppercase tracking-tight text-gray-900 hover:text-red-700 transition-colors">
                           {w.name}
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            toggleFavorite(w.name);
+                          }}
+                          className={`p-2 rounded-xl border transition-all active:scale-90 flex-shrink-0 mr-1 ${
+                            isFavorite(w.name)
+                              ? 'bg-red-50 text-red-700 border-red-200 shadow-sm'
+                              : 'bg-gray-50 text-gray-400 hover:text-red-700 hover:border-gray-300'
+                          }`}
+                          title={isFavorite(w.name) ? `Quitar ${w.name} de favoritos` : `Marcar ${w.name} como favorito`}
+                          aria-label={`Favorito ${w.name}`}
+                        >
+                          <Star size={14} className={isFavorite(w.name) ? 'fill-red-700 text-red-700' : ''} />
                         </button>
                         <button
                           onClick={(e) => { e.stopPropagation(); openDirectLinks(w.name); }}
@@ -1764,13 +2128,53 @@ export default function App() {
                     <HardDrive size={16} /> Cold Wallets (Seguridad Máxima de Claves)
                   </span>
                   <div className="grid grid-cols-1 gap-3">
-                    {COLD_WALLETS.map((w) => (
-                      <div key={w.name} className="flex items-center bg-white border border-gray-100 rounded-2xl p-1 shadow-sm hover:border-gray-900 transition-all group">
+                    {sortWithFavoritesFirst(COLD_WALLETS).map((w) => (
+                      <div 
+                        key={w.name} 
+                        className="flex items-center bg-white border border-gray-100 rounded-2xl p-1 shadow-sm hover:border-gray-900 transition-all group relative hover:z-30"
+                        title={`${w.name} (${w.category}): ${w.desc}`}
+                      >
+                        {/* Tooltip explicativo al pasar el cursor */}
+                        <div 
+                          className="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-72 max-w-[90vw] p-3 bg-gray-950 text-white rounded-xl shadow-2xl opacity-0 group-hover:opacity-100 transition-all duration-200 z-50 border border-gray-800"
+                          role="tooltip"
+                        >
+                          <div className="flex items-center justify-between gap-2 mb-1.5 pb-1 border-b border-gray-800">
+                            <span className="font-black text-white text-[11px] uppercase tracking-tight truncate">{w.name}</span>
+                            <span className="text-[9px] font-bold text-red-400 uppercase tracking-wider bg-red-950/80 px-1.5 py-0.5 rounded border border-red-800/40 shrink-0">
+                              {w.category}
+                            </span>
+                          </div>
+                          <p className="text-gray-300 text-[11px] font-normal leading-relaxed">
+                            {w.desc}
+                          </p>
+                          <div className="mt-2 pt-1 border-t border-gray-800 flex items-center justify-between text-[9px] text-gray-400 uppercase tracking-wider font-mono">
+                            <span>Pasa a ver detalles</span>
+                            <span className="text-red-400 font-bold">Ver análisis →</span>
+                          </div>
+                          <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-gray-950"></div>
+                        </div>
+
                         <button onClick={() => window.open(w.url, '_blank')} className="p-3 bg-red-700 text-white rounded-xl hover:bg-gray-900 transition-colors flex-shrink-0">
                           {React.cloneElement(w.icon as React.ReactElement<any>, { size: 16 })}
                         </button>
                         <button onClick={() => setSelectedDetail(w.name)} className="flex-1 px-3 py-3 text-left font-bold text-xs uppercase tracking-tight text-gray-900 hover:text-red-700 transition-colors">
                           {w.name}
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            toggleFavorite(w.name);
+                          }}
+                          className={`p-2 rounded-xl border transition-all active:scale-90 flex-shrink-0 mr-1 ${
+                            isFavorite(w.name)
+                              ? 'bg-red-50 text-red-700 border-red-200 shadow-sm'
+                              : 'bg-gray-50 text-gray-400 hover:text-red-700 hover:border-gray-300'
+                          }`}
+                          title={isFavorite(w.name) ? `Quitar ${w.name} de favoritos` : `Marcar ${w.name} como favorito`}
+                          aria-label={`Favorito ${w.name}`}
+                        >
+                          <Star size={14} className={isFavorite(w.name) ? 'fill-red-700 text-red-700' : ''} />
                         </button>
                         <button
                           onClick={(e) => { e.stopPropagation(); openDirectLinks(w.name); }}
@@ -1788,10 +2192,35 @@ export default function App() {
 
             {/* DEFI PLATFORMS */}
             <div className="space-y-8">
-              <h4 className="text-xs font-black uppercase tracking-wider text-gray-700 border-l-4 border-red-700 pl-4">Infraestructura DeFi Top</h4>
+              <h4 className="text-xs font-black uppercase tracking-wider text-gray-700 border-l-4 border-red-700 pl-4">Infraestructura DeFi & Plataformas Analíticas</h4>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                {DEFI_PLATFORMS.map((p) => (
-                  <div key={p.name} className="flex items-center bg-white border border-gray-100 rounded-2xl p-1 shadow-sm hover:border-red-700 transition-all group">
+                {sortWithFavoritesFirst(DEFI_PLATFORMS).map((p) => (
+                  <div 
+                    key={p.name} 
+                    className="flex items-center bg-white border border-gray-100 rounded-2xl p-1 shadow-sm hover:border-red-700 transition-all group relative hover:z-30"
+                    title={`${p.name} (${p.category}): ${p.desc}`}
+                  >
+                    {/* Tooltip explicativo al pasar el cursor */}
+                    <div 
+                      className="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-72 max-w-[90vw] p-3 bg-gray-950 text-white rounded-xl shadow-2xl opacity-0 group-hover:opacity-100 transition-all duration-200 z-50 border border-gray-800"
+                      role="tooltip"
+                    >
+                      <div className="flex items-center justify-between gap-2 mb-1.5 pb-1 border-b border-gray-800">
+                        <span className="font-black text-white text-[11px] uppercase tracking-tight truncate">{p.name}</span>
+                        <span className="text-[9px] font-bold text-red-400 uppercase tracking-wider bg-red-950/80 px-1.5 py-0.5 rounded border border-red-800/40 shrink-0">
+                          {p.category}
+                        </span>
+                      </div>
+                      <p className="text-gray-300 text-[11px] font-normal leading-relaxed">
+                        {p.desc}
+                      </p>
+                      <div className="mt-2 pt-1 border-t border-gray-800 flex items-center justify-between text-[9px] text-gray-400 uppercase tracking-wider font-mono">
+                        <span>Pasa a ver detalles</span>
+                        <span className="text-red-400 font-bold">Ver análisis →</span>
+                      </div>
+                      <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-gray-950"></div>
+                    </div>
+
                     <button 
                       onClick={() => window.open(p.url, '_blank')}
                       className="p-3 bg-gray-900 text-white rounded-xl hover:bg-red-700 transition-colors flex-shrink-0"
@@ -1806,6 +2235,21 @@ export default function App() {
                       {p.name}
                     </button>
                     <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleFavorite(p.name);
+                      }}
+                      className={`p-2 rounded-xl border transition-all active:scale-90 flex-shrink-0 mr-1 ${
+                        isFavorite(p.name)
+                          ? 'bg-red-50 text-red-700 border-red-200 shadow-sm'
+                          : 'bg-gray-50 text-gray-400 hover:text-red-700 hover:border-gray-300'
+                      }`}
+                      title={isFavorite(p.name) ? `Quitar ${p.name} de favoritos` : `Marcar ${p.name} como favorito`}
+                      aria-label={`Favorito ${p.name}`}
+                    >
+                      <Star size={14} className={isFavorite(p.name) ? 'fill-red-700 text-red-700' : ''} />
+                    </button>
+                    <button
                       onClick={(e) => { e.stopPropagation(); openDirectLinks(p.name); }}
                       className="p-2.5 rounded-xl bg-gray-50 hover:bg-red-50 text-gray-400 hover:text-red-700 border border-gray-200 transition-all flex-shrink-0 mr-1"
                       title={`Opciones con URLs y links directos de ${p.name} (DApp, Docs, Stats)`}
@@ -1814,6 +2258,158 @@ export default function App() {
                     </button>
                   </div>
                 ))}
+              </div>
+            </div>
+
+            {/* SECCIÓN ESPECIAL: COINGLASS & CONCEPTO DE LIQUIDACIONES */}
+            <div className="bg-white border-2 border-red-700/80 rounded-3xl p-6 md:p-10 shadow-sm space-y-8">
+              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6 border-b border-gray-100">
+                <div>
+                  <div className="flex flex-wrap items-center gap-2 mb-2">
+                    <span className="px-3 py-1 bg-red-700 text-white font-black text-[10px] uppercase tracking-widest rounded-full">
+                      Derivados & Gestión de Riesgo
+                    </span>
+                    <span className="px-2.5 py-1 bg-gray-100 text-gray-800 font-mono text-[10px] font-bold rounded-full">
+                      Telemetría en Tiempo Real
+                    </span>
+                  </div>
+                  <h4 className="text-2xl md:text-3xl font-black uppercase tracking-tight text-gray-950 flex items-center gap-3">
+                    <TrendingUp className="text-red-700" size={28} />
+                    Coinglass & Concepto de Liquidaciones
+                  </h4>
+                  <p className="text-gray-600 text-sm font-medium mt-1 max-w-3xl">
+                    Anatomía del desapalancamiento forzoso: cómo los contratos inteligentes y motores de riesgo cierran posiciones insolventes y cómo Coinglass mapea la liquidez acumulada en futuros y perpetuos.
+                  </p>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-3 shrink-0">
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleFavorite('Coinglass');
+                    }}
+                    className={`p-2.5 rounded-xl border transition-all active:scale-95 cursor-pointer flex items-center justify-center ${
+                      isFavorite('Coinglass')
+                        ? 'bg-red-50 text-red-700 border-red-200 shadow-sm'
+                        : 'bg-white text-gray-400 hover:text-red-700 border-gray-200'
+                    }`}
+                    title={isFavorite('Coinglass') ? 'Quitar Coinglass de favoritos' : 'Marcar Coinglass como favorito'}
+                    aria-label="Favorito Coinglass"
+                  >
+                    <Star size={16} className={isFavorite('Coinglass') ? 'fill-red-700 text-red-700' : ''} />
+                  </button>
+                  <button
+                    onClick={() => openDirectLinks('Coinglass')}
+                    className="px-4 py-2.5 rounded-xl bg-gray-900 hover:bg-red-700 text-white font-black text-xs uppercase tracking-wider flex items-center gap-2 transition-all shadow-sm active:scale-95"
+                    title="Ver enlaces directos a herramientas oficiales de Coinglass"
+                  >
+                    <Compass size={15} />
+                    <span>Enlaces Coinglass</span>
+                  </button>
+                  <a
+                    href="https://www.coinglass.com/es/pro/futures/LiquidationHeatMap"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-4 py-2.5 rounded-xl bg-red-700 hover:bg-red-800 text-white font-black text-xs uppercase tracking-wider flex items-center gap-2 transition-all shadow-sm active:scale-95"
+                    title="Abrir el Mapa de Calor de Liquidaciones oficial de Coinglass"
+                  >
+                    <span>Mapa de Calor</span>
+                    <ExternalLink size={14} />
+                  </a>
+                  <button
+                    onClick={() => setSelectedDetail('Liquidación')}
+                    className="px-4 py-2.5 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-900 font-black text-xs uppercase tracking-wider flex items-center gap-2 transition-all active:scale-95"
+                    title="Consultar la tesis técnica y pedagógica completa sobre Liquidaciones"
+                  >
+                    <Info size={14} className="text-red-700" />
+                    <span>Tesis Técnica</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Grid explicativo de los pilares de la liquidación */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="bg-gray-50 p-5 rounded-2xl border border-gray-200 space-y-2">
+                  <div className="flex items-center gap-2 text-red-700">
+                    <AlertTriangle size={18} />
+                    <span className="text-xs font-black uppercase tracking-wider text-gray-900">¿Qué es Liquidar?</span>
+                  </div>
+                  <p className="text-xs text-gray-700 leading-relaxed font-normal">
+                    El cierre forzoso e irrevocable de una posición apalancada cuando la garantía cae por debajo del margen de mantenimiento exigido, protegiendo al protocolo o exchange de la insolvencia.
+                  </p>
+                </div>
+
+                <div className="bg-gray-50 p-5 rounded-2xl border border-gray-200 space-y-2">
+                  <div className="flex items-center gap-2 text-red-700">
+                    <TrendingDown size={18} />
+                    <span className="text-xs font-black uppercase tracking-wider text-gray-900">Futuros & Mark Price</span>
+                  </div>
+                  <p className="text-xs text-gray-700 leading-relaxed font-normal">
+                    En exchanges y DEXs de perpetuos, las liquidaciones se activan mediante el <strong>Mark Price</strong> (precio índice de oráculos agregados) para mitigar manipulaciones de libros locales.
+                  </p>
+                </div>
+
+                <div className="bg-gray-50 p-5 rounded-2xl border border-gray-200 space-y-2">
+                  <div className="flex items-center gap-2 text-red-700">
+                    <Cpu size={18} />
+                    <span className="text-xs font-black uppercase tracking-wider text-gray-900">DeFi Lending & HF &lt; 1.0</span>
+                  </div>
+                  <p className="text-xs text-gray-700 leading-relaxed font-normal">
+                    En Aave o Morpho, si el <strong>Health Factor</strong> cae de 1.0, bots liquidadores pagan parte de la deuda y reciben colateral con bonificación (5-10%), asegurando la liquidez del protocolo.
+                  </p>
+                </div>
+
+                <div className="bg-gray-50 p-5 rounded-2xl border border-gray-200 space-y-2">
+                  <div className="flex items-center gap-2 text-red-700">
+                    <Layers size={18} />
+                    <span className="text-xs font-black uppercase tracking-wider text-gray-900">Cascadas & Squeezes</span>
+                  </div>
+                  <p className="text-xs text-gray-700 leading-relaxed font-normal">
+                    La ejecución masiva de órdenes forzadas retroalimenta el precio provocando <strong>Long Squeezes</strong> o <strong>Short Squeezes</strong>. Coinglass identifica estos cúmulos magnéticos de liquidez.
+                  </p>
+                </div>
+              </div>
+
+              {/* Banner de integración y herramientas Coinglass */}
+              <div className="bg-gray-900 text-white rounded-2xl p-6 md:p-8 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 border border-gray-800">
+                <div className="space-y-2 max-w-2xl">
+                  <span className="text-[10px] font-black uppercase tracking-widest text-red-400">Terminal Analítica de Futuros</span>
+                  <h5 className="text-xl font-black uppercase tracking-tight text-white">¿Cómo interpretar los mapas de liquidación en Coinglass?</h5>
+                  <p className="text-xs text-gray-300 leading-relaxed">
+                    El <strong>Liquidation Heatmap</strong> proyecta bandas de color donde yacen precios de liquidación de miles de traders. Los creadores de mercado e instituciones buscan estos focos de liquidez para cerrar órdenes antes de giros de mercado. Monitorear el <strong>Open Interest (Interés Abierto)</strong> y el <strong>Funding Rate</strong> revela el sesgo especulativo del mercado.
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 shrink-0 w-full lg:w-auto">
+                  <a
+                    href="https://www.coinglass.com/es/pro/futures/LiquidationHeatMap"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-3 bg-gray-800/80 hover:bg-red-700 rounded-xl text-center transition-colors border border-gray-700 group"
+                  >
+                    <span className="text-[10px] text-gray-400 group-hover:text-white block font-mono">HeatMap</span>
+                    <span className="text-xs font-black uppercase text-white">Mapa Calor</span>
+                  </a>
+                  <a
+                    href="https://www.coinglass.com/es/LiquidationData"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-3 bg-gray-800/80 hover:bg-red-700 rounded-xl text-center transition-colors border border-gray-700 group"
+                  >
+                    <span className="text-[10px] text-gray-400 group-hover:text-white block font-mono">24h Data</span>
+                    <span className="text-xs font-black uppercase text-white">Liquidaciones</span>
+                  </a>
+                  <a
+                    href="https://www.coinglass.com/es/funding-rates"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-3 bg-gray-800/80 hover:bg-red-700 rounded-xl text-center transition-colors border border-gray-700 group col-span-2 sm:col-span-1"
+                  >
+                    <span className="text-[10px] text-gray-400 group-hover:text-white block font-mono">Funding</span>
+                    <span className="text-xs font-black uppercase text-white">Tasas Fin.</span>
+                  </a>
+                </div>
               </div>
             </div>
 
@@ -1835,13 +2431,30 @@ export default function App() {
             
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
                <div className="bg-white p-12 rounded-[3.5rem] shadow-xl border border-gray-100 relative overflow-hidden group/chart">
-                 <button 
-                  onClick={() => setSelectedDetail('Radar de Atributos Sistémicos')}
-                  className="absolute top-10 right-10 p-2 bg-gray-50 text-gray-500 hover:text-red-700 rounded-full transition-all active:scale-90 z-10 opacity-0 group-hover/chart:opacity-100"
-                  title="Comparativa detallada de atributos"
-                >
-                  <Info size={22} />
-                </button>
+                 <div className="absolute top-10 right-10 flex items-center gap-1.5 z-10 opacity-0 group-hover/chart:opacity-100 transition-opacity">
+                   <button
+                     type="button"
+                     onClick={(e) => {
+                       e.stopPropagation();
+                       toggleFavorite('Radar de Atributos Sistémicos');
+                     }}
+                     className={`p-2 rounded-full border transition-all active:scale-90 cursor-pointer ${
+                       isFavorite('Radar de Atributos Sistémicos')
+                         ? 'bg-red-50 text-red-700 border-red-200 shadow-sm'
+                         : 'bg-gray-50 text-gray-400 hover:text-red-700 border-gray-200'
+                     }`}
+                     title={isFavorite('Radar de Atributos Sistémicos') ? 'Quitar de favoritos' : 'Marcar como favorito'}
+                   >
+                     <Star size={18} className={isFavorite('Radar de Atributos Sistémicos') ? 'fill-red-700 text-red-700' : ''} />
+                   </button>
+                   <button 
+                     onClick={() => setSelectedDetail('Radar de Atributos Sistémicos')}
+                     className="p-2 bg-gray-50 text-gray-500 hover:text-red-700 rounded-full border border-gray-200 transition-all active:scale-90"
+                     title="Comparativa detallada de atributos"
+                   >
+                     <Info size={22} />
+                   </button>
+                 </div>
                  <div className="absolute top-0 right-0 w-64 h-64 bg-red-700/5 blur-[100px] pointer-events-none"></div>
                  <h4 className="text-xs font-black uppercase tracking-wider text-red-700 mb-10 text-center relative z-10">Radar de Atributos Sistémicos</h4>
                  <div className="h-96 relative z-10">
@@ -1860,13 +2473,30 @@ export default function App() {
 
                <div className="space-y-12">
                  <div className="bg-white p-10 rounded-[3rem] border border-gray-100 shadow-xl shadow-gray-100/50 relative group/chart overflow-hidden">
-                   <button 
-                    onClick={() => setSelectedDetail('Finalidad Transaccional')}
-                    className="absolute top-8 right-8 p-2 bg-gray-50 text-gray-500 hover:text-red-700 rounded-full transition-all active:scale-90 z-10 opacity-0 group-hover/chart:opacity-100"
-                    title="Análisis de velocidad de asentamiento"
-                  >
-                    <Info size={18} />
-                  </button>
+                   <div className="absolute top-8 right-8 flex items-center gap-1.5 z-10 opacity-0 group-hover/chart:opacity-100 transition-opacity">
+                     <button
+                       type="button"
+                       onClick={(e) => {
+                         e.stopPropagation();
+                         toggleFavorite('Finalidad Transaccional');
+                       }}
+                       className={`p-2 rounded-full border transition-all active:scale-90 cursor-pointer ${
+                         isFavorite('Finalidad Transaccional')
+                           ? 'bg-red-50 text-red-700 border-red-200 shadow-sm'
+                           : 'bg-gray-50 text-gray-400 hover:text-red-700 border-gray-200'
+                       }`}
+                       title={isFavorite('Finalidad Transaccional') ? 'Quitar de favoritos' : 'Marcar como favorito'}
+                     >
+                       <Star size={16} className={isFavorite('Finalidad Transaccional') ? 'fill-red-700 text-red-700' : ''} />
+                     </button>
+                     <button 
+                       onClick={() => setSelectedDetail('Finalidad Transaccional')}
+                       className="p-2 bg-gray-50 text-gray-500 hover:text-red-700 rounded-full border border-gray-200 transition-all active:scale-90"
+                       title="Análisis de velocidad de asentamiento"
+                     >
+                       <Info size={18} />
+                     </button>
+                   </div>
                    <div className="flex items-center justify-between mb-8 pb-4 border-b border-gray-50">
                       <h4 className="text-xs font-black uppercase tracking-wider text-gray-700">Tiempo de Respuesta (Finalidad)</h4>
                       <Clock size={18} className="text-red-700 animate-pulse" />
@@ -2054,21 +2684,47 @@ export default function App() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              {GLOSSARY_TERMS.map((item) => (
-                <button 
+              {sortWithFavoritesFirst(GLOSSARY_TERMS, item => item.t).map((item) => (
+                <div 
                   key={item.t} 
+                  role="button"
+                  tabIndex={0}
                   onClick={() => setSelectedDetail(item.t)}
-                  className="text-left bg-white p-6 rounded-[1.5rem] border border-gray-200 hover:border-red-700 shadow-sm hover:shadow-xl transition-all group relative active:scale-[0.98]"
+                  onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelectedDetail(item.t); } }}
+                  className="text-left bg-white p-6 rounded-[1.5rem] border border-gray-200 hover:border-red-700 shadow-sm hover:shadow-xl transition-all group relative active:scale-[0.98] cursor-pointer flex flex-col justify-between"
                 >
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-red-700 font-black text-sm uppercase tracking-wider group-hover:italic transition-all">{item.t}</span>
-                    <Plus size={16} className="text-gray-400 group-hover:text-red-700 group-hover:rotate-90 transition-all" />
+                  <div>
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-red-700 font-black text-sm uppercase tracking-wider group-hover:italic transition-all">{item.t}</span>
+                      <div className="flex items-center gap-1">
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            toggleFavorite(item.t);
+                          }}
+                          className={`p-1.5 rounded-lg border transition-all active:scale-90 ${
+                            isFavorite(item.t)
+                              ? 'bg-red-50 text-red-700 border-red-200 shadow-xs'
+                              : 'bg-gray-50 text-gray-400 hover:text-red-700 border-gray-200'
+                          }`}
+                          title={isFavorite(item.t) ? `Quitar ${item.t} de favoritos` : `Marcar ${item.t} como favorito`}
+                          aria-label={`Favorito ${item.t}`}
+                        >
+                          <Star size={12} className={isFavorite(item.t) ? 'fill-red-700 text-red-700' : ''} />
+                        </button>
+                        <Plus size={16} className="text-gray-400 group-hover:text-red-700 group-hover:rotate-90 transition-all" />
+                      </div>
+                    </div>
+                    <p className="text-sm text-gray-600 font-medium leading-relaxed group-hover:text-gray-900 transition-colors">{item.d}</p>
                   </div>
-                  <p className="text-sm text-gray-600 font-medium leading-relaxed group-hover:text-gray-900 transition-colors">{item.d}</p>
-                  <div className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <Terminal size={12} className="text-gray-400" />
+                  <div className="mt-3 pt-2 border-t border-gray-50 flex items-center justify-between text-gray-400">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 group-hover:text-red-700 transition-colors">
+                      Ver Ficha Técnica
+                    </span>
+                    <Terminal size={12} />
                   </div>
-                </button>
+                </div>
               ))}
             </div>
           </section>
@@ -2093,6 +2749,17 @@ export default function App() {
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
+                    <button 
+                      onClick={() => toggleFavorite(selectedDetail)}
+                      className={`p-3 rounded-xl transition-all active:scale-90 flex items-center gap-1.5 font-bold text-xs uppercase ${
+                        isFavorite(selectedDetail)
+                          ? 'bg-red-50 text-red-700 border border-red-200 shadow-sm'
+                          : 'bg-gray-100 text-gray-400 hover:text-red-700'
+                      }`}
+                      title={isFavorite(selectedDetail) ? "Quitar de favoritos" : "Marcar como favorito"}
+                    >
+                      <Star size={20} className={isFavorite(selectedDetail) ? 'fill-red-700 text-red-700' : ''} />
+                    </button>
                     <button 
                       onClick={() => setModalViewMode('diff')}
                       className={`p-3 rounded-xl transition-all active:scale-90 flex items-center gap-1.5 font-bold text-xs uppercase ${modalViewMode === 'diff' ? 'bg-red-700 text-white shadow-lg shadow-red-700/20' : 'bg-gray-100 text-gray-400 hover:text-red-700'}`}
@@ -2131,6 +2798,17 @@ export default function App() {
                       {isAiModalLoading ? <Loader2 size={24} className="animate-spin" /> : <Bot size={24} />}
                     </button>
                     <button 
+                      onClick={() => setModalViewMode('notes')}
+                      className={`p-3 rounded-xl transition-all active:scale-90 relative flex items-center gap-1.5 font-bold text-xs uppercase ${modalViewMode === 'notes' ? 'bg-red-700 text-white shadow-lg shadow-red-700/20' : 'bg-gray-100 text-gray-600 hover:text-red-700 hover:bg-red-50'}`}
+                      title="Mis Notas Personales (Texto Enriquecido)"
+                    >
+                      <NotebookPen size={20} />
+                      <span className="hidden sm:inline">Notas</span>
+                      {hasConceptNote(selectedDetail) && (
+                        <span className="w-2 h-2 rounded-full bg-red-500 absolute top-1.5 right-1.5 ring-2 ring-white"></span>
+                      )}
+                    </button>
+                    <button 
                       onClick={() => openDirectLinks(selectedDetail)}
                       className="p-3 rounded-xl bg-gray-100 text-gray-700 hover:text-white hover:bg-red-700 transition-all active:scale-90 flex items-center gap-1.5 font-bold text-xs uppercase"
                       title="Abrir opciones y enlaces directos"
@@ -2139,7 +2817,7 @@ export default function App() {
                       <span className="hidden sm:inline">Links</span>
                     </button>
                     <div className="w-[1px] h-10 bg-gray-100 mx-2"></div>
-                    <button onClick={() => setSelectedDetail(null)} className="p-3 hover:bg-gray-100 rounded-xl text-gray-400 hover:text-red-700 transition-all active:scale-90">
+                    <button onClick={() => setSelectedDetail(null)} className="p-3 hover:bg-gray-100 rounded-xl text-gray-400 hover:text-red-700 transition-all active:scale-90" title="Cerrar (Esc)">
                       <X size={28} />
                     </button>
                   </div>
@@ -2252,6 +2930,10 @@ export default function App() {
                           </>
                         )}
                       </div>
+                    ) : modalViewMode === 'notes' ? (
+                      <div className="bg-white p-6 md:p-8 rounded-3xl border border-gray-200 animate-in fade-in slide-in-from-bottom-2">
+                        <ConceptNotesEditor conceptId={selectedDetail} conceptTitle={selectedDetail} />
+                      </div>
                     ) : (
                       <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm animate-in fade-in slide-in-from-bottom-2">
                         <p className="text-lg text-gray-900 leading-relaxed font-semibold">
@@ -2260,6 +2942,14 @@ export default function App() {
                       </div>
                     )}
                   </div>
+                </div>
+
+                {/* Pie del modal con atajo ESC */}
+                <div className="px-8 py-3 bg-gray-50 border-t border-gray-100 flex items-center justify-between text-[11px] font-bold text-gray-500 uppercase tracking-wider">
+                  <span>Manual de Ecosistema & Instrumentos</span>
+                  <span className="flex items-center gap-1.5 text-red-700 font-mono">
+                    <kbd className="px-2 py-0.5 bg-white border border-gray-200 rounded shadow-xs text-[10px] font-black text-gray-800">ESC</kbd> para cerrar
+                  </span>
                 </div>
               </div>
             </div>
@@ -2285,6 +2975,17 @@ export default function App() {
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
+                    <button 
+                      onClick={() => toggleFavorite(selectedEquivalence.defi)}
+                      className={`p-3 rounded-xl transition-all active:scale-90 flex items-center gap-1.5 font-bold text-xs uppercase ${
+                        isFavorite(selectedEquivalence.defi)
+                          ? 'bg-red-50 text-red-700 border border-red-200 shadow-sm'
+                          : 'bg-gray-100 text-gray-400 hover:text-red-700'
+                      }`}
+                      title={isFavorite(selectedEquivalence.defi) ? "Quitar de favoritos" : "Marcar como favorito"}
+                    >
+                      <Star size={20} className={isFavorite(selectedEquivalence.defi) ? 'fill-red-700 text-red-700' : ''} />
+                    </button>
                     <button 
                       onClick={() => setModalViewMode('diff')}
                       className={`p-3 rounded-xl transition-all active:scale-90 flex items-center gap-1.5 font-bold text-xs uppercase ${modalViewMode === 'diff' ? 'bg-red-700 text-white shadow-lg shadow-red-700/20' : 'bg-gray-100 text-gray-400 hover:text-red-700'}`}
@@ -2322,8 +3023,19 @@ export default function App() {
                     >
                       {isAiModalLoading ? <Loader2 size={24} className="animate-spin" /> : <Bot size={24} />}
                     </button>
+                    <button 
+                      onClick={() => setModalViewMode('notes')}
+                      className={`p-3 rounded-xl transition-all active:scale-90 relative flex items-center gap-1.5 font-bold text-xs uppercase ${modalViewMode === 'notes' ? 'bg-red-700 text-white shadow-lg shadow-red-700/20' : 'bg-gray-100 text-gray-600 hover:text-red-700 hover:bg-red-50'}`}
+                      title="Mis Notas Personales (Texto Enriquecido)"
+                    >
+                      <NotebookPen size={20} />
+                      <span className="hidden sm:inline">Notas</span>
+                      {hasConceptNote(selectedEquivalence.defi) && (
+                        <span className="w-2 h-2 rounded-full bg-red-500 absolute top-1.5 right-1.5 ring-2 ring-white"></span>
+                      )}
+                    </button>
                     <div className="w-[1px] h-10 bg-gray-100 mx-2"></div>
-                    <button onClick={() => setSelectedEquivalence(null)} className="p-3 hover:bg-gray-100 rounded-xl text-gray-400 hover:text-red-700 transition-all active:scale-90">
+                    <button onClick={() => setSelectedEquivalence(null)} className="p-3 hover:bg-gray-100 rounded-xl text-gray-400 hover:text-red-700 transition-all active:scale-90" title="Cerrar (Esc)">
                       <X size={28} />
                     </button>
                   </div>
@@ -2442,6 +3154,13 @@ export default function App() {
                           </>
                         )}
                       </div>
+                    ) : modalViewMode === 'notes' ? (
+                      <div className="bg-white p-6 md:p-8 rounded-3xl border border-gray-200 animate-in fade-in slide-in-from-bottom-2">
+                        <ConceptNotesEditor 
+                          conceptId={selectedEquivalence.defi} 
+                          conceptTitle={`${selectedEquivalence.trad} ➔ ${selectedEquivalence.defi}`} 
+                        />
+                      </div>
                     ) : (
                       <div className="bg-gray-50 p-8 rounded-3xl border border-gray-100 animate-in fade-in slide-in-from-bottom-2">
                         <p className="text-lg text-gray-700 leading-relaxed font-semibold italic">
@@ -2461,6 +3180,14 @@ export default function App() {
                       <span className="text-[12px] font-black uppercase text-red-700">{selectedEquivalence.defi}</span>
                     </div>
                   </div>
+                </div>
+
+                {/* Pie del modal con atajo ESC */}
+                <div className="px-8 py-3 bg-gray-50 border-t border-gray-100 flex items-center justify-between text-[11px] font-bold text-gray-500 uppercase tracking-wider">
+                  <span>Matriz de Transición TradFi a DeFi</span>
+                  <span className="flex items-center gap-1.5 text-red-700 font-mono">
+                    <kbd className="px-2 py-0.5 bg-white border border-gray-200 rounded shadow-xs text-[10px] font-black text-gray-800">ESC</kbd> para cerrar
+                  </span>
                 </div>
               </div>
             </div>

@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   X, ExternalLink, Copy, Check, Globe, FileCode2, BarChart2, 
   ShieldCheck, Landmark, GitBranch, Terminal, Compass, 
-  Search, AlertCircle, Sparkles, BookOpen, Layers
+  Search, AlertCircle, Sparkles, BookOpen, Layers, NotebookPen
 } from 'lucide-react';
 import { PlatformLinksResource, DirectLinkItem } from '../data/directLinksData';
+import { ConceptNotesEditor } from './ConceptNotesEditor';
+import { hasConceptNote } from '../utils/notesStorage';
 
 interface Props {
   resource: PlatformLinksResource | null;
@@ -16,6 +18,22 @@ export const DirectLinksModal: React.FC<Props> = ({ resource, isOpen, onClose })
   const [copiedUrl, setCopiedUrl] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [activeFilter, setActiveFilter] = useState<string>('todos');
+  const [showNotes, setShowNotes] = useState(false);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
+  useEffect(() => {
+    setShowNotes(false);
+  }, [resource?.id]);
 
   if (!isOpen || !resource) return null;
 
@@ -107,9 +125,27 @@ export const DirectLinksModal: React.FC<Props> = ({ resource, isOpen, onClose })
             </div>
           </div>
 
-          <h3 id="direct-links-modal-title" className="text-2xl md:text-3xl font-black uppercase text-gray-900 tracking-tight italic">
-            {resource.name}
-          </h3>
+          <div className="flex items-center justify-between gap-4 flex-wrap">
+            <h3 id="direct-links-modal-title" className="text-2xl md:text-3xl font-black uppercase text-gray-900 tracking-tight italic">
+              {resource.name}
+            </h3>
+
+            <button
+              onClick={() => setShowNotes(!showNotes)}
+              className={`px-3.5 py-1.5 rounded-xl border text-xs font-black uppercase tracking-wider transition-all flex items-center gap-1.5 mr-12 ${
+                showNotes 
+                  ? 'bg-red-700 text-white border-red-700 shadow-sm' 
+                  : 'bg-gray-50 text-gray-700 border-gray-200 hover:text-red-700 hover:border-red-300'
+              }`}
+              title="Mis notas personales sobre este concepto"
+            >
+              <NotebookPen size={14} />
+              <span>{showNotes ? 'Ver Enlaces' : 'Mis Notas'}</span>
+              {hasConceptNote(resource.name) && (
+                <span className="w-2 h-2 rounded-full bg-red-400"></span>
+              )}
+            </button>
+          </div>
 
           <p className="text-xs md:text-sm text-gray-600 font-semibold leading-relaxed mt-2 max-w-2xl">
             {resource.summary}
@@ -151,111 +187,123 @@ export const DirectLinksModal: React.FC<Props> = ({ resource, isOpen, onClose })
           )}
         </div>
 
-        {/* Filter and Search Bar */}
-        <div className="px-6 md:px-8 py-3 bg-gray-50/70 border-b border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <div className="relative w-full sm:w-72">
-            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-            <input
-              type="text"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Buscar en enlaces..."
-              className="w-full pl-9 pr-3 py-1.5 bg-white border border-gray-200 rounded-xl text-xs font-semibold text-gray-800 placeholder-gray-400 focus:outline-none focus:border-red-700"
+        {showNotes ? (
+          <div className="p-6 md:p-8 overflow-y-auto flex-1 custom-scrollbar">
+            <ConceptNotesEditor 
+              conceptId={resource.name} 
+              conceptTitle={resource.name} 
+              onClose={() => setShowNotes(false)} 
             />
           </div>
-
-          {/* Type filters */}
-          <div className="flex items-center gap-1.5 overflow-x-auto w-full sm:w-auto pb-1 sm:pb-0">
-            {['todos', 'dapp', 'docs', 'analytics', 'github', 'governance'].map((filterKey) => (
-              <button
-                key={filterKey}
-                onClick={() => setActiveFilter(filterKey)}
-                className={`px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all flex-shrink-0 ${
-                  activeFilter === filterKey
-                    ? 'bg-gray-900 text-white'
-                    : 'bg-white text-gray-600 hover:text-gray-900 border border-gray-200'
-                }`}
-              >
-                {filterKey === 'todos' ? 'Todos' : filterKey}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Links Options List */}
-        <div className="p-6 md:p-8 overflow-y-auto space-y-3.5 flex-1 custom-scrollbar">
-          <div className="flex items-center justify-between text-xs font-black uppercase tracking-wider text-gray-500 mb-2">
-            <span>Opciones de Acceso Directo ({filteredLinks.length})</span>
-            <span className="text-[11px] text-gray-400 font-bold">1-Click para Abrir o Copiar</span>
-          </div>
-
-          {filteredLinks.length === 0 ? (
-            <div className="text-center py-10 bg-gray-50 rounded-2xl border border-dashed border-gray-200">
-              <AlertCircle size={28} className="mx-auto text-gray-400 mb-2" />
-              <p className="text-xs font-bold uppercase text-gray-600">No se encontraron enlaces con el filtro actual</p>
-            </div>
-          ) : (
-            filteredLinks.map((item, idx) => (
-              <div 
-                key={idx}
-                className="bg-white border-2 border-gray-100 hover:border-red-700/40 rounded-2xl p-4 md:p-5 shadow-sm hover:shadow-md transition-all group flex flex-col md:flex-row md:items-center justify-between gap-4"
-              >
-                <div className="space-y-1.5 flex-1">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <span className="p-1.5 rounded-lg bg-gray-50 border border-gray-200">
-                      {getTypeIcon(item.type)}
-                    </span>
-                    <h4 className="text-sm md:text-base font-black uppercase tracking-tight text-gray-900 group-hover:text-red-700 transition-colors">
-                      {item.label}
-                    </h4>
-                    {getTypeBadge(item.type)}
-                  </div>
-
-                  <p className="text-xs text-gray-600 font-semibold leading-relaxed">
-                    {item.desc}
-                  </p>
-
-                  <div className="pt-1">
-                    <span className="font-mono text-[11px] font-bold text-gray-700 bg-gray-50 border border-gray-200 px-2.5 py-1 rounded-md inline-block max-w-full truncate">
-                      {item.url}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Direct Action Buttons */}
-                <div className="flex items-center gap-2 flex-shrink-0 pt-2 md:pt-0 border-t md:border-t-0 border-gray-100">
-                  <button
-                    onClick={() => handleCopy(item.url)}
-                    className="flex-1 md:flex-none px-3.5 py-2.5 rounded-xl border border-gray-200 bg-gray-50 hover:bg-gray-100 text-gray-700 hover:text-gray-900 text-xs font-black uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all active:scale-95"
-                    title="Copiar URL al portapapeles"
-                  >
-                    {copiedUrl === item.url ? (
-                      <>
-                        <Check size={14} className="text-red-700" />
-                        <span className="text-red-700 font-black">Copiado</span>
-                      </>
-                    ) : (
-                      <>
-                        <Copy size={14} />
-                        <span>Copiar</span>
-                      </>
-                    )}
-                  </button>
-
-                  <a
-                    href={item.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex-1 md:flex-none px-4 py-2.5 rounded-xl bg-gray-900 hover:bg-red-700 text-white text-xs font-black uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all shadow-sm active:scale-95 group/link"
-                  >
-                    <span>Abrir</span>
-                    <ExternalLink size={14} className="group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 transition-transform" />
-                  </a>
-                </div>
+        ) : (
+          <>
+            {/* Filter and Search Bar */}
+            <div className="px-6 md:px-8 py-3 bg-gray-50/70 border-b border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-3">
+              <div className="relative w-full sm:w-72">
+                <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                <input
+                  type="text"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  placeholder="Buscar en enlaces..."
+                  className="w-full pl-9 pr-3 py-1.5 bg-white border border-gray-200 rounded-xl text-xs font-semibold text-gray-800 placeholder-gray-400 focus:outline-none focus:border-red-700"
+                />
               </div>
-            ))
-          )}
-        </div>
+
+              {/* Type filters */}
+              <div className="flex items-center gap-1.5 overflow-x-auto w-full sm:w-auto pb-1 sm:pb-0">
+                {['todos', 'dapp', 'docs', 'analytics', 'github', 'governance'].map((filterKey) => (
+                  <button
+                    key={filterKey}
+                    onClick={() => setActiveFilter(filterKey)}
+                    className={`px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all flex-shrink-0 ${
+                      activeFilter === filterKey
+                        ? 'bg-gray-900 text-white'
+                        : 'bg-white text-gray-600 hover:text-gray-900 border border-gray-200'
+                    }`}
+                  >
+                    {filterKey === 'todos' ? 'Todos' : filterKey}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Links Options List */}
+            <div className="p-6 md:p-8 overflow-y-auto space-y-3.5 flex-1 custom-scrollbar">
+              <div className="flex items-center justify-between text-xs font-black uppercase tracking-wider text-gray-500 mb-2">
+                <span>Opciones de Acceso Directo ({filteredLinks.length})</span>
+                <span className="text-[11px] text-gray-400 font-bold">1-Click para Abrir o Copiar</span>
+              </div>
+
+              {filteredLinks.length === 0 ? (
+                <div className="text-center py-10 bg-gray-50 rounded-2xl border border-dashed border-gray-200">
+                  <AlertCircle size={28} className="mx-auto text-gray-400 mb-2" />
+                  <p className="text-xs font-bold uppercase text-gray-600">No se encontraron enlaces con el filtro actual</p>
+                </div>
+              ) : (
+                filteredLinks.map((item, idx) => (
+                  <div 
+                    key={idx}
+                    className="bg-white border-2 border-gray-100 hover:border-red-700/40 rounded-2xl p-4 md:p-5 shadow-sm hover:shadow-md transition-all group flex flex-col md:flex-row md:items-center justify-between gap-4"
+                  >
+                    <div className="space-y-1.5 flex-1">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="p-1.5 rounded-lg bg-gray-50 border border-gray-200">
+                          {getTypeIcon(item.type)}
+                        </span>
+                        <h4 className="text-sm md:text-base font-black uppercase tracking-tight text-gray-900 group-hover:text-red-700 transition-colors">
+                          {item.label}
+                        </h4>
+                        {getTypeBadge(item.type)}
+                      </div>
+
+                      <p className="text-xs text-gray-600 font-semibold leading-relaxed">
+                        {item.desc}
+                      </p>
+
+                      <div className="pt-1">
+                        <span className="font-mono text-[11px] font-bold text-gray-700 bg-gray-50 border border-gray-200 px-2.5 py-1 rounded-md inline-block max-w-full truncate">
+                          {item.url}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Direct Action Buttons */}
+                    <div className="flex items-center gap-2 flex-shrink-0 pt-2 md:pt-0 border-t md:border-t-0 border-gray-100">
+                      <button
+                        onClick={() => handleCopy(item.url)}
+                        className="flex-1 md:flex-none px-3.5 py-2.5 rounded-xl border border-gray-200 bg-gray-50 hover:bg-gray-100 text-gray-700 hover:text-gray-900 text-xs font-black uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all active:scale-95"
+                        title="Copiar URL al portapapeles"
+                      >
+                        {copiedUrl === item.url ? (
+                          <>
+                            <Check size={14} className="text-red-700" />
+                            <span className="text-red-700 font-black">Copiado</span>
+                          </>
+                        ) : (
+                          <>
+                            <Copy size={14} />
+                            <span>Copiar</span>
+                          </>
+                        )}
+                      </button>
+
+                      <a
+                        href={item.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex-1 md:flex-none px-4 py-2.5 rounded-xl bg-gray-900 hover:bg-red-700 text-white text-xs font-black uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all shadow-sm active:scale-95 group/link"
+                      >
+                        <span>Abrir</span>
+                        <ExternalLink size={14} className="group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 transition-transform" />
+                      </a>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          </>
+        )}
 
         {/* Footer Security Notice */}
         <div className="p-4 px-6 md:px-8 bg-gray-50 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-gray-500 font-bold uppercase tracking-wider">

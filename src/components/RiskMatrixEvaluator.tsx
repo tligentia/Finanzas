@@ -1,15 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { 
   ShieldAlert, ShieldCheck, AlertTriangle, CheckCircle2, 
-  HelpCircle, Zap, Lock, KeyRound, Radio, RefreshCw 
+  HelpCircle, Zap, Lock, KeyRound, Radio, RefreshCw,
+  Star 
 } from 'lucide-react';
 import { 
   BarChart, Bar, XAxis, YAxis, CartesianGrid, 
   Tooltip, ResponsiveContainer, Cell 
 } from 'recharts';
 import { RISK_DIMENSIONS_DATA, REGULATORY_CHECKLIST } from '../data/ecosystemData';
+import { useFavorites } from '../hooks/useFavorites';
 
 export const RiskMatrixEvaluator: React.FC = () => {
+  const { isFavorite, toggleFavorite, sortWithFavoritesFirst } = useFavorites();
   const [checkedItems, setCheckedItems] = useState<Record<string, boolean>>({
     c1: true,
     c2: true,
@@ -62,14 +65,31 @@ export const RiskMatrixEvaluator: React.FC = () => {
             Las 8 Dimensiones de Riesgo Estructural (Capítulo 15 del Manual)
           </h5>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {RISK_DIMENSIONS_DATA.map((dim, idx) => (
+            {sortWithFavoritesFirst(RISK_DIMENSIONS_DATA, dim => dim.dimension).map((dim) => (
               <div 
                 key={dim.dimension} 
-                className="p-4 bg-gray-50/70 rounded-2xl border border-gray-200 hover:border-red-700/40 transition-all space-y-1"
+                className="p-4 bg-gray-50/70 rounded-2xl border border-gray-200 hover:border-red-700/40 transition-all space-y-1 relative group"
               >
                 <div className="flex items-center justify-between">
-                  <span className="font-black text-xs text-gray-900">{dim.dimension}</span>
-                  <span className="font-mono text-[10px] font-black text-red-700 bg-red-50 px-1.5 py-0.5 rounded border border-red-100">
+                  <div className="flex items-center gap-1.5 min-w-0">
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleFavorite(dim.dimension);
+                      }}
+                      className={`p-1 rounded-md border transition-all active:scale-90 ${
+                        isFavorite(dim.dimension)
+                          ? 'bg-red-50 text-red-700 border-red-200 shadow-xs'
+                          : 'bg-white text-gray-400 hover:text-red-700 border-gray-200'
+                      }`}
+                      title={isFavorite(dim.dimension) ? "Quitar de favoritos" : "Marcar como favorito"}
+                    >
+                      <Star size={11} className={isFavorite(dim.dimension) ? 'fill-red-700 text-red-700' : ''} />
+                    </button>
+                    <span className="font-black text-xs text-gray-900 truncate">{dim.dimension}</span>
+                  </div>
+                  <span className="font-mono text-[10px] font-black text-red-700 bg-red-50 px-1.5 py-0.5 rounded border border-red-100 shrink-0">
                     Nivel {dim.score}/100
                   </span>
                 </div>

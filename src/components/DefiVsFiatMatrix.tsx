@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { 
   Scale, Landmark, Cpu, ArrowRightLeft, ShieldCheck, 
   Clock, Eye, DollarSign, AlertTriangle, CheckCircle2, 
   Layers, Lock, Globe, FileText, Zap, ChevronRight,
-  TrendingDown, RefreshCw, Activity, Sparkles, Compass
+  TrendingDown, RefreshCw, Activity, Sparkles, Compass, Star
 } from 'lucide-react';
+import { useFavorites } from '../hooks/useFavorites';
 
 export interface ComparisonDimension {
   id: string;
@@ -391,8 +392,13 @@ interface Props {
 export const DefiVsFiatMatrix: React.FC<Props> = ({ onOpenDetailModal, onOpenDirectLinks }) => {
   const [activeDimensionId, setActiveDimensionId] = useState<string>('emision');
   const [activeTab, setActiveTab] = useState<'dimensiones' | 'instrumentos'>('dimensiones');
+  const { isFavorite, toggleFavorite, sortWithFavoritesFirst } = useFavorites();
 
   const selectedDimension = COMPARISON_DIMENSIONS.find(d => d.id === activeDimensionId) || COMPARISON_DIMENSIONS[0];
+
+  const sortedInstruments = useMemo(() => {
+    return sortWithFavoritesFirst(INSTRUMENT_DIFFERENCES, (item) => item.instrument);
+  }, [sortWithFavoritesFirst]);
 
   return (
     <div className="bg-white rounded-[3rem] p-8 md:p-12 border border-gray-100 shadow-xl shadow-gray-100/50 space-y-10">
@@ -626,13 +632,31 @@ export const DefiVsFiatMatrix: React.FC<Props> = ({ onOpenDetailModal, onOpenDir
                 <span className="text-[10px] font-black uppercase tracking-widest text-red-200 block">Diferencia Fundamental Concluyente:</span>
                 <p className="text-sm font-bold leading-relaxed">{selectedDimension.coreDifference}</p>
               </div>
-              <button
-                onClick={() => onOpenDetailModal && onOpenDetailModal(selectedDimension.title)}
-                className="px-4 py-2.5 bg-white text-red-700 hover:bg-gray-100 rounded-xl text-xs font-black uppercase tracking-wider transition-all flex items-center gap-1.5 flex-shrink-0 shadow-sm"
-              >
-                <span>Explorar a Fondo</span>
-                <ChevronRight size={14} />
-              </button>
+              <div className="flex items-center gap-2 flex-shrink-0">
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    toggleFavorite(selectedDimension.title);
+                  }}
+                  className={`px-3 py-2 rounded-xl text-xs font-black uppercase tracking-wider flex items-center gap-1.5 transition-all shadow-sm active:scale-95 ${
+                    isFavorite(selectedDimension.title)
+                      ? 'bg-white text-red-700 hover:bg-gray-100'
+                      : 'bg-red-800/80 hover:bg-red-800 text-white border border-red-500'
+                  }`}
+                  title={isFavorite(selectedDimension.title) ? `Quitar ${selectedDimension.title} de favoritos` : `Marcar ${selectedDimension.title} como favorito`}
+                >
+                  <Star size={14} className={isFavorite(selectedDimension.title) ? 'fill-red-700 text-red-700' : ''} />
+                  <span>{isFavorite(selectedDimension.title) ? 'Favorito' : 'Favorito'}</span>
+                </button>
+                <button
+                  onClick={() => onOpenDetailModal && onOpenDetailModal(selectedDimension.title)}
+                  className="px-4 py-2 bg-white text-red-700 hover:bg-gray-100 rounded-xl text-xs font-black uppercase tracking-wider transition-all flex items-center gap-1.5 shadow-sm"
+                >
+                  <span>Explorar a Fondo</span>
+                  <ChevronRight size={14} />
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -643,7 +667,7 @@ export const DefiVsFiatMatrix: React.FC<Props> = ({ onOpenDetailModal, onOpenDir
             Desglose comparativo directo entre los instrumentos financieros tradicionales del sistema Fiat y sus equivalentes directos construidos mediante contratos inteligentes en DeFi.
           </p>
           <div className="grid grid-cols-1 gap-4">
-            {INSTRUMENT_DIFFERENCES.map((item) => (
+            {sortedInstruments.map((item) => (
               <div 
                 key={item.instrument}
                 className="bg-white border border-gray-200 rounded-3xl p-6 md:p-8 hover:border-red-600 transition-all shadow-sm space-y-4 group"
@@ -654,6 +678,22 @@ export const DefiVsFiatMatrix: React.FC<Props> = ({ onOpenDetailModal, onOpenDir
                     <h4 className="text-xl font-black uppercase tracking-tight text-gray-900">{item.instrument}</h4>
                   </div>
                   <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleFavorite(item.instrument);
+                      }}
+                      className={`p-2 rounded-xl border transition-all active:scale-90 ${
+                        isFavorite(item.instrument)
+                          ? 'bg-red-50 text-red-700 border-red-200 shadow-sm'
+                          : 'bg-gray-50 text-gray-400 hover:text-red-700 hover:border-gray-300'
+                      }`}
+                      title={isFavorite(item.instrument) ? `Quitar ${item.instrument} de favoritos` : `Marcar ${item.instrument} como favorito`}
+                      aria-label={`Favorito ${item.instrument}`}
+                    >
+                      <Star size={14} className={isFavorite(item.instrument) ? 'fill-red-700 text-red-700' : ''} />
+                    </button>
                     <button
                       onClick={() => onOpenDirectLinks && onOpenDirectLinks(item.instrument)}
                       className="px-3 py-1.5 bg-gray-50 hover:bg-red-50 text-gray-600 hover:text-red-700 border border-gray-200 rounded-xl text-[11px] font-black uppercase tracking-wider flex items-center gap-1.5 transition-all"

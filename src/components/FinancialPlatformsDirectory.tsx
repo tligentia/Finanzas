@@ -3,8 +3,9 @@ import {
   ExternalLink, Compass, Info, Search, Globe, Activity, 
   BarChart3, LineChart, Database, Network, Bot, 
   Layers, ShieldCheck, Zap, RefreshCw, Cpu, 
-  ArrowRightLeft, Sparkles, CheckCircle2, ChevronRight, Terminal
+  ArrowRightLeft, Sparkles, CheckCircle2, ChevronRight, Terminal, Star
 } from 'lucide-react';
+import { useFavorites } from '../hooks/useFavorites';
 
 export interface FinancialPlatformItem {
   id: string;
@@ -102,6 +103,27 @@ export const FINANCIAL_PLATFORMS_DATA: FinancialPlatformItem[] = [
     ],
     operationalRole: 'Monitor de cabecera para seguimiento intradiario de variaciones porcentuales y salud de carteras.',
     fiatVsDefiContext: 'Alternativa ágil frente a interfaces bancarias tradicionales lentas con accesos biométricos burocráticos.'
+  },
+  {
+    id: 'coinglass',
+    name: 'Coinglass',
+    shortName: 'Coinglass',
+    url: 'https://www.coinglass.com/es',
+    blockId: 1,
+    blockTitle: 'Bloque 1 • Analítica On-Chain, Métricas de Protocolos & Agregadores Cripto',
+    categoryTag: 'Derivados, Futuros & Liquidaciones',
+    icon: <LineChart className="text-red-700" size={24} />,
+    summary: 'Terminal analítica líder mundial en derivados: mapas de calor de liquidaciones, open interest, funding rates y ratios long/short.',
+    detailedExplanation: 'Coinglass es la infraestructura analítica especializada en los mercados de futuros y derivados de criptomonedas. Proporciona telemetría en tiempo real sobre liquidaciones forzosas en Binance, Bybit, OKX y DEXs como Hyperliquid, calculando el Interés Abierto (Open Interest), tasas de financiación (Funding Rates) y mapas de calor (Liquidation Heatmaps) que muestran las zonas de acumulación de stops y liquidaciones donde el precio tiende a ser atraído.',
+    keyFeatures: [
+      'Mapa de Calor de Liquidaciones (Liquidation Heatmap) que identifica los cúmulos de precios magnéticos.',
+      'Monitor en vivo de volumen de liquidaciones en 24h diferenciando posiciones Long vs. Short.',
+      'Seguimiento agregado de Interés Abierto (Open Interest) y flujos de capital en derivados.',
+      'Comparativa de Tasas de Financiación (Funding Rates) para arbitraje de tasas y costes de apalancamiento.',
+      'Ratios de posicionamiento Long/Short en cuentas institucionales y traders destacados.'
+    ],
+    operationalRole: 'Detección de barridos de liquidez, estimación de riesgo de liquidaciones en cascada y calibración de apalancamiento prudente.',
+    fiatVsDefiContext: 'Equivale a los informes consolidados del CME Group y cámaras de compensación tradicionales, pero con telemetría en tiempo real y acceso público sin barreras de suscripción.'
   },
 
   // --- BLOQUE 2: TERMINALES BURSÁTILES, ANÁLISIS TÉCNICO & MACROECONOMÍA GLOBAL ---
@@ -317,17 +339,18 @@ interface Props {
 export const FinancialPlatformsDirectory: React.FC<Props> = ({ onSelectPlatform, onOpenDirectLinks }) => {
   const [selectedBlock, setSelectedBlock] = useState<number | 'all'>('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const { isFavorite, toggleFavorite, sortWithFavoritesFirst } = useFavorites();
 
   const blocksMeta = [
-    { id: 'all', label: 'Todas las Plataformas (14)', count: 14, icon: <Layers size={14} /> },
-    { id: 1, label: 'Bloque 1: Cripto & On-Chain (4)', count: 4, icon: <Database size={14} /> },
-    { id: 2, label: 'Bloque 2: Terminales & Bolsa (6)', count: 6, icon: <LineChart size={14} /> },
-    { id: 3, label: 'Bloque 3: Web3 & AMM (3)', count: 3, icon: <ArrowRightLeft size={14} /> },
-    { id: 4, label: 'Bloque 4: IA Financiera (1)', count: 1, icon: <Bot size={14} /> },
+    { id: 'all', label: `Todas las Plataformas (${FINANCIAL_PLATFORMS_DATA.length})`, count: FINANCIAL_PLATFORMS_DATA.length, icon: <Layers size={14} /> },
+    { id: 1, label: `Bloque 1: Cripto & On-Chain (${FINANCIAL_PLATFORMS_DATA.filter(p => p.blockId === 1).length})`, count: FINANCIAL_PLATFORMS_DATA.filter(p => p.blockId === 1).length, icon: <Database size={14} /> },
+    { id: 2, label: `Bloque 2: Terminales & Bolsa (${FINANCIAL_PLATFORMS_DATA.filter(p => p.blockId === 2).length})`, count: FINANCIAL_PLATFORMS_DATA.filter(p => p.blockId === 2).length, icon: <LineChart size={14} /> },
+    { id: 3, label: `Bloque 3: Web3 & AMM (${FINANCIAL_PLATFORMS_DATA.filter(p => p.blockId === 3).length})`, count: FINANCIAL_PLATFORMS_DATA.filter(p => p.blockId === 3).length, icon: <ArrowRightLeft size={14} /> },
+    { id: 4, label: `Bloque 4: IA Financiera (${FINANCIAL_PLATFORMS_DATA.filter(p => p.blockId === 4).length})`, count: FINANCIAL_PLATFORMS_DATA.filter(p => p.blockId === 4).length, icon: <Bot size={14} /> },
   ];
 
   const filteredPlatforms = useMemo(() => {
-    return FINANCIAL_PLATFORMS_DATA.filter(p => {
+    const list = FINANCIAL_PLATFORMS_DATA.filter(p => {
       const matchBlock = selectedBlock === 'all' || p.blockId === selectedBlock;
       const matchSearch = searchQuery.trim() === '' || 
         p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -337,7 +360,8 @@ export const FinancialPlatformsDirectory: React.FC<Props> = ({ onSelectPlatform,
         p.url.toLowerCase().includes(searchQuery.toLowerCase());
       return matchBlock && matchSearch;
     });
-  }, [selectedBlock, searchQuery]);
+    return sortWithFavoritesFirst(list);
+  }, [selectedBlock, searchQuery, sortWithFavoritesFirst]);
 
   return (
     <div className="space-y-10">
@@ -442,6 +466,22 @@ export const FinancialPlatformsDirectory: React.FC<Props> = ({ onSelectPlatform,
                     </a>
                   </div>
                 </div>
+
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    toggleFavorite(platform.name);
+                  }}
+                  className={`p-2.5 rounded-xl border transition-all active:scale-90 flex-shrink-0 ${
+                    isFavorite(platform.name)
+                      ? 'bg-red-50 text-red-700 border-red-200 hover:bg-red-100 shadow-sm'
+                      : 'bg-gray-50 text-gray-400 hover:text-red-700 hover:border-gray-300'
+                  }`}
+                  title={isFavorite(platform.name) ? `Quitar ${platform.name} de favoritos` : `Marcar ${platform.name} como favorito`}
+                  aria-label={`Favorito ${platform.name}`}
+                >
+                  <Star size={18} className={isFavorite(platform.name) ? 'fill-red-700 text-red-700' : ''} />
+                </button>
               </div>
 
               {/* Summary */}

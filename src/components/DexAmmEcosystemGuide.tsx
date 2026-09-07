@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { 
   RefreshCw, Layers, Compass, ExternalLink, Zap, ShieldAlert, 
   Coins, ArrowRightLeft, TrendingUp, CheckCircle2, ChevronRight, 
   BarChart3, Info, Sparkles, AlertTriangle, Scale, Network, 
-  Search, Shield, Check, FileText, Database, HelpCircle
+  Search, Shield, Check, FileText, Database, HelpCircle, Star
 } from 'lucide-react';
 import { DirectLinksModal } from './DirectLinksModal';
 import { getLinksFor, PlatformLinksResource } from '../data/directLinksData';
+import { useFavorites } from '../hooks/useFavorites';
 
 export interface DexPlatformItem {
   id: string;
@@ -196,6 +197,19 @@ export const DexAmmEcosystemGuide: React.FC<Props> = ({ onSelectPlatform }) => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [activeDirectLinksResource, setActiveDirectLinksResource] = useState<PlatformLinksResource | null>(null);
   const [isDirectLinksOpen, setIsDirectLinksOpen] = useState(false);
+  const { isFavorite, toggleFavorite, sortWithFavoritesFirst } = useFavorites();
+
+  // Close modals on ESC
+  useEffect(() => {
+    if (!isDirectLinksOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setIsDirectLinksOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isDirectLinksOpen]);
 
   // Criteria Quick Simulator State
   const [selectedChainCriteria, setSelectedChainCriteria] = useState<string>('all');
@@ -226,21 +240,25 @@ export const DexAmmEcosystemGuide: React.FC<Props> = ({ onSelectPlatform }) => {
     }
   };
 
-  const filteredPlatforms = DEX_AMM_PLATFORMS.filter(item => {
-    const matchBlock = 
-      selectedBlock === 'todos' ? true :
-      selectedBlock === 'amm-dex' ? item.category === 'amm-dex' :
-      selectedBlock === 'solana' ? item.category === 'solana' :
-      selectedBlock === 'yield' ? (item.category === 'yield-aggregator' || item.category === 'lst-yield') : true;
+  const filteredPlatforms = useMemo(() => {
+    const list = DEX_AMM_PLATFORMS.filter(item => {
+      const matchBlock = 
+        selectedBlock === 'todos' ? true :
+        selectedBlock === 'amm-dex' ? item.category === 'amm-dex' :
+        selectedBlock === 'solana' ? item.category === 'solana' :
+        selectedBlock === 'yield' ? (item.category === 'yield-aggregator' || item.category === 'lst-yield') : true;
 
-    const matchSearch = 
-      item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.chains.some(c => c.toLowerCase().includes(searchTerm.toLowerCase())) ||
-      item.dominantFeature.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchSearch = 
+        item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.chains.some(c => c.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        item.dominantFeature.toLowerCase().includes(searchTerm.toLowerCase());
 
-    return matchBlock && matchSearch;
-  });
+      return matchBlock && matchSearch;
+    });
+
+    return sortWithFavoritesFirst(list, (item) => item.name);
+  }, [selectedBlock, searchTerm, sortWithFavoritesFirst]);
 
   return (
     <div className="bg-white border-2 border-gray-900 rounded-[2.5rem] p-6 sm:p-10 shadow-xl space-y-12">
@@ -349,6 +367,22 @@ export const DexAmmEcosystemGuide: React.FC<Props> = ({ onSelectPlatform }) => {
                           </div>
 
                           <div className="flex items-center gap-1.5 flex-shrink-0">
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                toggleFavorite(p.name);
+                              }}
+                              className={`p-1.5 sm:p-2 rounded-xl border transition-all active:scale-90 ${
+                                isFavorite(p.name)
+                                  ? 'bg-red-50 text-red-700 border-red-200 shadow-sm'
+                                  : 'bg-gray-50 text-gray-400 hover:text-red-700 hover:border-gray-300'
+                              }`}
+                              title={isFavorite(p.name) ? `Quitar ${p.name} de favoritos` : `Marcar ${p.name} como favorito`}
+                              aria-label={`Favorito ${p.name}`}
+                            >
+                              <Star size={14} className={isFavorite(p.name) ? 'fill-red-700 text-red-700' : ''} />
+                            </button>
                             <button
                               onClick={(e) => openLinksFor(e, p.name)}
                               className="px-3 py-1.5 rounded-xl bg-gray-50 hover:bg-red-700 text-gray-700 hover:text-white border border-gray-200 transition-all flex items-center gap-1 text-[11px] font-black uppercase tracking-wider shadow-sm"
@@ -469,6 +503,22 @@ export const DexAmmEcosystemGuide: React.FC<Props> = ({ onSelectPlatform }) => {
 
                           <div className="flex items-center gap-1.5 flex-shrink-0">
                             <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                toggleFavorite(p.name);
+                              }}
+                              className={`p-1.5 sm:p-2 rounded-xl border transition-all active:scale-90 ${
+                                isFavorite(p.name)
+                                  ? 'bg-red-50 text-red-700 border-red-200 shadow-sm'
+                                  : 'bg-gray-50 text-gray-400 hover:text-red-700 hover:border-gray-300'
+                              }`}
+                              title={isFavorite(p.name) ? `Quitar ${p.name} de favoritos` : `Marcar ${p.name} como favorito`}
+                              aria-label={`Favorito ${p.name}`}
+                            >
+                              <Star size={14} className={isFavorite(p.name) ? 'fill-red-700 text-red-700' : ''} />
+                            </button>
+                            <button
                               onClick={(e) => openLinksFor(e, p.name)}
                               className="px-3 py-1.5 rounded-xl bg-gray-50 hover:bg-gray-900 text-gray-700 hover:text-white border border-gray-200 transition-all flex items-center gap-1 text-[11px] font-black uppercase tracking-wider shadow-sm"
                               title={`Ver URLs y enlaces directos de ${p.name}`}
@@ -573,6 +623,22 @@ export const DexAmmEcosystemGuide: React.FC<Props> = ({ onSelectPlatform }) => {
                           </div>
 
                           <div className="flex items-center gap-1.5 flex-shrink-0">
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                toggleFavorite(p.name);
+                              }}
+                              className={`p-1.5 sm:p-2 rounded-xl border transition-all active:scale-90 ${
+                                isFavorite(p.name)
+                                  ? 'bg-red-50 text-red-700 border-red-200 shadow-sm'
+                                  : 'bg-gray-50 text-gray-400 hover:text-red-700 hover:border-gray-300'
+                              }`}
+                              title={isFavorite(p.name) ? `Quitar ${p.name} de favoritos` : `Marcar ${p.name} como favorito`}
+                              aria-label={`Favorito ${p.name}`}
+                            >
+                              <Star size={14} className={isFavorite(p.name) ? 'fill-red-700 text-red-700' : ''} />
+                            </button>
                             <button
                               onClick={(e) => openLinksFor(e, p.name)}
                               className="px-3 py-1.5 rounded-xl bg-gray-50 hover:bg-red-700 text-gray-700 hover:text-white border border-gray-200 transition-all flex items-center gap-1 text-[11px] font-black uppercase tracking-wider shadow-sm"

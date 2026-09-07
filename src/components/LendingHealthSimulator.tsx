@@ -1,8 +1,10 @@
 import React, { useState, useMemo } from 'react';
 import { 
   ShieldCheck, AlertTriangle, ShieldAlert, DollarSign, 
-  Percent, ArrowRight, Zap, RefreshCw, CheckCircle2
+  Percent, ArrowRight, Zap, RefreshCw, CheckCircle2,
+  Star
 } from 'lucide-react';
+import { useFavorites } from '../hooks/useFavorites';
 
 interface CollateralOption {
   symbol: string;
@@ -20,6 +22,7 @@ const COLLATERAL_OPTIONS: CollateralOption[] = [
 ];
 
 export const LendingHealthSimulator: React.FC = () => {
+  const { isFavorite, toggleFavorite } = useFavorites();
   const [selectedCollateralIdx, setSelectedCollateralIdx] = useState<number>(0);
   const [collateralValueUSD, setCollateralValueUSD] = useState<number>(10000);
   const [borrowPercentageOfMax, setBorrowPercentageOfMax] = useState<number>(65); // % of max LTV borrowed
@@ -75,6 +78,18 @@ export const LendingHealthSimulator: React.FC = () => {
           <div className="flex items-center gap-2 mb-1">
             <span className="w-2.5 h-2.5 bg-red-700 rounded-full animate-pulse"></span>
             <span className="text-[11px] font-black uppercase tracking-[0.3em] text-red-700">Simulador de Riesgo Crediticio</span>
+            <button
+              type="button"
+              onClick={() => toggleFavorite('Lending On-Chain & Factor de Salud')}
+              className={`p-1.5 rounded-lg border transition-all active:scale-90 ml-2 ${
+                isFavorite('Lending On-Chain & Factor de Salud')
+                  ? 'bg-red-50 text-red-700 border-red-200 shadow-sm'
+                  : 'bg-white text-gray-400 hover:text-red-700 border-gray-200'
+              }`}
+              title={isFavorite('Lending On-Chain & Factor de Salud') ? "Quitar de favoritos" : "Marcar como favorito"}
+            >
+              <Star size={13} className={isFavorite('Lending On-Chain & Factor de Salud') ? 'fill-red-700 text-red-700' : ''} />
+            </button>
           </div>
           <h4 className="text-2xl md:text-3xl font-black uppercase italic tracking-tighter text-gray-900">
             Lending On-Chain & Factor de Salud (Health Factor)
